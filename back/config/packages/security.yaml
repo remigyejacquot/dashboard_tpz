@@ -14,12 +14,27 @@ security:
         class: App\Entity\User
         property: email
   firewalls:
-    dev:
-      pattern: ^/(_(profiler|wdt)|css|images|js)/
-      security: false
+    # dev:
+    #   pattern: ^/(_(profiler|wdt)|css|images|js)/
+    #   security: false
+    # main:
+    #   lazy: true
+    #   provider: app_user_provider
+    #   custom_authenticator: App\Security\LoginAuthenticator
+    #   logout:
+    #     path: app_logout
+    #     # where to redirect after logout
+    #     target: /
     main:
       lazy: true
       provider: app_user_provider
+      json_login:
+        check_path: /authentication
+        username_path: email
+        password_path: password
+        success_handler: lexik_jwt_authentication.handler.authentication_success
+        failure_handler: lexik_jwt_authentication.handler.authentication_failure
+      jwt: ~
 
       # activate different ways to authenticate
       # https://symfony.com/doc/current/security.html#the-firewall

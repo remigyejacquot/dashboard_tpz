@@ -7,7 +7,7 @@ use App\Repository\SubtaskRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ApiResource
+ * @ApiResource()
  * @ORM\Entity(repositoryClass=SubtaskRepository::class)
  */
 class Subtask
