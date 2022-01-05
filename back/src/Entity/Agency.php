@@ -2,33 +2,48 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\AgencyRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: AgencyRepository::class)]
+/**
+ * @ApiResource
+ * @ORM\Entity(repositoryClass=AgencyRepository::class)
+ */
 class Agency
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
+    /**
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     * @ORM\Column(type="integer")
+     */
     private $id;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
     private $name;
 
-    #[ORM\Column(type: 'boolean')]
+    /**
+     * @ORM\Column(type="boolean")
+     */
     private $is_dev;
 
-    #[ORM\ManyToOne(targetEntity: Tpz::class, inversedBy: 'agencies')]
-    #[ORM\JoinColumn(nullable: false)]
+    /**
+     * @ORM\ManyToOne(targetEntity=Tpz::class, inversedBy="agencies")
+     */
     private $tpz;
 
-    #[ORM\OneToMany(mappedBy: 'agency', targetEntity: User::class)]
+    /**
+     * @ORM\OneToMany(targetEntity=User::class, mappedBy="agency")
+     */
     private $users;
 
-    #[ORM\OneToMany(mappedBy: 'agency', targetEntity: Project::class)]
+    /**
+     * @ORM\OneToMany(targetEntity=Project::class, mappedBy="agency")
+     */
     private $projects;
 
     public function __construct()

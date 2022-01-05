@@ -2,23 +2,33 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\TpzRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: TpzRepository::class)]
+/**
+ * @ApiResource
+ * @ORM\Entity(repositoryClass=TpzRepository::class)
+ */
 class Tpz
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
+    /**
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     * @ORM\Column(type="integer")
+     */
     private $id;
 
-    #[ORM\Column(type: 'datetime', nullable: true)]
+    /**
+     * @ORM\Column(type="datetime")
+     */
     private $year;
 
-    #[ORM\OneToMany(mappedBy: 'tpz', targetEntity: Agency::class, orphanRemoval: true)]
+    /**
+     * @ORM\OneToMany(targetEntity=Agency::class, mappedBy="tpz")
+     */
     private $agencies;
 
     public function __construct()
@@ -36,7 +46,7 @@ class Tpz
         return $this->year;
     }
 
-    public function setYear(?\DateTimeInterface $year): self
+    public function setYear(\DateTimeInterface $year): self
     {
         $this->year = $year;
 

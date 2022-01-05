@@ -2,39 +2,60 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-#[ORM\Entity(repositoryClass: UserRepository::class)]
+/**
+ * @ApiResource
+ * @ORM\Entity(repositoryClass=UserRepository::class)
+ */
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
+    /**
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     * @ORM\Column(type="integer")
+     */
     private $id;
 
-    #[ORM\Column(type: 'string', length: 180, unique: true)]
+    /**
+     * @ORM\Column(type="string", length=180, unique=true)
+     */
     private $email;
 
-    #[ORM\Column(type: 'json')]
+    /**
+     * @ORM\Column(type="json")
+     */
     private $roles = [];
 
-    #[ORM\Column(type: 'string')]
+    /**
+     * @var string The hashed password
+     * @ORM\Column(type="string")
+     */
     private $password;
 
-    #[ORM\Column(type: 'string', length: 255)]
-    private $lastname;
+    /**
+     * @ORM\ManyToOne(targetEntity=Agency::class, inversedBy="users")
+     */
+    private $agency;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
     private $firstname;
 
-    #[ORM\Column(type: 'boolean')]
-    private $is_dev;
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $lastname;
 
-    #[ORM\ManyToOne(targetEntity: Agency::class, inversedBy: 'users')]
-    private $agency;
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $is_dev;
 
     public function getId(): ?int
     {
@@ -59,6 +80,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @see UserInterface
      */
     public function getUserIdentifier(): string
+    {
+        return (string) $this->email;
+    }
+
+    /**
+     * @deprecated since Symfony 5.3, use getUserIdentifier instead
+     */
+    public function getUsername(): string
     {
         return (string) $this->email;
     }
@@ -98,6 +127,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
+     * Returning a salt is only needed, if you are not using a modern
+     * hashing algorithm (e.g. bcrypt or sodium) in your security.yaml.
+     *
+     * @see UserInterface
+     */
+    public function getSalt(): ?string
+    {
+        return null;
+    }
+
+    /**
      * @see UserInterface
      */
     public function eraseCredentials()
@@ -106,14 +146,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // $this->plainPassword = null;
     }
 
-    public function getLastname(): ?string
+    public function getAgency(): ?Agency
     {
-        return $this->lastname;
+        return $this->agency;
     }
 
-    public function setLastname(string $lastname): self
+    public function setAgency(?Agency $agency): self
     {
-        $this->lastname = $lastname;
+        $this->agency = $agency;
 
         return $this;
     }
@@ -130,6 +170,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    public function getLastname(): ?string
+    {
+        return $this->lastname;
+    }
+
+    public function setLastname(string $lastname): self
+    {
+        $this->lastname = $lastname;
+
+        return $this;
+    }
+
     public function getIsDev(): ?bool
     {
         return $this->is_dev;
@@ -138,18 +190,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setIsDev(bool $is_dev): self
     {
         $this->is_dev = $is_dev;
-
-        return $this;
-    }
-
-    public function getAgency(): ?Agency
-    {
-        return $this->agency;
-    }
-
-    public function setAgency(?Agency $agency): self
-    {
-        $this->agency = $agency;
 
         return $this;
     }

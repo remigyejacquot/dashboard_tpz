@@ -2,32 +2,48 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\ProjectRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: ProjectRepository::class)]
+/**
+ * @ApiResource
+ * @ORM\Entity(repositoryClass=ProjectRepository::class)
+ */
 class Project
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
+    /**
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     * @ORM\Column(type="integer")
+     */
     private $id;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
     private $name;
 
-    #[ORM\Column(type: 'datetime_immutable')]
+    /**
+     * @ORM\Column(type="datetime_immutable")
+     */
     private $created_at;
 
-    #[ORM\Column(type: 'datetime_immutable')]
+    /**
+     * @ORM\Column(type="datetime_immutable")
+     */
     private $updated_at;
 
-    #[ORM\ManyToOne(targetEntity: Agency::class, inversedBy: 'projects')]
+    /**
+     * @ORM\ManyToOne(targetEntity=Agency::class, inversedBy="projects")
+     */
     private $agency;
 
-    #[ORM\OneToMany(mappedBy: 'project', targetEntity: Task::class)]
+    /**
+     * @ORM\OneToMany(targetEntity=Task::class, mappedBy="project")
+     */
     private $tasks;
 
     public function __construct()
