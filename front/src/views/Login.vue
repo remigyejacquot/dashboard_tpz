@@ -1,15 +1,45 @@
 <template>
   <div class="container">
-    <div class="form">
-      <router-link to="/register" class="btn-left-part" href=""
-        >S'inscrire</router-link
+    <b-form v-if="loading === false">
+      <b-form-group
+        id="input-group-1"
+        label="Adresse email:"
+        label-for="input-1"
+        description="Renseignez votre adresse email univ-reims"
       >
-      <label for="email">Adresse mail</label>
-      <input id="email" type="email" value="" v-model="email" />
-      <label for="password">Mot de passe</label>
-      <input id="password" type="password" value="" v-model="password" />
-      <button class="btn-right-part" @click="connexion">Se connecter</button>
-      <router-link to="/"> Mot de passe oublié? </router-link>
+        <b-form-input
+          id="input-1"
+          v-model="email"
+          type="email"
+          placeholder="example@etudiant.univ-reims.fr"
+          required
+        ></b-form-input>
+      </b-form-group>
+
+      <b-form-group
+        id="input-group-2"
+        label="Mot de passe:"
+        label-for="input-2"
+      >
+        <b-form-input
+          id="input-2"
+          v-model="password"
+          type="password"
+          required
+        ></b-form-input>
+      </b-form-group>
+      <div class="d-flex justify-content-center row mt-3">
+        <b-button variant="primary" @click="connexion" class="col-3"
+          >Se connecter</b-button
+        >
+        <div class="d-flex justify-content-center mt-2">
+          <b-link to="/register" class="me-3" href="">S'inscrire</b-link>
+          <b-link to="/"> Mot de passe oublié? </b-link>
+        </div>
+      </div>
+    </b-form>
+    <div class="d-flex align-items-center" v-if="loading === true">
+      <b-spinner class="ml-auto"></b-spinner>
     </div>
   </div>
 </template>
@@ -24,15 +54,18 @@ export default {
     return {
       email: "",
       password: "",
+      loading: false,
     };
   },
   methods: {
     async connexion() {
+      this.loading = true;
       let userToConnect = {
         email: this.email,
         password: this.password,
       };
       await authentication(userToConnect).then((resp) => {
+        this.loading = false;
         const token = resp.data.token;
         const userData = atob(resp.data.token.split(".")[1]); //on récupère les données de l'utilisateur, par défaut, login, rôles
         localStorage.setItem("user", userData); // store the user in localstorage
@@ -53,9 +86,14 @@ export default {
   display: flex;
   justify-content: center;
 }
-.form {
-  display: flex;
-  width: 50%;
-  flex-direction: column;
+form {
+  width: 100%;
+  text-align: start;
+}
+label {
+  margin: 0.5em 0;
+}
+a {
+  text-align: center;
 }
 </style>

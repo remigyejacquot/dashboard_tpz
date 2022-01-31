@@ -1,6 +1,10 @@
 # front
 
+## .env file
+Create an .env file from .env.example
+
 ## Project setup
+
 ```
 yarn install
 ```
