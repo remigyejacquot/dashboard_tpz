@@ -1,11 +1,12 @@
 <template>
   <div class="container">
     <b-form v-if="loading === false">
+      <h1>Mot de passe oublié?</h1>
       <b-form-group
           id="input-group-1"
           label="Adresse email:"
           label-for="input-1"
-          description="Renseignez votre adresse email univ-reims"
+          description="Renseignez votre adresse email de connexion"
       >
         <b-form-input
             id="input-1"
@@ -13,15 +14,13 @@
             type="email"
             placeholder="example@etudiant.univ-reims.fr"
             required
+
         ></b-form-input>
       </b-form-group>
       <div class="d-flex justify-content-center row mt-3">
-        <b-button variant="primary" @click="connexion" class="col-3"
-        >Se connecter</b-button
+        <b-button variant="primary" @click="resetPassword" class="col-3"
+        >Nouveau mot de passe</b-button
         >
-        <div class="d-flex justify-content-center mt-2">
-          <b-link to="/"> Mot de passe oublié? </b-link>
-        </div>
       </div>
     </b-form>
     <div class="d-flex align-items-center" v-if="loading === true">
@@ -35,7 +34,15 @@ export default {
   name: "ResetPassword",
   data() {
     return {
-      email: ""
+      email: "",
+      loading: false,
+      isSent: false,
+    }
+  },
+  methods: {
+    async resetPassword() {
+      this.loading = true;
+
     }
   }
 }
