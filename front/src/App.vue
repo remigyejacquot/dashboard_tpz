@@ -1,11 +1,20 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Login</router-link>
-    </div>
+    <b-img-lazy v-bind="mainProps" center :src="require('./assets/tpz_logo.png')" fluid alt="Logo Troyes Point Zero"></b-img-lazy>
+<!--    <b-img src="https://picsum.photos/1024/400/?image=41" fluid alt="Responsive image"></b-img>-->
     <router-view />
   </div>
 </template>
+
+<script>
+export default {
+  data() {
+    return {
+      mainProps: { width: 200, height: 200}
+    }
+  }
+}
+</script>
 
 <style lang="scss">
 #app {

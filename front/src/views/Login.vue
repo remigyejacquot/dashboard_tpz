@@ -33,9 +33,8 @@
           >Se connecter</b-button
         >
         <div class="d-flex justify-content-center mt-2">
-          <b-link to="/register" class="me-3" href="">S'inscrire</b-link>
-          <b-link to="/"> Mot de passe oublié? </b-link>
-        </div>
+          <b-link to="/resetpassword"> Mot de passe oublié? </b-link>
+      </div>
       </div>
     </b-form>
     <div class="d-flex align-items-center" v-if="loading === true">
@@ -81,7 +80,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .container {
   display: flex;
   justify-content: center;

@@ -2,6 +2,7 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import Login from "../views/Login";
 import Dashboard from "../views/Dashboard";
+import ResetPassword from "../views/ResetPassword";
 
 Vue.use(VueRouter);
 
@@ -16,6 +17,11 @@ const routes = [
     name: "Dashboard",
     component: Dashboard,
   },
+  {
+    path: "/resetpassword",
+    name: "ResetPassword",
+    component: ResetPassword
+  }
 ];
 
 const router = new VueRouter({
