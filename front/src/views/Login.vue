@@ -34,7 +34,7 @@
         >
         <div class="d-flex justify-content-center mt-2">
           <b-link to="/resetpassword"> Mot de passe oublié? </b-link>
-      </div>
+        </div>
       </div>
     </b-form>
     <div class="d-flex align-items-center" v-if="loading === true">

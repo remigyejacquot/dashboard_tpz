@@ -96,6 +96,14 @@
       <excludeFolder url="file://$MODULE_DIR$/back/vendor/symfony/event-dispatcher-contracts" />
       <excludeFolder url="file://$MODULE_DIR$/back/vendor/symfony/security-guard" />
       <excludeFolder url="file://$MODULE_DIR$/back/vendor/symfony/web-profiler-bundle" />
+      <excludeFolder url="file://$MODULE_DIR$/back/vendor/symfonycasts/reset-password-bundle" />
+      <excludeFolder url="file://$MODULE_DIR$/back/vendor/symfony/form" />
+      <excludeFolder url="file://$MODULE_DIR$/back/vendor/symfony/polyfill-intl-idn" />
+      <excludeFolder url="file://$MODULE_DIR$/back/vendor/symfony/mailer" />
+      <excludeFolder url="file://$MODULE_DIR$/back/vendor/symfony/options-resolver" />
+      <excludeFolder url="file://$MODULE_DIR$/back/vendor/symfony/polyfill-intl-icu" />
+      <excludeFolder url="file://$MODULE_DIR$/back/vendor/symfony/mime" />
+      <excludeFolder url="file://$MODULE_DIR$/back/vendor/egulias/email-validator" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

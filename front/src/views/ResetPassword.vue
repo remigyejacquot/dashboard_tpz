@@ -14,13 +14,13 @@
             type="email"
             placeholder="example@etudiant.univ-reims.fr"
             required
-
         ></b-form-input>
       </b-form-group>
       <div class="d-flex justify-content-center row mt-3">
-        <b-button variant="primary" @click="resetPassword" class="col-3"
-        >Nouveau mot de passe</b-button
-        >
+        <b-button variant="primary" @click="requestNewPassword" class="col-3">Nouveau mot de passe</b-button>
+        <div class="d-flex justify-content-center mt-2">
+          <b-link to="/">Se connecter</b-link>
+        </div>
       </div>
     </b-form>
     <div class="d-flex align-items-center" v-if="loading === true">
@@ -30,6 +30,8 @@
 </template>
 
 <script>
+import {resetPassword} from "../../api/resetPassword";
+
 export default {
   name: "ResetPassword",
   data() {
@@ -40,9 +42,14 @@ export default {
     }
   },
   methods: {
-    async resetPassword() {
+    async requestNewPassword() {
       this.loading = true;
-
+      let userInfo = {
+        email: this.email
+      }
+      await resetPassword(userInfo).then((resp)=>{
+        console.log(resp);
+      });
     }
   }
 }

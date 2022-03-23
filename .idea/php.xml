@@ -92,6 +92,14 @@
       <path value="$PROJECT_DIR$/back/vendor/symfony/event-dispatcher-contracts" />
       <path value="$PROJECT_DIR$/back/vendor/symfony/security-guard" />
       <path value="$PROJECT_DIR$/back/vendor/symfony/web-profiler-bundle" />
+      <path value="$PROJECT_DIR$/back/vendor/symfonycasts/reset-password-bundle" />
+      <path value="$PROJECT_DIR$/back/vendor/symfony/form" />
+      <path value="$PROJECT_DIR$/back/vendor/symfony/polyfill-intl-idn" />
+      <path value="$PROJECT_DIR$/back/vendor/symfony/mailer" />
+      <path value="$PROJECT_DIR$/back/vendor/symfony/options-resolver" />
+      <path value="$PROJECT_DIR$/back/vendor/symfony/polyfill-intl-icu" />
+      <path value="$PROJECT_DIR$/back/vendor/symfony/mime" />
+      <path value="$PROJECT_DIR$/back/vendor/egulias/email-validator" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.2" />
