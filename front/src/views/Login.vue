@@ -68,7 +68,7 @@ export default {
         const token = resp.data.token;
         const userData = atob(resp.data.token.split(".")[1]); //on récupère les données de l'utilisateur, par défaut, login, rôles
         localStorage.setItem("user", userData); // store the user in localstorage
-        localStorage.setItem("usertoken", token); // store the token in localstorage
+        localStorage.setItem("userToken", token); // store the token in localstorage
         router.push("/dashboard").catch((err) => {
           console.log("err", err);
           localStorage.removeItem("user");

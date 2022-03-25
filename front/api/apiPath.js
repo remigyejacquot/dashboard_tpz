@@ -1,2 +1,1 @@
-export let BASE_URL =
-  "http://localhost:8888/dashboard/back/public/index.php/api";
+export let API_BASE_URL = process.env.VUE_APP_API_URL+"api";

@@ -1,7 +1,10 @@
-import axios from "axios";
+//import axiosInstance from "./axiosInstance";
+//import axios from "axios";
+//import {API_BASE_URL} from "./apiPath";
+import axiosInstance from "./axiosInstance";
 
-async function authentication(data) {
-    return await axios.post(process.env.VUE_APP_API_URL + "authentication", data);
+async function getAllAgencies() {
+    return await axiosInstance.get(  "api/agencies");
 }
 
-export { authentication };
+export { getAllAgencies };
