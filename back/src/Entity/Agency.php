@@ -4,12 +4,15 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\AgencyRepository;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *     normalizationContext={"groups"={"agencies:read", "tpzMembers:read"}}
+ * )
  * @ORM\Entity(repositoryClass=AgencyRepository::class)
  */
 class Agency
@@ -23,6 +26,7 @@ class Agency
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"agencies:read"})
      */
     private $name;
 
@@ -33,16 +37,19 @@ class Agency
 
     /**
      * @ORM\ManyToOne(targetEntity=Tpz::class, inversedBy="agencies")
+     * @Groups({"agencies:read"})
      */
     private $tpz;
 
     /**
      * @ORM\OneToMany(targetEntity=User::class, mappedBy="agency")
+     * @Groups({"agencies:read"})
      */
     private $users;
 
     /**
      * @ORM\OneToMany(targetEntity=Project::class, mappedBy="agency")
+     * @Groups ({"agencies:read"})
      */
     private $projects;
 

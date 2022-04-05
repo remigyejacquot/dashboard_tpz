@@ -4,7 +4,10 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -44,11 +47,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"agencies:read"})
+     * @Groups({"tpzMembers:read"})
      */
     private $firstname;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"agencies:read"})
+     * @Groups({"tpzMembers:read"})
      */
     private $lastname;
 
@@ -56,6 +63,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="boolean")
      */
     private $is_dev;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=TpzRoles::class, inversedBy="users")
+     */
+    private $tpz_role;
+
+    public function __construct()
+    {
+        $this->tpz_role = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -190,6 +207,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setIsDev(bool $is_dev): self
     {
         $this->is_dev = $is_dev;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|TpzRoles[]
+     */
+    public function getTpzRole(): Collection
+    {
+        return $this->tpz_role;
+    }
+
+    public function addTpzRole(TpzRoles $tpzRole): self
+    {
+        if (!$this->tpz_role->contains($tpzRole)) {
+            $this->tpz_role[] = $tpzRole;
+        }
+
+        return $this;
+    }
+
+    public function removeTpzRole(TpzRoles $tpzRole): self
+    {
+        $this->tpz_role->removeElement($tpzRole);
 
         return $this;
     }
