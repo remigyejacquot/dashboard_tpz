@@ -45,7 +45,7 @@
 
 <script>
 import router from "../router";
-import { authentication } from "../../api/login";
+import { login } from "../../api/authentication";
 
 export default {
   name: "Login",
@@ -63,7 +63,7 @@ export default {
         email: this.email,
         password: this.password,
       };
-      await authentication(userToConnect).then((resp) => {
+      await login(userToConnect).then((resp) => {
         this.loading = false;
         const token = resp.data.token;
         const userData = atob(resp.data.token.split(".")[1]); //on récupère les données de l'utilisateur, par défaut, login, rôles
