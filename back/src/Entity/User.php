@@ -12,7 +12,9 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *     normalizationContext={"groups"={"users:read"}}
+ * )
  * @ORM\Entity(repositoryClass=UserRepository::class)
  */
 class User implements UserInterface, PasswordAuthenticatedUserInterface
@@ -26,6 +28,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
+     * @Groups({"users:read"})
      */
     private $email;
 
@@ -42,6 +45,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\ManyToOne(targetEntity=Agency::class, inversedBy="users")
+     * @Groups({"users:read"})
      */
     private $agency;
 
@@ -49,6 +53,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="string", length=255)
      * @Groups({"agencies:read"})
      * @Groups({"tpzMembers:read"})
+     * @Groups({"users:read"})
      */
     private $firstname;
 
@@ -56,16 +61,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="string", length=255)
      * @Groups({"agencies:read"})
      * @Groups({"tpzMembers:read"})
+     * @Groups({"users:read"})
      */
     private $lastname;
 
     /**
      * @ORM\Column(type="boolean")
+     * @Groups({"users:read"})
      */
     private $is_dev;
 
     /**
      * @ORM\ManyToMany(targetEntity=TpzRoles::class, inversedBy="users")
+     * @Groups({"users:read"})
      */
     private $tpz_role;
 

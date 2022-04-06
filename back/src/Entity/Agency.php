@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ApiResource(
- *     normalizationContext={"groups"={"agencies:read", "tpzMembers:read"}}
+ *     normalizationContext={"groups"={"agencies:read"}}
  * )
  * @ORM\Entity(repositoryClass=AgencyRepository::class)
  */
@@ -49,7 +49,7 @@ class Agency
 
     /**
      * @ORM\OneToMany(targetEntity=Project::class, mappedBy="agency")
-     * @Groups ({"agencies:read"})
+     * @Groups({"agencies:read", "users:read"})
      */
     private $projects;
 
