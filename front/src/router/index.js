@@ -3,6 +3,7 @@ import VueRouter from "vue-router";
 import Login from "../views/Login";
 import Dashboard from "../views/Dashboard";
 import ResetPassword from "../views/ResetPassword";
+import Projects from "../views/Projects";
 
 Vue.use(VueRouter);
 
@@ -17,6 +18,12 @@ const routes = [
     name: "Dashboard",
     component: Dashboard,
     props: true,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: "/projects",
+    name: "Projects",
+    component: Projects,
     meta: { requiresAuth: true },
   },
   {

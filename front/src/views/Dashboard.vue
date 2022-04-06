@@ -7,6 +7,7 @@
     <b-card-text v-for="agency in agencies" :key="agency.id">{{ agency }}</b-card-text>
     <p>TPZMEMBERS</p>
     <b-card-text v-for="member in tpzMembers" :key="member.id">{{ member }}</b-card-text>
+    <b-button :to="{name: 'projects'}">LES PROJETS</b-button>
   </div>
 </template>
 
@@ -53,7 +54,9 @@ export default {
          })
       })
     },
-    fetch
+    fetchProjects() {
+
+    }
   },
 };
 </script>
