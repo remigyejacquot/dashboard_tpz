@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Agency;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -47,4 +48,32 @@ class AgencyRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    /**
+     * @param User $user
+     * @return Agency[]|null
+     */
+    public function retrieveUserTypeAgencies(User $user) : ?array
+    {
+        return $this->createQueryBuilder('agency')
+            ->andWhere('agency.is_dev = :is_dev')
+            ->setParameter('is_dev', $user->getIsDev())
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    /**
+     * @param User $user
+     * @return Agency[]|null
+     */
+    public function retrieveOtherAgencies(User $user) : ?array
+    {
+        return $this->createQueryBuilder('agency')
+            ->andWhere('agency.is_dev != :is_dev')
+            ->setParameter('is_dev', $user->getIsDev())
+            ->getQuery()
+            ->getResult()
+            ;
+    }
 }

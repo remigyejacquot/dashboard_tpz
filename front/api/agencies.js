@@ -3,8 +3,8 @@
 //import {API_BASE_URL} from "./apiPath";
 import axiosInstance from "./axiosInstance";
 
-async function getAllAgencies() {
-    return await axiosInstance.get(  "api/agencies");
+async function getUserLicenceAgencies(id) {
+    return await axiosInstance.get(  "licence_agencies/"+id);
 }
 
-export { getAllAgencies };
+export { getUserLicenceAgencies };

@@ -1,7 +1,9 @@
 <template>
   <div>
     <h1>DASHBOARD</h1>
-    <p>AGENCY</p>
+    <p>USER</p>
+    <b-card-text>{{ user }}</b-card-text>
+    <p>TOUTES LES AGENCES DE LA LICENCE {{user.is_dev ? 'DEV' : 'COM'}}</p>
     <b-card-text v-for="agency in agencies" :key="agency.id">{{ agency }}</b-card-text>
     <p>TPZMEMBERS</p>
     <b-card-text v-for="member in tpzMembers" :key="member.id">{{ member }}</b-card-text>
@@ -9,28 +11,30 @@
 </template>
 
 <script>
-import {getAllAgencies} from "../../api/agencies";
+import {getUserLicenceAgencies} from "../../api/agencies";
 import {getAllMembers} from "../../api/tpzMembers";
+import {getUser} from "../../api/users";
 
 export default {
   name: "Dashboard",
   data() {
     return {
+      user:{},
       agencies:[],
-      tpzMembers:[]
+      tpzMembers:[],
     };
   },
   created() {
-    this.fetchAgencies()
+    const userId = JSON.parse(localStorage.getItem("user")).id
+    this.fetchUserInfo(userId)
     this.fetchTpzMembers()
+    this.fetchUserLicenceAgencies(userId)
   },
   methods: {
-     fetchAgencies() {
-       getAllAgencies().then((res)=>{
-        console.log(res.data['hydra:member'])
-         res.data['hydra:member'].forEach(agency => {
-          this.agencies.push(agency)
-         })
+    fetchUserInfo(id) {
+      getUser(id).then((res)=>{
+        console.log(res.data)
+        this.user = res.data
       })
     },
     fetchTpzMembers() {
@@ -41,6 +45,15 @@ export default {
          })
        })
     },
+    fetchUserLicenceAgencies(id) {
+      getUserLicenceAgencies(id).then((res)=>{
+        console.log(res.data)
+         res.data.forEach(agency=>{
+           this.agencies.push(agency)
+         })
+      })
+    },
+    fetch
   },
 };
 </script>
