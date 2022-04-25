@@ -4,6 +4,7 @@
     <p>USER</p>
     <b-card-text>{{ user }}</b-card-text>
     <p>TOUTES LES AGENCES DE LA LICENCE {{user.is_dev ? 'DEV' : 'COM'}}</p>
+    <b-button @click="toggleLicence">CHANGER DE LICENCE</b-button>
     <b-card-text v-for="agency in agencies" :key="agency.id">{{ agency }}</b-card-text>
     <p>TPZMEMBERS</p>
     <b-card-text v-for="member in tpzMembers" :key="member.id">{{ member }}</b-card-text>
@@ -12,7 +13,7 @@
 </template>
 
 <script>
-import {getUserLicenceAgencies} from "../../api/agencies";
+import {getLicenceAgencies, getUserLicenceAgencies} from "../../api/agencies";
 import {getAllMembers} from "../../api/tpzMembers";
 import {getUser} from "../../api/users";
 
@@ -23,6 +24,7 @@ export default {
       user:{},
       agencies:[],
       tpzMembers:[],
+      agenciesType:"",
     };
   },
   created() {
@@ -34,8 +36,8 @@ export default {
   methods: {
     fetchUserInfo(id) {
       getUser(id).then((res)=>{
-        console.log(res)
         this.user = res.data
+        this.agenciesType = res.data.is_dev ? 'dev' : 'com'
       })
     },
     fetchTpzMembers() {
@@ -54,6 +56,16 @@ export default {
     },
     fetchProjects() {
 
+    },
+    toggleLicence() {
+      let newAgencies = []
+      this.agenciesType === 'dev' ? this.agenciesType = 'com' : this.agenciesType ='dev'
+      getLicenceAgencies(this.agenciesType).then((res)=>{
+        res.data.forEach(agency=>{
+          newAgencies.push(agency)
+        })
+        this.agencies = newAgencies
+      })
     }
   },
 };

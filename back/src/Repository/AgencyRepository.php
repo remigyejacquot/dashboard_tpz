@@ -6,6 +6,8 @@ use App\Entity\Agency;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use phpDocumentor\Reflection\Types\Boolean;
+use PhpParser\Node\Expr\Cast\Bool_;
 
 /**
  * @method Agency|null find($id, $lockMode = null, $lockVersion = null)
@@ -64,14 +66,13 @@ class AgencyRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param User $user
      * @return Agency[]|null
      */
-    public function retrieveOtherAgencies(User $user) : ?array
+    public function retrieveAgencies($type) : ?array
     {
         return $this->createQueryBuilder('agency')
-            ->andWhere('agency.is_dev != :is_dev')
-            ->setParameter('is_dev', $user->getIsDev())
+            ->andWhere('agency.is_dev = :is_dev')
+            ->setParameter('is_dev', $type)
             ->getQuery()
             ->getResult()
             ;

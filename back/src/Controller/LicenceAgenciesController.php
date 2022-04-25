@@ -49,20 +49,12 @@ class LicenceAgenciesController extends AbstractController
     }
 
     /**
-     * @Route("/other_licence_agencies/{id}", name="other_licence_agencies")
+     * @Route("/licence_agencies/{type}", name="other_licence_agencies")
      */
-    public function getOtherLicenceAgencies(Request $request, EntityManagerInterface $entityManager, SerializerInterface $serializer, int $id): Response
+    public function getLicenceAgencies(Request $request, EntityManagerInterface $entityManager, SerializerInterface $serializer, string $type): Response
     {
-        /** @var User $user */
-        $user = $entityManager->getRepository(User::class)->find($id);
-        if(!$user){
-            throw $this->createNotFoundException(
-                'L\'utilisateur '.$id.' ne semble pas exister'
-            );
-        }
-        $type = $user->getIsDev();
-
-        $agencies = $this->agencyRepository->retrieveOtherAgencies($user);
+        $value = $type === 'dev';
+        $agencies = $this->agencyRepository->retrieveAgencies($value);
 
         return new Response($serializer->serialize($agencies, 'json'));
     }
