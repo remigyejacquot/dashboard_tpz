@@ -4,11 +4,15 @@
 import axiosInstance from "./axiosInstance";
 
 async function getUserLicenceAgencies(id) {
-    return await axiosInstance.get(  "user_licence_agencies/"+id);
+    return await axiosInstance.get(  "/tpz/dashboard_tpz/back/public/index.php/user_licence_agencies/"+id);
 }
 
 async function getLicenceAgencies(type) {
-    return await axiosInstance.get(  "licence_agencies/"+type);
+    return await axiosInstance.get(  "/tpz/dashboard_tpz/back/public/index.php/licence_agencies/"+type);
 }
 
-export { getUserLicenceAgencies, getLicenceAgencies };
+async function getAgencyMembers(id) {
+    return await axiosInstance.get("/tpz/dashboard_tpz/back/public/index.php/api/agencies/"+id)
+}
+
+export { getUserLicenceAgencies, getLicenceAgencies, getAgencyMembers };
