@@ -1,15 +1,9 @@
 import axios from 'axios';
 
-/*const headers = {
-    "Accept": 'application/json',
-    "Content-Type": 'application/json; charset=utf-8',
-    "Access-Control-Allow-Credentials": true,
-    "Access-Control-Allow-Origin": "http://localhost:8888/tpz/dashboard_tpz/back/public/index.php/api",
-    "X-Requested-With": 'XMLHttpRequest',
-};*/
+const urlRemi = "http://localhost:8888/tpz/dashboard_tpz/back/public/index.php/"
 
 const axiosInstance = axios.create({
-    baseURL: 'http://localhost/dashboard_tpz/back/public/index.php',
+    baseURL: 'http://localhost/dashboard_tpz/back/public/index.php'
     //headers,
 });
 

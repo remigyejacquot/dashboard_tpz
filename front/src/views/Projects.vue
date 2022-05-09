@@ -4,7 +4,7 @@
     <p>USER</p>
     <b-card-text>{{ user }}</b-card-text>
     <p>LES MEMBRES DE L'AGENCE</p>
-    <b-card-text v-for="agency in agencies" :key="agency.id">{{ agency }}</b-card-text>
+    <b-card-text v-for="agency in agencyMembers" :key="agency.id">{{ agency }}</b-card-text>
     <p>TPZMEMBERS</p>
     <b-card-text v-for="member in tpzMembers" :key="member.id">{{ member }}</b-card-text>
     <b-button :to="{name: 'Projects'}">LES PROJETS</b-button>
@@ -49,7 +49,7 @@ export default {
     fetchUserLicenceAgencies(id) {
       getUserLicenceAgencies(id).then((res)=>{
         res.data.forEach(agency=>{
-          this.agencies.push(agency)
+          this.agencyMembers.push(agency)
         })
       })
     },
