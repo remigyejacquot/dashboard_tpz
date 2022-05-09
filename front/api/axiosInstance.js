@@ -9,7 +9,7 @@ import axios from 'axios';
 };*/
 
 const axiosInstance = axios.create({
-    baseURL: process.env.VUE_APP_API_URL,
+    baseURL: 'http://localhost/dashboard_tpz/back/public/index.php',
     //headers,
 });
 
