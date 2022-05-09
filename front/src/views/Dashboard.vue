@@ -37,6 +37,7 @@ export default {
     fetchUserInfo(id) {
       getUser(id).then((res)=>{
         this.user = res.data
+        localStorage.setItem("user", JSON.stringify(res.data)); // store the user in localstorage
         this.agenciesType = res.data.is_dev ? 'dev' : 'com'
       })
     },

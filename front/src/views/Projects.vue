@@ -12,7 +12,6 @@
 </template>
 
 <script>
-import {getUser} from "../../api/users";
 import {getAllMembers} from "../../api/tpzMembers";
 import {getUserLicenceAgencies} from "../../api/agencies";
 
@@ -20,25 +19,19 @@ export default {
   name: "Projects",
   data() {
     return {
-      user:{},
+      user: {},
       tpzMembers:[],
       agencyMembers:[],
     };
   },
   created() {
-    const userId = JSON.parse(localStorage.getItem("user")).id
-    this.fetchUserInfo(userId)
+    console.log('toto',JSON.parse(localStorage.getItem("user")))
+    const user = JSON.parse(localStorage.getItem("user"))
+    this.user = user
     this.fetchTpzMembers()
-    this.fetchUserLicenceAgencies(userId)
+    this.fetchUserLicenceAgencies(user['@id'].substr(-1))//retrieve user index from @id
   },
   methods: {
-    fetchUserInfo(id) {
-      getUser(id).then((res)=>{
-        this.user = res.data
-        this.agenciesType = res.data.is_dev ? 'dev' : 'com'
-        //getAgencyMembers(res.data.)
-      })
-    },
     fetchTpzMembers() {
       getAllMembers().then((res)=>{
         res.data['hydra:member'].forEach(member => {
