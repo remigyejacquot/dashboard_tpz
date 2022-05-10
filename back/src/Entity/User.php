@@ -254,6 +254,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->tpz;
     }
 
+    /**
+     * @Groups({"users:read"})
+     */
+    public function getTpzId(): ?int
+    {
+        return $this->tpz->getId();
+    }
+
     public function setTpz(?Tpz $tpz): self
     {
         $this->tpz = $tpz;
