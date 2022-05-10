@@ -16,6 +16,7 @@
 import {getLicenceAgencies, getUserLicenceAgencies} from "../../api/agencies";
 import {getAllMembers} from "../../api/tpzMembers";
 import {getUser} from "../../api/users";
+import {getTpz} from "../../api/tpzs";
 
 export default {
   name: "Dashboard",
@@ -36,10 +37,13 @@ export default {
   methods: {
     fetchUserInfo(id) {
       getUser(id).then((res)=>{
-        console.log(res.data)
+        console.log(res.data.tpzId)
         this.user = res.data
-        localStorage.setItem("user", JSON.stringify(res.data)) // store the user in localstorage
+        //localStorage.setItem("user", JSON.stringify(res.data)) // store the user in localstorage
         this.agenciesType = res.data.is_dev ? 'dev' : 'com'
+        getTpz(res.data.tpzId).then(res=>{
+          console.log('toto',res.data)
+        })
       })
     },
     fetchTpzMembers() {

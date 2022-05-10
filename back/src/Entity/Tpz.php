@@ -10,7 +10,9 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *     normalizationContext={"groups"={"tpzs:read"}}
+ * )
  * @ORM\Entity(repositoryClass=TpzRepository::class)
  */
 class Tpz
@@ -30,6 +32,7 @@ class Tpz
 
     /**
      * @ORM\OneToMany(targetEntity=Agency::class, mappedBy="tpz")
+     * @Groups({"tpzs:read"})
      */
     private $agencies;
 
