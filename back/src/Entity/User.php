@@ -77,6 +77,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $tpz_role;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Tpz::class, inversedBy="users")
+     */
+    private $tpz;
+
     public function __construct()
     {
         $this->tpz_role = new ArrayCollection();
@@ -240,6 +245,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function removeTpzRole(TpzRoles $tpzRole): self
     {
         $this->tpz_role->removeElement($tpzRole);
+
+        return $this;
+    }
+
+    public function getTpz(): ?Tpz
+    {
+        return $this->tpz;
+    }
+
+    public function setTpz(?Tpz $tpz): self
+    {
+        $this->tpz = $tpz;
 
         return $this;
     }
