@@ -55,9 +55,6 @@ export default {
          })
       })
     },
-    fetchProjects() {
-
-    },
     toggleLicence() {
       let newAgencies = []
       this.agenciesType === 'dev' ? this.agenciesType = 'com' : this.agenciesType ='dev'

@@ -171,6 +171,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // $this->plainPassword = null;
     }
 
+
     public function getAgency(): ?Agency
     {
         return $this->agency;
