@@ -12,7 +12,7 @@ async function getLicenceAgencies(type) {
 }
 
 async function getAgencyMembers(id) {
-    return await axiosInstance.get("agencies/"+id)
+    return await axiosInstance.get("/api/agencies/"+id)
 }
 
 export { getUserLicenceAgencies, getLicenceAgencies, getAgencyMembers };
