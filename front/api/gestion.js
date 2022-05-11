@@ -4,6 +4,12 @@ async function getGroupesData(id) {
     return await axiosInstance.get(  "/gestion/groupes/"+id);
 }
 
+async function deleteGroupe(id) {
+    return await axiosInstance.post("/gestion/deleteGroupMembers/" +id).then(async function (){
+        return await axiosInstance.delete("/api/agencies/" + id)
+    })
+}
+
 async function updateRole(role, idUser, idAgence) {
     console.log(role)
     return await axiosInstance.post("/gestion/updateRole", {
@@ -13,4 +19,4 @@ async function updateRole(role, idUser, idAgence) {
     })
 }
 
-export {getGroupesData, updateRole}
+export {getGroupesData, updateRole, deleteGroupe}

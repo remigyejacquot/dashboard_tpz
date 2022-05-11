@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-form-group id="input" v-bind:label="placeholder" v-bind:label-for="input">
-      <b-form-input v-bind:id="input" v-model="user" type="text" v-bind:placeholder="placeholder" required v-on:update="onChange($event)"></b-form-input>
+      <b-form-input v-bind:id="input" v-model="agency" type="text" v-bind:placeholder="placeholder" required v-on:update="onChange($event)"></b-form-input>
       <div v-bind:class="(autocompeleteList.length === 0) ? 'd-none' : ''">
         <ul id="results">
           <p>Veuillez selectionner l'étudiant</p>
@@ -10,7 +10,7 @@
           </li>
         </ul>
       </div>
-      <b-form-input id="id" v-model="id" type="text" placeholder="" required hidden></b-form-input>
+      <b-form-input id="idAgency" v-model="idAgency" type="text" placeholder="" required hidden></b-form-input>
     </b-form-group>
   </div>
 </template>
@@ -26,8 +26,8 @@ export default {
   },
   data () {
     return {
-      user: "",
-      id : null,
+      agency : "",
+      idAgency : null,
       autocompeleteList : [],
     }
   },
@@ -39,8 +39,9 @@ export default {
       this.autocompeleteList = results
     },
     updateField(item){
-      this.user = item.nom + ' ' + item.prenom
-      this.id = item.id
+      this.agency = item.name
+      this.idAgency = item.id
+      this.autocompeleteList = []
     },
     search(array, results, $event) {
       array = JSON.parse(JSON.stringify(array))

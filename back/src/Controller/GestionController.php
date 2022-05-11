@@ -75,4 +75,26 @@ class GestionController extends AbstractController
         return new Response('ok');
     }
 
+    /**
+     * @Route("/gestion/deleteGroupMembers/{id}", name="delete_group_members")
+     */
+    public function deleteGroupMembers(EntityManagerInterface $entityManager, int $id) {
+        /** @var Agency $agency */
+        $agency = $entityManager->getRepository(Agency::class)->find($id);
+        $members = $agency->getUsers();
+        /** @var TpzRoles $role */
+        $role = $entityManager->getRepository(TpzRoles::class)->findOneBy(array('role' => 'chef de projet'));
+        /** @var User $member */
+        foreach ($members as $member) {
+            if($member->getTpzRole()->contains($role)) {
+                $member->getTpzRole()->removeElement($role);
+                $entityManager->persist($member);
+            }
+            $agency->removeUser($member);
+        }
+        $entityManager->persist($agency);
+        $entityManager->flush();
+        return new Response('ok');
+    }
+
 }

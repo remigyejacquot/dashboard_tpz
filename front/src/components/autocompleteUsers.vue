@@ -39,6 +39,7 @@ export default {
     updateField(item){
       this.user = item.nom + ' ' + item.prenom
       this.id = item.id
+      this.autocompeleteList = []
     }
   }
 }
