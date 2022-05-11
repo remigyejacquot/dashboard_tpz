@@ -6,7 +6,7 @@ async function login(data) {
 }
 
 async function logout() {
-  return await axiosInstance.post( "logout");
+  return await axiosInstance.post( "/logout");
 }
 
 export { login, logout };

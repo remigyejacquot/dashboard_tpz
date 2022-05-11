@@ -21,6 +21,7 @@ class Agency
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"agencies:read"})
      */
     private $id;
 
