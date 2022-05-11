@@ -33,9 +33,15 @@ class Tpz
      */
     private $agencies;
 
+    /**
+     * @ORM\OneToMany(targetEntity=User::class, mappedBy="tpz")
+     */
+    private $users;
+
     public function __construct()
     {
         $this->agencies = new ArrayCollection();
+        $this->users = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -79,6 +85,36 @@ class Tpz
             // set the owning side to null (unless already changed)
             if ($agency->getTpz() === $this) {
                 $agency->setTpz(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+
+    public function addUser(User $user): self
+    {
+        if (!$this->users->contains($user)) {
+            $this->users[] = $user;
+            $user->setTpz($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUser(User $user): self
+    {
+        if ($this->users->removeElement($user)) {
+            // set the owning side to null (unless already changed)
+            if ($user->getTpz() === $this) {
+                $user->setTpz(null);
             }
         }
 

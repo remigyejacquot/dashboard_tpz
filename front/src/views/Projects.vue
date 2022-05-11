@@ -13,7 +13,7 @@
 
 <script>
 import {getAllMembers} from "../../api/tpzMembers";
-import {getUserLicenceAgencies} from "../../api/agencies";
+import {getAgencyMembers} from "../../api/agencies";
 
 export default {
   name: "Projects",
@@ -25,11 +25,10 @@ export default {
     };
   },
   created() {
-    console.log('toto',JSON.parse(localStorage.getItem("user")))
     const user = JSON.parse(localStorage.getItem("user"))
     this.user = user
     this.fetchTpzMembers()
-    this.fetchUserLicenceAgencies(user['@id'].substr(-1))//retrieve user index from @id
+    this.fetchUserLicenceAgencies(user.agency['@id'].substr(-1))//retrieve user agency index from @id
   },
   methods: {
     fetchTpzMembers() {
@@ -40,9 +39,9 @@ export default {
       })
     },
     fetchUserLicenceAgencies(id) {
-      getUserLicenceAgencies(id).then((res)=>{
-        res.data.forEach(agency=>{
-          this.agencyMembers.push(agency)
+      getAgencyMembers(id).then((res)=>{
+        res.data.users.forEach(user=>{
+          this.agencyMembers.push(user)
         })
       })
     },
