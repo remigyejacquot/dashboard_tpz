@@ -6,6 +6,7 @@ import ResetPassword from "../views/ResetPassword";
 import Projects from "../views/Projects";
 import Gestion from "../views/Gestion";
 import Groupes from "../views/Groupes";
+import "../assets/css/main.css";
 
 Vue.use(VueRouter);
 

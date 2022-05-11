@@ -2,11 +2,9 @@
   <div>
     <div>
       <div>
-        Créer un groupe
+        Créer une agence
         <b-form>
-          <b-form-group id="chef" label="chef" label-for="chef">
-            <b-form-input id="chef" v-model="chef" type="text" placeholder="Chef de projet" required></b-form-input>
-          </b-form-group>
+          <autocomplete-users v-bind:options="suggestions"  input="chef" placeholder="Chef de projet"></autocomplete-users>
             <b-form-group id="spe" label="Spécialité" label-for="spe">
               <b-form-select v-model="is_dev" :options="options"></b-form-select>
             </b-form-group>
@@ -14,17 +12,35 @@
         <b-button class="green-button mt-4" @click="ajoutGroupe">Ajouter</b-button>
       </div>
     </div>
+    <div>
+      <div>
+        Supprimer une agence
+        <b-form>
+          <autocomplete-agency v-bind:agencesDev="agencesDev" v-bind:agencesCom="agencesCom" input="groupe" placeholder="Agence"></autocomplete-agency>
+        </b-form>
+        <b-button v-b-modal.modal-1 class="green-button mt-4">Supprimer</b-button>
+      </div>
+    </div>
+    <b-modal id="modal-1" title="Suppression"  hide-footer>
+      <p class="my-4">Êtes-vous sûr de vouloir supprimer l'agence' ?</p>
+      <div class="d-flex justify-content-end">
+        <b-button class="mt-3 mr-2" block @click="$bvModal.hide('bv-modal-example')">Annuler</b-button>
+        <b-button class="mt-3" block @click="$bvModal.hide('bv-modal-example'); supprimerGroupe()" variant="danger">Supprimer</b-button>
+      </div>
+    </b-modal>
     <router-view></router-view>
   </div>
 </template>
 
 <script>
 import { addAgency } from "../../api/agencies";
-import {getGroupesData} from "../../api/gestion";
+import {getGroupesData, updateRole, deleteGroupe} from "../../api/gestion";
+import AutocompleteUsers from "../components/autocompleteUsers";
+import AutocompleteAgency from "../components/autocompleteAgency";
 
 export default {
   name: "Groupes",
-
+  components: { AutocompleteAgency, AutocompleteUsers },
   data () {
     return {
       chefProjet: "",
@@ -32,7 +48,10 @@ export default {
       options : [
           { value: true, text: 'Développement' },
           { value: false, text: 'Communication' }
-      ]
+      ],
+      suggestions : {},
+      agencesDev : [],
+      agencesCom: [],
     }
   },
   async mounted () {
@@ -41,6 +60,7 @@ export default {
 
   methods: {
     async ajoutGroupe() {
+      this.chefProjet = document.getElementById('id').value
       await addAgency(
           {
             tpz : "/dashboard_tpz/back/public/index.php/api/tpzs/1",
@@ -49,14 +69,23 @@ export default {
           }
       ).then(
           (res) => {
-             console.log(res)
+            this.updateRoleChef(res.data['@id'].replace(/\D/g, ""))
           }
       )
     },
+    async updateRoleChef(idAgence) {
+      await updateRole('chef de projet', this.chefProjet, idAgence)
+    },
     async getDataGroupes() {
         await getGroupesData(1).then((res) => {
-          console.log(res)
+          this.suggestions = res.data.users
+          this.agencesDev = res.data.agenciesDev
+          this.agencesCom = res.data.agenciesCom
         })
+    },
+    async supprimerGroupe() {
+      let toDelete = document.getElementById('idAgency').value
+      await deleteGroupe(toDelete)
     }
   }
 }
