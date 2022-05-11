@@ -40,7 +40,7 @@ export default {
     };
   },
   created() {
-    const userId = JSON.parse(localStorage.getItem("user")).id;
+    const userId = JSON.parse(localStorage.getItem("user")).id || JSON.parse(localStorage.getItem("user"))["@id"].substr(-1);
     this.fetchInfo(userId);
     this.fetchTpzMembers();
   },
@@ -50,6 +50,7 @@ export default {
         console.log(res.data.tpzId);
         this.user = res.data;
         this.type = res.data.is_dev ? "dev" : "com";
+        localStorage.setItem("user", JSON.stringify(res.data))
         localStorage.setItem("tpzId", JSON.stringify(res.data.tpzId)) // store the user in localstorage
         getTpz(res.data.tpzId).then((res) => {
           console.log("toto", res.data.agencies);

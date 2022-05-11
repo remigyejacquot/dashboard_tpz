@@ -24,7 +24,7 @@ class Project
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"tpzs:read"})
+     * @Groups({"tpzs:read","agencies:read"})
      */
     private $name;
 
