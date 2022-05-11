@@ -53,7 +53,7 @@ export default {
     console.log("toto", JSON.parse(localStorage.getItem("user")));
     const user = JSON.parse(localStorage.getItem("user"));
     this.user = user;
-    this.getAllAgencyMembers(user["@id"].substr(-1)); //retrieve user index from @id
+    this.getAllAgencyMembers(user["agency"]["@id"].substr(-1)); //retrieve user index from @id
   },
   methods: {
     getAllAgencyMembers(id) {
@@ -62,7 +62,6 @@ export default {
         res.data.projects.forEach((project) => {
           this.projects.push(project);
         });
-        console.log(this.user["agency"])
       });
     },
   },
