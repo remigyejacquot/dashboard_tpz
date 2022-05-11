@@ -36,7 +36,9 @@ export default {
   methods: {
     fetchUserInfo(id) {
       getUser(id).then((res)=>{
+        console.log(res.data)
         this.user = res.data
+        localStorage.setItem("user", JSON.stringify(res.data)) // store the user in localstorage
         this.agenciesType = res.data.is_dev ? 'dev' : 'com'
       })
     },
@@ -53,9 +55,6 @@ export default {
            this.agencies.push(agency)
          })
       })
-    },
-    fetchProjects() {
-
     },
     toggleLicence() {
       let newAgencies = []

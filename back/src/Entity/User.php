@@ -176,6 +176,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // $this->plainPassword = null;
     }
 
+
     public function getAgency(): ?Agency
     {
         return $this->agency;
@@ -251,6 +252,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getTpz(): ?Tpz
     {
         return $this->tpz;
+    }
+
+    /**
+     * @Groups({"users:read"})
+     */
+    public function getTpzId(): ?int
+    {
+        return $this->tpz->getId();
     }
 
     public function setTpz(?Tpz $tpz): self
