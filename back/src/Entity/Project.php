@@ -45,7 +45,7 @@ class Project
 
     /**
      * @ORM\OneToMany(targetEntity=Task::class, mappedBy="project")
-     * @Groups({"tpzs:read"})
+     * @Groups({"tpzs:read","agencies:read"})
      */
     private $tasks;
 

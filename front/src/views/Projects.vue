@@ -51,6 +51,7 @@ export default {
   },
   created() {
     const user = JSON.parse(localStorage.getItem("user"));
+    this.user = user
     this.getAllAgencyMembers(user["agency"].substr(-1)); //retrieve user index from @id
   },
   methods: {
