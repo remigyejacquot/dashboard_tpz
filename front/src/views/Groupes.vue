@@ -1,6 +1,16 @@
 <template>
   <div>
     <div>
+      <div v-for="(item) in agencesDev" :key="item.id">
+        <p>{{item.name}}</p>
+        <ul>
+          <li v-for="(member) in item.users" :key="member.id">
+            {{member.firstname}} {{member.lastname}}
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div>
       <div>
         Créer une agence
         <b-form>
