@@ -1,10 +1,9 @@
 import axios from 'axios';
 
-const urlRemi = "http://localhost:8888/tpz/dashboard_tpz/back/public/index.php/"
+//const urlRemi = "http://localhost:8888/tpz/dashboard_tpz/back/public/index.php/"
 
 const axiosInstance = axios.create({
-    baseURL: urlRemi //'http://localhost/dashboard_tpz/back/public/index.php'
-    //headers,
+    baseURL: 'http://localhost/dashboard_tpz/back/public/index.php',
 });
 
 axiosInstance.interceptors.request.use(
