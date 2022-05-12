@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div class="container">
     <!--    Liste des étudiants-->
-    <section>
+    <b-card class="card item-list">
       <div class="mt-3">
         <b-button-group>
           <b-button id="dev" @click="toggleLicence($event)" :style="style.dev">DEV</b-button>
@@ -9,24 +9,28 @@
             >COM</b-button
           >
         </b-button-group>
-        <b-card-text>Liste des étudiants</b-card-text>
         <b-icon
-          icon="plus-circle-fill"
-          style="color: #f96197"
-          font-scale="1.5"
-          @click="addStudent"
-          >+</b-icon
+            icon="plus-circle-fill"
+            style="color: #f96197"
+            font-scale="1.5"
+            @click="addStudent"
+        >+</b-icon
         >
+        <b-card-text>Liste des étudiants</b-card-text>
+        <b-card-text v-for="user in users" :key="user.id">{{user}}</b-card-text>
       </div>
-    </section>
+    </b-card>
     <!--    Recherche-->
-    <section>
+    <b-card class="card item-search">
       <autocomplete-users
         v-bind:options="suggestions"
         input="etudiant"
         placeholder="Rechercher un étudiant"
       ></autocomplete-users>
-    </section>
+    </b-card>
+    <b-card class="card item-add">
+      <b-card-text>Ajouter un étudiant</b-card-text>
+    </b-card>
   </div>
 </template>
 
@@ -40,6 +44,7 @@ export default {
   components: { AutocompleteUsers },
   data() {
     return {
+      users:[],
       suggestions: {},
       type: "dev",
       style: {
@@ -52,6 +57,13 @@ export default {
     this.getAllStudents();
   },
   methods: {
+    getAllStudents() {
+      getUsers(JSON.parse(localStorage.getItem("tpzId"))).then((res) => {
+        this.users=res.data
+      }).catch(err=>{
+        console.log(err)
+      })
+    },
     toggleLicence(e) {
       console.log(e.target.id)
       /*si on clique sur DEV et que COM était sélectionné on switch sinon rien*/
@@ -77,13 +89,32 @@ export default {
     addStudent() {
       console.log("add new student");
     },
-    getAllStudents() {
-      getUsers(JSON.parse(localStorage.getItem("tpzId"))).then((res) => {
-        console.log(res.data);
-      });
-    },
   },
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto;
+  grid-template-areas:
+    "list search"
+    "list add";
+  justify-items: stretch;
+}
+.item-list {
+  grid-area: list;
+}
+.item-search {
+  grid-area: search;
+}
+.item-add {
+  grid-area: add;
+}
+.card {
+  margin: 2em;
+}
+
+
+</style>
