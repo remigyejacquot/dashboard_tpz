@@ -6,7 +6,7 @@
         <ul id="results">
           <p>Veuillez selectionner l'étudiant</p>
           <li v-for="(item) in autocompeleteList" :key="item.id" @click="updateField(item)" class="autocomplete-result" :style="{'cursor': 'pointer'}">
-              {{ item.firstname }} {{ item.lastname }}
+              {{ item.lastname }} {{ item.firstname }}
           </li>
         </ul>
       </div>
@@ -29,6 +29,7 @@ export default {
   },
   methods : {
     onChange($event) {
+      console.log(this.options)
       let searchResults = this.options.filter((group) => group['lastname'].toLowerCase().startsWith($event.toLowerCase()) || group['firstname'].toLowerCase().startsWith($event.toLowerCase()) )
       let results = []
       searchResults.forEach( (result) => {
@@ -37,7 +38,7 @@ export default {
       this.autocompeleteList = results
     },
     updateField(item){
-      this.user = item.nom + ' ' + item.prenom
+      this.user = item.lastname + ' ' + item.firstname
       this.id = item.id
       this.autocompeleteList = []
     }

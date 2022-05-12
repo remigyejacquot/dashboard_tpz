@@ -17,13 +17,20 @@ import {getUsers} from "../../api/users";
 
 export default {
   name: "Bureau",
+  data () {
+    return {
+      suggestions : []
+    }
+  },
   components: {AutocompleteUsers},
   async mounted () {
     this.getUsersData()
   },
   methods : {
     async getUsersData() {
-      await getUsers(1)
+      await getUsers(1).then((res) => {
+        this.suggestions = res.data
+      })
     }
   }
 }
