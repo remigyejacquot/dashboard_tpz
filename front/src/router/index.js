@@ -6,8 +6,9 @@ import ResetPassword from "../views/ResetPassword";
 import Projects from "../views/Projects";
 import Gestion from "../views/Gestion";
 import Groupes from "../views/Groupes";
-import "../assets/css/main.css";
 import GestionEtudiants from "../views/GestionEtudiants";
+import Bureau from "../views/Bureau";
+import "../assets/css/main.css";
 
 Vue.use(VueRouter);
 
@@ -48,10 +49,15 @@ const routes = [
         component: Groupes
       },
       {
+        path: '/gestion/bureau',
+        name: 'Bureau',
+        component: Bureau
+      },
+      {
         path:'/gestion/etudiants',
         name: 'GestionEtudiants',
         component: GestionEtudiants
-      }
+      },
     ]
   },
 ];
