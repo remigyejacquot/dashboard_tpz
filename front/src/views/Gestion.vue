@@ -4,7 +4,7 @@
       <b-nav class="d-flex flex-column">
         <b-nav-item active><router-link :to="{ name: 'Groupes'}">Groupes</router-link></b-nav-item>
         <b-nav-item><router-link to="/">Bureau</router-link></b-nav-item>
-        <b-nav-item><router-link to="/">etudiants</router-link></b-nav-item>
+        <b-nav-item><router-link :to="{ name: 'GestionEtudiants'}">etudiants</router-link></b-nav-item>
         <b-nav-item><router-link to="/">profs</router-link></b-nav-item>
       </b-nav>
     </div>

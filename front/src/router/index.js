@@ -7,6 +7,7 @@ import Projects from "../views/Projects";
 import Gestion from "../views/Gestion";
 import Groupes from "../views/Groupes";
 import "../assets/css/main.css";
+import GestionEtudiants from "../views/GestionEtudiants";
 
 Vue.use(VueRouter);
 
@@ -46,6 +47,11 @@ const routes = [
         name: 'Groupes',
         component: Groupes
       },
+      {
+        path:'/gestion/etudiants',
+        name: 'GestionEtudiants',
+        component: GestionEtudiants
+      }
     ]
   },
 ];
