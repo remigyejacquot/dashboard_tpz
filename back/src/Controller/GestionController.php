@@ -29,17 +29,10 @@ class GestionController extends AbstractController
             $users = $tpz->getUsers();
         }
 
-        $usersData = [];
-        /** @var User $user */
-        foreach ($users as $user) {
-            $data = array('nom' => $user->getLastname(), 'prenom' => $user->getFirstname(), 'id' => $user->getId());
-            $usersData[] = $data;
-        }
-
         $data = [
            'agenciesDev' => $agenciesDev,
            'agenciesCom' => $agenciesCom,
-           'users' => $usersData
+           'users' => $users
         ];
 
         return New Response($serializer->serialize($data, 'json'));
@@ -97,4 +90,15 @@ class GestionController extends AbstractController
         return new Response('ok');
     }
 
+    /**
+     * @Route("/gestion/getEtudiants/{tpzId}", name="get_etudiant_tpz")
+     */
+    public function getEtudiantsTPz(EntityManagerInterface $entityManager, SerializerInterface $serializer, int $tpzId) {
+        /** @var Tpz $tpz */
+        $tpz = $entityManager->getRepository(Tpz::class)->find($tpzId);
+        if($tpz) {
+           return new Response($serializer->serialize($tpz->getUsers(), 'json'));
+        }
+        return null;
+    }
 }
