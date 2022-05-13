@@ -1,19 +1,33 @@
 <template>
   <div>
     <div>
-      <autocomplete-users v-bind:options="suggestions"  input="president" placeholder="Président"></autocomplete-users>
-      <autocomplete-users v-bind:options="suggestions"  input="vice-president" placeholder="Vice-président"></autocomplete-users>
-      <autocomplete-users v-bind:options="suggestions"  input="tresorier" placeholder="Trésorier"></autocomplete-users>
-      <autocomplete-users v-bind:options="suggestions"  input="vice-tresorier" placeholder="Vice-trésorier"></autocomplete-users>
-      <autocomplete-users v-bind:options="suggestions"  input="secretaire" placeholder="Secrétaire"></autocomplete-users>
-      <autocomplete-users v-bind:options="suggestions"  input="vice-secretaire" placeholder="Vice-secrétaire"></autocomplete-users>
+      <div id="president-fields">
+        <autocomplete-users v-bind:options="suggestions"  input="president" placeholder="Président"></autocomplete-users>
+      </div>
+      <div id="vice-president-fields">
+        <autocomplete-users v-bind:options="suggestions"  input="vice-president" placeholder="Vice-président"></autocomplete-users>
+      </div>
+      <div id="tresorier-fields">
+        <autocomplete-users v-bind:options="suggestions"  input="tresorier" placeholder="Trésorier"></autocomplete-users>
+      </div>
+      <div id="vice-tresorier-fields">
+        <autocomplete-users v-bind:options="suggestions"  input="vice-tresorier" placeholder="Vice-trésorier"></autocomplete-users>
+      </div>
+      <div id="secretaire-fields">
+        <autocomplete-users v-bind:options="suggestions"  input="secretaire" placeholder="Secrétaire"></autocomplete-users>
+      </div>
+      <div id="vice-secretaire-fields">
+        <autocomplete-users v-bind:options="suggestions"  input="vice-secretaire" placeholder="Vice-secrétaire"></autocomplete-users>
+      </div>
     </div>
+    <b-button class="green-button mt-4" @click="updateRoleBureau">valider</b-button>
   </div>
 </template>
 
 <script>
 import AutocompleteUsers from "../components/autocompleteUsers";
 import {getUsers} from "../../api/users";
+import {updateRoleBureau} from "../../api/gestion";
 
 export default {
   name: "Bureau",
@@ -31,6 +45,18 @@ export default {
       await getUsers(1).then((res) => {
         this.suggestions = res.data
       })
+    },
+    async updateRoleBureau() {
+      const roles = ['president', 'vice-president', 'secretaire', 'vice-secretaire', 'tresorier', 'vice-tresorier']
+      let data = []
+      for (let role in roles) {
+        let value = document.querySelector("#" + roles[role] + '-fields ' + '#id' ).value;
+        if(value != "") {
+          data.push([roles[role], value])
+        }
+      }
+      console.log(data)
+      await updateRoleBureau(data)
     }
   }
 }

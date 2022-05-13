@@ -101,4 +101,30 @@ class GestionController extends AbstractController
         }
         return null;
     }
+
+    /**
+     * @Route("/gestion/updateRoleBureau", name="update_role_bureau")
+     */
+    public function updateRoleBureau(EntityManagerInterface $entityManager, Request $request) {
+        $request_body = file_get_contents('php://input');
+        $data = json_decode($request_body, true);
+        $bureauMembers = $data['data'];
+
+        foreach ($bureauMembers as $bureau) {
+            /** @var TpzRoles $roleField */
+            $roleField = $entityManager->getRepository(TpzRoles::class)->findOneBy(array('role' => $bureau[0]));
+            /** @var User $user */
+            $user = $entityManager->getRepository(User::class)->find($bureau[1]);
+
+            if($roleField && $user) {
+                $user->addTpzRole($roleField);
+                $roleField->addUser($user);
+                $entityManager->persist($roleField);
+                $entityManager->persist($user);
+            }
+        }
+        $entityManager->flush();
+
+        return new Response('ok');
+    }
 }

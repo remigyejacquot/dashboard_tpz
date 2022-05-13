@@ -11,7 +11,6 @@ async function deleteGroupe(id) {
 }
 
 async function updateRole(role, idUser, idAgence) {
-    console.log(role)
     return await axiosInstance.post("/gestion/updateRole", {
         'roleUser' : role,
         'idUser' : idUser,
@@ -19,4 +18,10 @@ async function updateRole(role, idUser, idAgence) {
     })
 }
 
-export {getGroupesData, updateRole, deleteGroupe}
+async function updateRoleBureau(data) {
+    return await axiosInstance.post("/gestion/updateRoleBureau", {
+        'data' : data,
+    })
+}
+
+export {getGroupesData, updateRole, deleteGroupe, updateRoleBureau}

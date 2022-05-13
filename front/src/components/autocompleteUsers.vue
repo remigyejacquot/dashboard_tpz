@@ -10,7 +10,7 @@
           </li>
         </ul>
       </div>
-      <b-form-input id="id" v-model="id" type="text" placeholder="" required hidden></b-form-input>
+      <b-form-input id="id" v-model="id" type="text" placeholder="" required></b-form-input>
     </b-form-group>
   </div>
 </template>
