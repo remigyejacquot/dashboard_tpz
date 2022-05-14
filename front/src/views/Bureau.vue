@@ -39,14 +39,7 @@ export default {
   components: {AutocompleteUsers},
   async mounted () {
     this.getUsersData()
-    getMembresBureau(1).then((res) => {
-      const membres = res.data
-      for (let i in membres) {
-        for(let role in membres[i].tpzRolesArray) {
-          this.setValueToField(membres[i], membres[i].tpzRolesArray[role])
-        }
-      }
-    })
+    this.getRolesBureau()
   },
   methods : {
     async getUsersData() {
@@ -63,7 +56,20 @@ export default {
           data.push([roles[role], value])
         }
       }
-      await updateRoleBureau(data)
+      await updateRoleBureau(data).then(() => {
+        this.getRolesBureau()
+      })
+    },
+
+    async getRolesBureau() {
+      await getMembresBureau(1).then((res) => {
+        const membres = res.data
+        for (let i in membres) {
+          for(let role in membres[i].tpzRolesArray) {
+            this.setValueToField(membres[i], membres[i].tpzRolesArray[role])
+          }
+        }
+      })
     },
     setValueToField(user, role) {
       const field = document.querySelector("#" + role + '-fields ' + '#id' )
