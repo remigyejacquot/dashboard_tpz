@@ -1,0 +1,38 @@
+.menu-container {
+    background-color: #f3f3f3;
+    padding: 50px 20px;
+    height: 100vh;
+}
+
+.gestion-menu {
+    background-color: #FAD26E;
+    width: 140px;
+    border-radius: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.gestion-nav {
+   display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    height: 70%;
+}
+
+.gestion-nav li {
+    text-transform: uppercase;
+}
+
+.gestion-nav li a{
+    color: white !important;
+    text-decoration: none;
+    font-family: roboto, sans-serif;
+    font-weight: bold;
+}
+
+.nav-item a {
+    display: flex;
+    flex-direction: column;
+}
