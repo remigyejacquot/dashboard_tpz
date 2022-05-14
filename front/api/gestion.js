@@ -24,4 +24,8 @@ async function updateRoleBureau(data) {
     })
 }
 
-export {getGroupesData, updateRole, deleteGroupe, updateRoleBureau}
+async function getMembresBureau(tpz) {
+    return await axiosInstance.get("/gestion/getMembresBureau/" + tpz)
+}
+
+export {getGroupesData, updateRole, deleteGroupe, updateRoleBureau, getMembresBureau}

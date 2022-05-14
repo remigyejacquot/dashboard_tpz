@@ -27,7 +27,7 @@
 <script>
 import AutocompleteUsers from "../components/autocompleteUsers";
 import {getUsers} from "../../api/users";
-import {updateRoleBureau} from "../../api/gestion";
+import {updateRoleBureau, getMembresBureau} from "../../api/gestion";
 
 export default {
   name: "Bureau",
@@ -39,6 +39,14 @@ export default {
   components: {AutocompleteUsers},
   async mounted () {
     this.getUsersData()
+    getMembresBureau(1).then((res) => {
+      const membres = res.data
+      for (let i in membres) {
+        for(let role in membres[i].tpzRolesArray) {
+          this.setValueToField(membres[i], membres[i].tpzRolesArray[role])
+        }
+      }
+    })
   },
   methods : {
     async getUsersData() {
@@ -55,8 +63,17 @@ export default {
           data.push([roles[role], value])
         }
       }
-      console.log(data)
       await updateRoleBureau(data)
+    },
+    setValueToField(user, role) {
+      const field = document.querySelector("#" + role + '-fields ' + '#id' )
+      const user_field = document.querySelector("#" + role)
+      if(field){
+        field.value = user.id
+      }
+      if(user_field) {
+        user_field.value = user.lastname + ' ' + user.firstname
+      }
     }
   }
 }

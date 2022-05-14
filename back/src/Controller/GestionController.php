@@ -7,6 +7,7 @@ use App\Entity\Agency;
 use App\Entity\Tpz;
 use App\Entity\TpzRoles;
 use App\Entity\User;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -126,5 +127,13 @@ class GestionController extends AbstractController
         $entityManager->flush();
 
         return new Response('ok');
+    }
+
+    /**
+     * @Route("/gestion/getMembresBureau/{tpzId}", name="get_membre_bureau")
+     */
+    public function getMembresBureau(UserRepository $userRepository, SerializerInterface $serializer, int $tpzId) {
+        $membres = $userRepository->getUsersBureau($tpzId);
+        return new Response($serializer->serialize($membres, 'json'));
     }
 }

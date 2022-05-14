@@ -250,6 +250,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    /**
+     * @Groups({"users:read"})
+     */
+    public function getTpzRolesArray() {
+        $tpz_roles = [];
+        /** @var TpzRoles $roles */
+        foreach ($this->getTpzRole() as $roles) {
+            $tpz_roles[] = $roles->getRole();
+        }
+        return $tpz_roles;
+    }
+
     public function getTpz(): ?Tpz
     {
         return $this->tpz;
