@@ -104,9 +104,9 @@ class GestionController extends AbstractController
     }
 
     /**
-     * @Route("/gestion/updateRoleBureau", name="update_role_bureau")
+     * @Route("/gestion/updateRoleBureau/{tpzId}", name="update_role_bureau")
      */
-    public function updateRoleBureau(EntityManagerInterface $entityManager, Request $request) {
+    public function updateRoleBureau(EntityManagerInterface $entityManager, UserRepository $userRepository, Request $request, int $tpzId) {
         $request_body = file_get_contents('php://input');
         $data = json_decode($request_body, true);
         $bureauMembers = $data['data'];
@@ -117,7 +117,16 @@ class GestionController extends AbstractController
             /** @var User $user */
             $user = $entityManager->getRepository(User::class)->find($bureau[1]);
 
+            $bureauActuel = $userRepository->getUsersBureau($tpzId);
             if($roleField && $user) {
+                /** @var User $actuelMember */
+                foreach ($bureauActuel as $actuelMember) {
+                    if ($actuelMember->getTpzRole()->contains($roleField) && $actuelMember !== $user) {
+                        $roleField->removeUser($actuelMember);
+                        $actuelMember->removeTpzRole($roleField);
+                        $entityManager->persist($actuelMember);
+                    }
+                }
                 $user->addTpzRole($roleField);
                 $roleField->addUser($user);
                 $entityManager->persist($roleField);

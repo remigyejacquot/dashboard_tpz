@@ -18,8 +18,8 @@ async function updateRole(role, idUser, idAgence) {
     })
 }
 
-async function updateRoleBureau(data) {
-    return await axiosInstance.post("/gestion/updateRoleBureau", {
+async function updateRoleBureau(data, tpz) {
+    return await axiosInstance.post("/gestion/updateRoleBureau/" + tpz, {
         'data' : data,
     })
 }

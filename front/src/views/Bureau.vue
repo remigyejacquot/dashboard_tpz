@@ -56,9 +56,7 @@ export default {
           data.push([roles[role], value])
         }
       }
-      await updateRoleBureau(data).then(() => {
-        this.getRolesBureau()
-      })
+      await updateRoleBureau(data, 1)
     },
 
     async getRolesBureau() {
