@@ -1,28 +1,40 @@
 <template>
-  <div>
-    <div>
-      <div id="president-fields">
-        <autocomplete-users v-bind:options="suggestions"  input="president" placeholder="Président"></autocomplete-users>
+  <div class="container-fluid">
+    <div class="row bureau-form">
+      <div class="col-lg-12">
+        <h1>Bureau</h1>
       </div>
-      <div id="vice-president-fields">
-        <autocomplete-users v-bind:options="suggestions"  input="vice-president" placeholder="Vice-président"></autocomplete-users>
+      <div class="col-lg-6">
+        <div id="president-fields" class="input-gestion">
+          <autocomplete-users v-bind:options="suggestions"  input="president" placeholder="Président"></autocomplete-users>
+        </div>
+        <div id="tresorier-fields" class="input-gestion">
+          <autocomplete-users v-bind:options="suggestions"  input="tresorier" placeholder="Trésorier"></autocomplete-users>
+        </div>
+        <div id="secretaire-fields" class="input-gestion">
+          <autocomplete-users v-bind:options="suggestions"  input="secretaire" placeholder="Secrétaire"></autocomplete-users>
+        </div>
       </div>
-      <div id="tresorier-fields">
-        <autocomplete-users v-bind:options="suggestions"  input="tresorier" placeholder="Trésorier"></autocomplete-users>
+      <div class="col-lg-6">
+        <div id="vice-president-fields" class="input-gestion">
+          <autocomplete-users v-bind:options="suggestions"  input="vice-president" placeholder="Vice-président"></autocomplete-users>
+        </div>
+        <div id="vice-tresorier-fields" class="input-gestion">
+          <autocomplete-users v-bind:options="suggestions"  input="vice-tresorier" placeholder="Vice-trésorier"></autocomplete-users>
+        </div>
+        <div id="vice-secretaire-fields" class="input-gestion">
+          <autocomplete-users v-bind:options="suggestions"  input="vice-secretaire" placeholder="Vice-secrétaire"></autocomplete-users>
+        </div>
       </div>
-      <div id="vice-tresorier-fields">
-        <autocomplete-users v-bind:options="suggestions"  input="vice-tresorier" placeholder="Vice-trésorier"></autocomplete-users>
-      </div>
-      <div id="secretaire-fields">
-        <autocomplete-users v-bind:options="suggestions"  input="secretaire" placeholder="Secrétaire"></autocomplete-users>
-      </div>
-      <div id="vice-secretaire-fields">
-        <autocomplete-users v-bind:options="suggestions"  input="vice-secretaire" placeholder="Vice-secrétaire"></autocomplete-users>
+      <div class="col-lg-12">
+        <button class="valid-button mt-4" @click="updateRoleBureau">Valider</button>
       </div>
     </div>
-    <b-button class="green-button mt-4" @click="updateRoleBureau">valider</b-button>
   </div>
 </template>
+<style>
+  @import '../assets/css/bureau.css';
+</style>
 
 <script>
 import AutocompleteUsers from "../components/autocompleteUsers";

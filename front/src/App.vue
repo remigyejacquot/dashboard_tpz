@@ -1,7 +1,5 @@
 <template>
   <div id="app">
-    <b-img-lazy v-bind="mainProps" center :src="require('./assets/tpz_logo.png')" fluid alt="Logo Troyes Point Zero"></b-img-lazy>
-    <b-button @click="logout">Déconnexion</b-button>
     <router-view />
   </div>
 </template>

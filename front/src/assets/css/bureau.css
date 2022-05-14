@@ -1,0 +1,52 @@
+.container-fluid {
+    background-color: #f3f3f3;
+    height: 100vh;
+    padding: 50px !important;
+}
+
+.bureau-form {
+    padding: 20px;
+    background-color: white;
+    border-radius: 15px;
+    height: 500px;
+}
+
+h1 {
+    font-family: roboto, sans-serif;
+    font-size: 25px !important;
+    font-weight: bold !important;
+    text-align: left;
+}
+
+.input-gestion {
+    padding: 20px;
+}
+
+.input-gestion * {
+    font-family: roboto, sans-serif;
+}
+
+.input-gestion label {
+    text-align: left;
+    font-size: 20px;
+}
+
+.input-gestion input {
+    background-color: #F6F6F6;
+    border: none;
+}
+
+.valid-button {
+    float: right;
+    background-color: #FAD26E;
+    color :white;
+    font-family: roboto, sans-serif;
+    font-weight: bold;
+    padding: 5px 40px;
+    border: none;
+    border-radius: 20px;
+}
+
+.valid-button:hover {
+    background-color: #6D5A8F;
+}
