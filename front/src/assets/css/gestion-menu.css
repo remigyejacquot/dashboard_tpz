@@ -6,7 +6,7 @@
 
 .gestion-menu {
     background-color: #FAD26E;
-    width: 140px;
+    width: 130px !important;
     border-radius: 25px;
     display: flex;
     justify-content: center;
@@ -33,6 +33,14 @@
 }
 
 .nav-item a {
+    height: 90px;
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+a.active {
+    background-color: rgba(0, 0, 0, 0.03);
+    border-radius: 15px;
 }

@@ -36,17 +36,3 @@ h1 {
     border: none;
 }
 
-.valid-button {
-    float: right;
-    background-color: #FAD26E;
-    color :white;
-    font-family: roboto, sans-serif;
-    font-weight: bold;
-    padding: 5px 40px;
-    border: none;
-    border-radius: 20px;
-}
-
-.valid-button:hover {
-    background-color: #6D5A8F;
-}

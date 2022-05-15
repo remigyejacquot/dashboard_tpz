@@ -1,54 +1,59 @@
 <template>
-  <div>
-    <div>
-      <div v-for="(item) in agencesDev" :key="item.id">
-        <p>{{item.name}}</p>
-        <ul>
-          <li v-for="(member) in item.users" :key="member.id">
-            {{member.firstname}} {{member.lastname}}
-          </li>
-        </ul>
+  <div class="container-fluid">
+    <div class="row h-100">
+      <div class="container-liste-agence col-lg-6">
+        <p class="action-title">Liste des groupes</p>
+        <div v-for="(item) in agencesDev" :key="item.id">
+          <p>{{item.name}}</p>
+          <ul>
+            <li v-for="(member) in item.users" :key="member.id">
+              {{member.firstname}} {{member.lastname}}
+            </li>
+          </ul>
+        </div>
+        <div v-for="(item) in agencesCom" :key="item.id">
+          <p>{{item.name}}</p>
+          <ul>
+            <li v-for="(member) in item.users" :key="member.id">
+              {{member.firstname}} {{member.lastname}}
+            </li>
+          </ul>
+        </div>
       </div>
-      <div v-for="(item) in agencesCom" :key="item.id">
-        <p>{{item.name}}</p>
-        <ul>
-          <li v-for="(member) in item.users" :key="member.id">
-            {{member.firstname}} {{member.lastname}}
-          </li>
-        </ul>
+      <div class="col-lg-6 container-forms">
+        <div class="form add">
+          <p class="action-title">Créer une agence</p>
+          <b-form>
+            <autocomplete-users v-bind:options="suggestions"  input="chef" placeholder="Chef de projet"></autocomplete-users>
+              <b-form-group id="spe" label="Spécialité" label-for="spe">
+                <b-form-select v-model="is_dev" :options="options"></b-form-select>
+              </b-form-group>
+          </b-form>
+          <button class="valid-button mt-4" @click="ajoutGroupe">Ajouter</button>
+        </div>
+        <div class="form mt-4 delete">
+          <p class="action-title">Supprimer une agence</p>
+          <b-form>
+            <autocomplete-agency v-bind:agencesDev="agencesDev" v-bind:agencesCom="agencesCom" input="groupe" placeholder="Agence"></autocomplete-agency>
+          </b-form>
+          <button v-b-modal.modal-1 class="red-button mt-4">Supprimer</button>
+        </div>
       </div>
-    </div>
-    <div>
-      <div>
-        Créer une agence
-        <b-form>
-          <autocomplete-users v-bind:options="suggestions"  input="chef" placeholder="Chef de projet"></autocomplete-users>
-            <b-form-group id="spe" label="Spécialité" label-for="spe">
-              <b-form-select v-model="is_dev" :options="options"></b-form-select>
-            </b-form-group>
-        </b-form>
-        <b-button class="green-button mt-4" @click="ajoutGroupe">Ajouter</b-button>
+      <b-modal id="modal-1" title="Suppression"  hide-footer>
+        <p class="my-4">Êtes-vous sûr de vouloir supprimer l'agence' ?</p>
+        <div class="d-flex justify-content-end">
+          <b-button class="mt-3 mr-2" block @click="$bvModal.hide('bv-modal-example')">Annuler</b-button>
+          <b-button class="mt-3" block @click="$bvModal.hide('bv-modal-example'); supprimerGroupe()" variant="danger">Supprimer</b-button>
+        </div>
+      </b-modal>
+      <router-view></router-view>
       </div>
-    </div>
-    <div>
-      <div>
-        Supprimer une agence
-        <b-form>
-          <autocomplete-agency v-bind:agencesDev="agencesDev" v-bind:agencesCom="agencesCom" input="groupe" placeholder="Agence"></autocomplete-agency>
-        </b-form>
-        <b-button v-b-modal.modal-1 class="green-button mt-4">Supprimer</b-button>
-      </div>
-    </div>
-    <b-modal id="modal-1" title="Suppression"  hide-footer>
-      <p class="my-4">Êtes-vous sûr de vouloir supprimer l'agence' ?</p>
-      <div class="d-flex justify-content-end">
-        <b-button class="mt-3 mr-2" block @click="$bvModal.hide('bv-modal-example')">Annuler</b-button>
-        <b-button class="mt-3" block @click="$bvModal.hide('bv-modal-example'); supprimerGroupe()" variant="danger">Supprimer</b-button>
-      </div>
-    </b-modal>
-    <router-view></router-view>
   </div>
 </template>
+
+<style>
+@import '../assets/css/groupes.css';
+</style>
 
 <script>
 import { addAgency } from "../../api/agencies";
