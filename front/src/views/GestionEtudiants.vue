@@ -4,20 +4,23 @@
     <b-card class="card item-list">
       <div class="mt-3">
         <b-button-group>
-          <b-button id="dev" @click="toggleLicence($event)" :style="style.dev">DEV</b-button>
+          <b-button id="dev" @click="toggleLicence($event)" :style="style.dev"
+            >DEV</b-button
+          >
           <b-button id="com" @click="toggleLicence($event)" :style="style.com"
             >COM</b-button
           >
         </b-button-group>
         <b-icon
-            icon="plus-circle-fill"
-            style="color: #f96197"
-            font-scale="1.5"
-            @click="addStudent"
-        >+</b-icon
+          icon="plus-circle-fill"
+          style="color: #f96197"
+          font-scale="1.5"
+          >+</b-icon
         >
         <b-card-text>Liste des étudiants</b-card-text>
-        <b-card-text v-for="user in users" :key="user.id">{{user}}</b-card-text>
+        <b-card-text v-for="user in users" :key="user.id">{{
+          user
+        }}</b-card-text>
       </div>
     </b-card>
     <!--    Recherche-->
@@ -30,27 +33,65 @@
     </b-card>
     <b-card class="card item-add">
       <b-card-text>Ajouter un étudiant</b-card-text>
+      <div>
+        <b-form-group label="Nom" label-for="input-lastname" class="m-2">
+          <b-form-input
+            id="input-lastname"
+            v-model="userToAdd.lastname"
+            placeholder="Nom de l'étudiant"
+            lazy-formatter
+          ></b-form-input>
+        </b-form-group>
+        <b-form-group label="Prénom" label-for="input-firstname" class="m-2"
+          ><b-form-input
+            id="input-firstname"
+            v-model="userToAdd.firstname"
+            placeholder="Prénom de l'étudiant"
+            lazy-formatter
+          ></b-form-input>
+        </b-form-group>
+        <b-form-group label="Email" label-for="input-email" class="m-2"
+          ><b-form-input
+            id="input-email"
+            v-model="userToAdd.name"
+            placeholder="Email de l'étudiant"
+            lazy-formatter
+          ></b-form-input>
+        </b-form-group>
+        <b-button type="submit" id="submit-btn" :style="bgColors.yellow" @click="addNewStudent">Ajouter</b-button>
+      </div>
     </b-card>
   </div>
 </template>
 
 <script>
-import { getUsers } from "../../api/users";
+import {addStudent, getUsers} from "../../api/users";
 import AutocompleteUsers from "../components/autocompleteUsers";
-import {COLORS} from "../utils/colors";
+import { COLORS } from "../utils/colors";
 
 export default {
   name: "GestionEtudiants",
   components: { AutocompleteUsers },
   data() {
     return {
-      users:[],
+      users: [],
+      userToAdd: {
+        email: "",
+        roles: [""],
+        firstname: "",
+        lastname: "",
+        tpz: "",
+        isDev: "",
+      },
       suggestions: {},
       type: "dev",
       style: {
-        dev: "background-color: "+COLORS.yellow,
+        dev: "background-color: " + COLORS.yellow,
         com: "",
       },
+      bgColors:{
+        yellow: "background-color: " + COLORS.yellow
+    }
     };
   },
   mounted() {
@@ -58,36 +99,41 @@ export default {
   },
   methods: {
     getAllStudents() {
-      getUsers(JSON.parse(localStorage.getItem("tpzId"))).then((res) => {
-        this.users=res.data
-      }).catch(err=>{
-        console.log(err)
-      })
+      getUsers(JSON.parse(localStorage.getItem("tpzId")))
+        .then((res) => {
+          this.users = res.data;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
     toggleLicence(e) {
-      console.log(e.target.id)
+      console.log(e.target.id);
       /*si on clique sur DEV et que COM était sélectionné on switch sinon rien*/
-      if (e.target.id === 'dev'){
-        if(this.type === 'com'){
-          this.type = 'dev'
+      if (e.target.id === "dev") {
+        if (this.type === "com") {
+          this.type = "dev";
           this.style = {
-            dev: "background-color: "+COLORS.yellow,
-            com: ""
-          }
+            dev: "background-color: " + COLORS.yellow,
+            com: "",
+          };
         }
-      /*si on clique sur COM et que DEV était sélectionné on switch sinon rien*/
-      } else if (e.target.id === 'com') {
-        if(this.type === 'dev'){
-          this.type = 'com'
+        /*si on clique sur COM et que DEV était sélectionné on switch sinon rien*/
+      } else if (e.target.id === "com") {
+        if (this.type === "dev") {
+          this.type = "com";
           this.style = {
             dev: "",
-            com: "background-color: "+COLORS.yellow,
-          }
+            com: "background-color: " + COLORS.yellow,
+          };
         }
       }
     },
-    addStudent() {
+    addNewStudent() {
       console.log("add new student");
+      addStudent(this.userToAdd).then(res=>{
+        console.log(res)
+      })
     },
   },
 };
@@ -115,6 +161,10 @@ export default {
 .card {
   margin: 2em;
 }
-
-
+#submit-btn {
+  width: 10em;
+  border-radius: 10em;
+  border-color: transparent;
+  margin: 1em;
+}
 </style>
