@@ -56,7 +56,7 @@ export default {
   methods : {
     async getUsersData() {
       await getUsers(1).then((res) => {
-        this.suggestions = res.data
+        this.suggestions = res.data['hydra:member']
       })
     },
     async updateRoleBureau() {

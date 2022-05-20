@@ -5,7 +5,7 @@ async function getUser(id) {
 }
 
 async function getUsers(tpzId) {
-    return await axiosInstance.get("/gestion/getEtudiants/" + tpzId)
+    return await axiosInstance.get("api/users?tpz.id=" + tpzId)
 }
 
 export { getUser, getUsers };
