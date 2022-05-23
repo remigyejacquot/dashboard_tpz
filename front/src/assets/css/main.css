@@ -35,3 +35,17 @@ body * {
 .red-button:hover {
     background-color: #c24949;
 }
+
+.modifier {
+    background-color: transparent !important;
+    border: none !important;
+    color : #FAD26E !important;
+}
+
+.modifier:hover {
+    color: #6D5A8F !important;
+}
+
+.modifier:focus {
+    box-shadow: transparent !important;
+}

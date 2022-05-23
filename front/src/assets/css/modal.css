@@ -1,0 +1,53 @@
+.modal-header {
+    background-color: #FBDD91 !important;
+    color: white;
+    padding: 5px 20px !important;
+}
+
+.modal-header h5 {
+    font-weight: bold !important;
+}
+
+.close {
+    background-color: transparent;
+    border: none;
+    color: white;
+    font-size: 30px;
+}
+
+#name {
+    background-color: #F6F6F6;
+    border: none;
+    border-radius: 0;
+}
+
+#name-input label {
+    width: 20%;
+}
+
+#name-input div {
+    width: 80%;
+}
+
+.modal-dialog {
+    width: 55% !important;
+    max-width: none !important;
+    min-width: 500px !important;
+}
+
+.modal-content {
+    border: none !important;
+    border-radius: 0 !important;
+}
+
+.bottom-modal {
+    border-top : 1px solid #d4d3d3;
+}
+
+.modal-body {
+    padding: 8% !important;
+}
+
+.valid-button-wrapper {
+    height: 70px;
+}

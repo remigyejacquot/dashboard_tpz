@@ -1,5 +1,6 @@
 <template>
   <div class="container-fluid">
+    <form-update-projet></form-update-projet>
     <div class="row h-100">
       <div class="container-liste-agence col-lg-6">
         <p class="action-title">Liste des groupes</p>
@@ -60,10 +61,11 @@ import { addAgency } from "../../api/agencies";
 import {getGroupesData, updateRole, deleteGroupe} from "../../api/gestion";
 import AutocompleteUsers from "../components/autocompleteUsers";
 import AutocompleteAgency from "../components/autocompleteAgency";
+import FormUpdateProjet from "../components/formUpdateProjet";
 
 export default {
   name: "Groupes",
-  components: { AutocompleteAgency, AutocompleteUsers },
+  components: {FormUpdateProjet, AutocompleteAgency, AutocompleteUsers },
   data () {
     return {
       chefProjet: "",
