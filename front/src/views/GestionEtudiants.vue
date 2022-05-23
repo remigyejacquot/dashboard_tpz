@@ -83,7 +83,7 @@ export default {
         tpz: "",
         isDev: "",
       },
-      suggestions: {},
+      suggestions: [],
       type: "dev",
       style: {
         dev: "background-color: " + COLORS.yellow,
@@ -101,7 +101,13 @@ export default {
     getAllStudents() {
       getUsers(JSON.parse(localStorage.getItem("tpzId")))
         .then((res) => {
-          this.users = res.data;
+          res.data["hydra:member"].map(el=>{
+            if(el.is_dev) {
+              console.log(el)
+              this.suggestions.push(el)
+            }
+          })
+          this.users = res.data["hydra:member"];
         })
         .catch((err) => {
           console.log(err);
