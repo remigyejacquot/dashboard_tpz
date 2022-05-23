@@ -17,6 +17,8 @@
         <b-nav-item to="/">
             <font-awesome-icon icon="user-tie" class="gestion-icones-menu" size="2x"/>
             profs
+        </b-nav-item>
+      </b-nav>
     </div>
     <router-view></router-view>
   </div>
