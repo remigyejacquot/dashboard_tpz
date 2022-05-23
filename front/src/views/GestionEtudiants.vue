@@ -152,6 +152,12 @@ export default {
           console.log(err);
         });
     },
+    updateUser(){
+      console.log('udated')
+    },
+    deleteUser(){
+      console.log('udated')
+    },
     toggleLicence(e) {
       console.log(e.target.id);
       /*si on clique sur DEV et que COM était sélectionné on switch sinon rien*/
