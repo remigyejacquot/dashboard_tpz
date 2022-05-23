@@ -101,4 +101,12 @@ class GestionController extends AbstractController
         }
         return null;
     }
+
+    /**
+     * @Route("/gestion/addStudent", name="add_student")
+     */
+    public function addStudent(EntityManagerInterface $entityManager, Request $request) {
+        dd($request->getContent());
+        return null;
+    }
 }
