@@ -4,4 +4,13 @@ async function getUser(id) {
     return await axiosInstance.get(  "api/users/"+id);
 }
 
-export { getUser };
+async function getUsers(tpzId) {
+    return await axiosInstance.get("api/users?tpz.id=" + tpzId)
+}
+
+async function addStudent(data) {
+    //return await axiosInstance.post("/gestion/addStudent", data)
+    return await axiosInstance.post("api/users", data)
+}
+
+export { getUser, getUsers, addStudent };

@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\SubtaskRepository;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -21,6 +22,7 @@ class Subtask
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"agencies:read"})
      */
     private $title;
 
@@ -31,6 +33,7 @@ class Subtask
 
     /**
      * @ORM\Column(type="boolean")
+     * @Groups({"agencies:read"})
      */
     private $is_finished;
 

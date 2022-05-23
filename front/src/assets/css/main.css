@@ -1,0 +1,37 @@
+.d-none {
+    display: none;
+}
+
+body * {
+    font-family: roboto, sans-serif;
+}
+
+.valid-button {
+    float: right;
+    background-color: #FAD26E;
+    color :white;
+    font-family: roboto, sans-serif;
+    font-weight: bold;
+    padding: 5px 40px;
+    border: none;
+    border-radius: 20px;
+}
+
+.valid-button:hover {
+    background-color: #6D5A8F;
+}
+
+.red-button {
+    float: right;
+    background-color: #FF6969;
+    color :white;
+    font-family: roboto, sans-serif;
+    font-weight: bold;
+    padding: 5px 40px;
+    border: none;
+    border-radius: 20px;
+}
+
+.red-button:hover {
+    background-color: #c24949;
+}

@@ -1,7 +1,5 @@
 <template>
-  <div id="app ">
-<!--    <b-img-lazy v-bind="mainProps" center :src="require('./assets/tpz_logo.png')" fluid alt="Logo Troyes Point Zero"></b-img-lazy>-->
-<!--    <b-button @click="logout">Déconnexion</b-button>-->
+  <div id="app">
     <router-view />
   </div>
 </template>
@@ -28,7 +26,6 @@ export default {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
 }
 

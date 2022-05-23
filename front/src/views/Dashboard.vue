@@ -244,9 +244,9 @@
 </template>
 
 <script>
-import { getLicenceAgencies, getUserLicenceAgencies } from "../../api/agencies";
-import { getAllMembers } from "../../api/tpzMembers";
+import { getAllTpzMembers } from "../../api/tpzMembers";
 import { getUser } from "../../api/users";
+import { getTpz } from "../../api/tpzs";
 import ProjectPreview from "../components/ProjectPreview";
 
 export default {
@@ -255,51 +255,45 @@ export default {
   data() {
     return {
       user: {},
-      agencies: [],
+      devAgencies: [],
+      comAgencies: [],
       tpzMembers: [],
-      agenciesType: "",
+      type: "",
     };
   },
   created() {
-    const userId = JSON.parse(localStorage.getItem("user")).id;
-    this.fetchUserInfo(userId);
+    const userId = JSON.parse(localStorage.getItem("user")).id || JSON.parse(localStorage.getItem("user"))["@id"].substr(-1);
+    this.fetchInfo(userId);
     this.fetchTpzMembers();
-    this.fetchUserLicenceAgencies(userId);
   },
   methods: {
-    fetchUserInfo(id) {
+    fetchInfo(id) {
       getUser(id).then((res) => {
+        console.log(res.data.tpzId);
         this.user = res.data;
-        localStorage.setItem("user", JSON.stringify(res.data)); // store the user in localstorage
-        this.agenciesType = res.data.is_dev ? "dev" : "com";
+        this.type = res.data.is_dev ? "dev" : "com";
+        localStorage.setItem("user", JSON.stringify(res.data))
+        localStorage.setItem("tpzId", JSON.stringify(res.data.tpzId)) // store the user in localstorage
+        getTpz(res.data.tpzId).then((res) => {
+          console.log("toto", res.data.agencies);
+          this.devAgencies = res.data.agencies.filter(
+            (el) => el.is_dev === true
+          );
+          this.comAgencies = res.data.agencies.filter(
+            (el) => el.is_dev !== true
+          );
+        });
       });
     },
     fetchTpzMembers() {
-      getAllMembers().then((res) => {
+      getAllTpzMembers().then((res) => {
         res.data["hydra:member"].forEach((member) => {
           this.tpzMembers.push(member);
         });
       });
     },
-    fetchUserLicenceAgencies(id) {
-      getUserLicenceAgencies(id).then((res) => {
-        res.data.forEach((agency) => {
-          this.agencies.push(agency);
-        });
-      });
-    },
-    fetchProjects() {},
     toggleLicence() {
-      let newAgencies = [];
-      this.agenciesType === "dev"
-        ? (this.agenciesType = "com")
-        : (this.agenciesType = "dev");
-      getLicenceAgencies(this.agenciesType).then((res) => {
-        res.data.forEach((agency) => {
-          newAgencies.push(agency);
-        });
-        this.agencies = newAgencies;
-      });
+      this.type === "dev" ? (this.type = "com") : (this.type = "dev");
     },
   },
 };
