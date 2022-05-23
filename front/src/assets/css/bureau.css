@@ -1,0 +1,38 @@
+.container-fluid {
+    background-color: #f3f3f3;
+    height: 100%;
+    padding: 0 50px 0 50px !important;
+}
+
+.bureau-form {
+    padding: 20px;
+    background-color: white;
+    border-radius: 15px;
+    height: 500px;
+}
+
+h1 {
+    font-family: roboto, sans-serif;
+    font-size: 25px !important;
+    font-weight: bold !important;
+    text-align: left;
+}
+
+.input-gestion {
+    padding: 20px;
+}
+
+.input-gestion * {
+    font-family: roboto, sans-serif;
+}
+
+.input-gestion label {
+    text-align: left;
+    font-size: 20px;
+}
+
+.input-gestion input {
+    background-color: #F6F6F6;
+    border: none;
+}
+
