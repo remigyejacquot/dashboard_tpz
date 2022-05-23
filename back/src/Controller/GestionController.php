@@ -7,6 +7,7 @@ use App\Entity\Agency;
 use App\Entity\Tpz;
 use App\Entity\TpzRoles;
 use App\Entity\User;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -103,6 +104,49 @@ class GestionController extends AbstractController
     }
 
     /**
+     * @Route("/gestion/updateRoleBureau/{tpzId}", name="update_role_bureau")
+     */
+    public function updateRoleBureau(EntityManagerInterface $entityManager, UserRepository $userRepository, Request $request, int $tpzId) {
+        $request_body = file_get_contents('php://input');
+        $data = json_decode($request_body, true);
+        $bureauMembers = $data['data'];
+
+        foreach ($bureauMembers as $bureau) {
+            /** @var TpzRoles $roleField */
+            $roleField = $entityManager->getRepository(TpzRoles::class)->findOneBy(array('role' => $bureau[0]));
+            /** @var User $user */
+            $user = $entityManager->getRepository(User::class)->find($bureau[1]);
+
+            $bureauActuel = $userRepository->getUsersBureau($tpzId);
+            if($roleField && $user) {
+                /** @var User $actuelMember */
+                foreach ($bureauActuel as $actuelMember) {
+                    if ($actuelMember->getTpzRole()->contains($roleField) && $actuelMember !== $user) {
+                        $roleField->removeUser($actuelMember);
+                        $actuelMember->removeTpzRole($roleField);
+                        $entityManager->persist($actuelMember);
+                    }
+                }
+                $user->addTpzRole($roleField);
+                $roleField->addUser($user);
+                $entityManager->persist($roleField);
+                $entityManager->persist($user);
+            }
+        }
+        $entityManager->flush();
+
+        return new Response('ok');
+    }
+
+    /**
+     * @Route("/gestion/getMembresBureau/{tpzId}", name="get_membre_bureau")
+     */
+    public function getMembresBureau(UserRepository $userRepository, SerializerInterface $serializer, int $tpzId) {
+        $membres = $userRepository->getUsersBureau($tpzId);
+        return new Response($serializer->serialize($membres, 'json'));
+    }
+  
+     /**
      * @Route("/gestion/addStudent", name="add_student")
      */
     public function addStudent(EntityManagerInterface $entityManager, Request $request) {
