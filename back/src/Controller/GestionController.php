@@ -12,6 +12,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 
@@ -145,17 +146,39 @@ class GestionController extends AbstractController
         $membres = $userRepository->getUsersBureau($tpzId);
         return new Response($serializer->serialize($membres, 'json'));
     }
-  
+
      /**
      * @Route("/gestion/addStudent", name="add_student")
      */
-    public function addStudent(EntityManagerInterface $entityManager, SerializerInterface $serializer, Request $request) {
+    public function addStudent(UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $entityManager, SerializerInterface $serializer, Request $request) {
         $data=json_decode($request->getContent());
-
+        $plaintextPassword = 'azerty';
+        $tpz = $entityManager->getRepository(Tpz::class)->find($data->tpz);
         /** @var User $user */
+        $user = new User();
+        $hashedPassword = $passwordHasher->hashPassword(
+            $user,
+            $plaintextPassword
+        );
+
+        switch ($data){
+            case empty($data->lastname) :
+                return new Response('Le nom n\'est pas correctement renseigné');
+            case empty($data->firstname) :
+                return new Response('Le prénom n\'est pas correctement renseigné');
+            case empty($data->email) || $data->email :
+                return new Response('L\'email n\'est pas correctement renseigné');
+        }
+
         $user->setEmail($data->email);
         $user->setFirstname($data->firstname);
         $user->setLastname($data->lastname);
-        return new Response($user);
+        $user->setPassword($hashedPassword);
+        $user->setRoles(['ROLE_USER']);
+        $user->setIsDev($data->isDev);
+        $user->setTpz($tpz);
+        $entityManager->persist($user);
+        $entityManager->flush();
+        return new Response('ok');
     }
 }
