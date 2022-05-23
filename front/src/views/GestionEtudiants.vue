@@ -32,7 +32,7 @@
       ></autocomplete-users>
     </b-card>
     <b-card class="card item-add">
-      <b-card-text>Ajouter un étudiant</b-card-text>
+      <b-card-text>Ajouter un étudiant {{type.toUpperCase()}}</b-card-text>
       <div>
         <b-form-group label="Nom" label-for="input-lastname" class="m-2">
           <b-form-input
@@ -53,7 +53,7 @@
         <b-form-group label="Email" label-for="input-email" class="m-2"
           ><b-form-input
             id="input-email"
-            v-model="userToAdd.name"
+            v-model="userToAdd.email"
             placeholder="Email de l'étudiant"
             lazy-formatter
           ></b-form-input>
@@ -148,6 +148,13 @@ export default {
     "list search"
     "list add";
   justify-items: stretch;
+}
+.btn-group > .btn:first-child {
+  border-top-left-radius: 100px;
+  border-bottom-left-radius: 100px;
+}.btn-group > .btn:last-child {
+  border-top-right-radius: 100px;
+  border-bottom-right-radius: 100px;
 }
 .item-list {
   grid-area: list;
