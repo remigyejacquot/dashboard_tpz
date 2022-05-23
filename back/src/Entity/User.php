@@ -55,17 +55,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"agencies:read"})
-     * @Groups({"tpzMembers:read"})
-     * @Groups({"users:read"})
+     * @Groups({"users:read","tpzs:read","agencies:read"})
      */
     private $firstname;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"agencies:read"})
-     * @Groups({"tpzMembers:read"})
-     * @Groups({"users:read"})
+     * @Groups({"users:read","tpzs:read","agencies:read"})
      */
     private $lastname;
 
@@ -77,7 +73,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\ManyToMany(targetEntity=TpzRoles::class, inversedBy="users")
-     * @Groups({"users:read"})
+     * @Groups({"users:read","tpzs:read"})
      */
     private $tpz_role;
 

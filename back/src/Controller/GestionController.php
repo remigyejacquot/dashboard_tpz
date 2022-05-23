@@ -145,4 +145,12 @@ class GestionController extends AbstractController
         $membres = $userRepository->getUsersBureau($tpzId);
         return new Response($serializer->serialize($membres, 'json'));
     }
+  
+     /**
+     * @Route("/gestion/addStudent", name="add_student")
+     */
+    public function addStudent(EntityManagerInterface $entityManager, Request $request) {
+        dd($request->getContent());
+        return null;
+    }
 }

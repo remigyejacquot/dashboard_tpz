@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ApiResource(
- *     normalizationContext={"groups"={"agencies:read"}}
+ *   normalizationContext={"groups"={"agencies:read"}}
  * )
  * @ORM\Entity(repositoryClass=AgencyRepository::class)
  */
@@ -27,30 +27,30 @@ class Agency
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"agencies:read"})
+     * @Groups({"tpzs:read"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="boolean")
+     * @Groups({"tpzs:read"})
      */
     private $is_dev;
 
     /**
      * @ORM\ManyToOne(targetEntity=Tpz::class, inversedBy="agencies")
-     * @Groups({"agencies:read"})
      */
     private $tpz;
 
     /**
      * @ORM\OneToMany(targetEntity=User::class, mappedBy="agency")
-     * @Groups({"agencies:read"})
+     * @Groups({"tpzs:read","agencies:read"})
      */
     private $users;
 
     /**
      * @ORM\OneToMany(targetEntity=Project::class, mappedBy="agency")
-     * @Groups({"agencies:read", "users:read"})
+     * @Groups({"tpzs:read","agencies:read"})
      */
     private $projects;
 

@@ -1,7 +1,7 @@
 import axiosInstance from "./axiosInstance";
 
-async function getAllMembers() {
+async function getAllTpzMembers() {
     return await axiosInstance.get(  "api/tpz_roles");
 }
 
-export { getAllMembers };
+export { getAllTpzMembers };
