@@ -5,11 +5,8 @@ import { BootstrapVue, IconsPlugin } from "bootstrap-vue";
 /* import the fontawesome core */
 import { library } from '@fortawesome/fontawesome-svg-core'
 /* import specific icons */
-import { faChalkboardUser, faUserGroup, faGear, faCrown, faUserTie } from '@fortawesome/free-solid-svg-icons'
+import {faUsers, faUserTie, faUsersGear, faUserPen, faPen, faChalkboardUser, faUserGroup, faGear, faCrown } from '@fortawesome/free-solid-svg-icons'
 /* import font awesome icon component */
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { library} from "@fortawesome/fontawesome-svg-core";
-import {faUsers, faUserTie, faUsersGear, faUserPen, faPen} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 
 library.add(faUsers, faUserTie, faUsersGear, faUserPen, faPen)
