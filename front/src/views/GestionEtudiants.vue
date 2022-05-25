@@ -12,16 +12,19 @@
               >COM</b-button
             >
           </b-button-group>
-          <b-icon
-            icon="plus-circle-fill"
-            style="color: #f96197"
-            font-scale="1.5"
-            @click="showAddUserCard"
-            >+</b-icon
-          >
+            <b-icon
+              icon="plus-circle-fill"
+              style="color: #f96197"
+              font-scale="1.5"
+              @click="showAddUserCard"
+              class="icon-btn"
+              >+</b-icon
+            >
         </div>
         <div class="mt-3">
-          <b-card-text>Liste des étudiants</b-card-text>
+          <b-card-text
+            >Liste des étudiants de la licence {{ type }}</b-card-text
+          >
           <div
             class="itemStudent pt-1 pb-1"
             v-for="student in suggestions"
@@ -53,11 +56,15 @@
       ></autocomplete-users>
     </b-card>
     <!--    Ajouter un étudiant-->
-    <b-card class="card item-add" v-if="isUpdateUserCardDisplayed || isAddUserCardDisplayed">
-      <b-card-text  v-if="isAddUserCardDisplayed"
+    <b-card
+      class="card item-add"
+      v-if="isUpdateUserCardDisplayed || isAddUserCardDisplayed"
+    >
+      <b-card-text v-if="isAddUserCardDisplayed"
         >Ajouter un étudiant en licence {{ type.toUpperCase() }}</b-card-text
-      ><b-card-text  v-else-if="isUpdateUserCardDisplayed"
-        >Modifier les informations de l'étudiant <b>{{student.lastname}} {{student.firstname}}</b></b-card-text
+      ><b-card-text v-else-if="isUpdateUserCardDisplayed"
+        >Modifier les informations de l'étudiant
+        <b>{{ student.lastname }} {{ student.firstname }}</b></b-card-text
       >
       <div>
         <b-form-group label="Nom" label-for="input-lastname" class="m-2">
@@ -100,14 +107,14 @@
           </b-form-invalid-feedback>
         </b-form-group>
         <b-button
-            v-if="isAddUserCardDisplayed"
+          v-if="isAddUserCardDisplayed"
           type="submit"
           id="submit-btn"
           :style="bgColors.yellow"
           @click="addNewStudent"
           >Ajouter</b-button
         ><b-button
-            v-else-if="isUpdateUserCardDisplayed"
+          v-else-if="isUpdateUserCardDisplayed"
           type="submit"
           id="submit-btn"
           :style="bgColors.yellow"
@@ -116,13 +123,13 @@
         >
       </div>
     </b-card>
-
   </div>
 </template>
 
 <script>
 import {
-  addStudent, deleteStudent,
+  addStudent,
+  deleteStudent,
   getUsers,
   updateStudent,
 } from "../../api/users";
@@ -182,20 +189,20 @@ export default {
         });
     },
     toggleLicence(e) {
-      this.suggestions=[]
+      this.suggestions = [];
       console.log(e.target.id);
       /*si on clique sur DEV et que COM était sélectionné on switch sinon rien*/
       if (e.target.id === "dev") {
         if (this.type === "com") {
           this.type = "dev";
           this.student.isDev = true;
-          this.students.map(el=>{
-            if(el.is_dev){
-              this.suggestions.push(el)
+          this.students.map((el) => {
+            if (el.is_dev) {
+              this.suggestions.push(el);
             }
-          })
+          });
           this.style = {
-            dev: "background-color: " + COLORS.yellow,
+            dev: "background-color: " + COLORS.lightyellow,
             com: "",
           };
         }
@@ -204,14 +211,14 @@ export default {
         if (this.type === "dev") {
           this.type = "com";
           this.student.isDev = false;
-          this.students.map(el=>{
-            if(!el.is_dev){
-              this.suggestions.push(el)
+          this.students.map((el) => {
+            if (!el.is_dev) {
+              this.suggestions.push(el);
             }
-          })
+          });
           this.style = {
             dev: "",
-            com: "background-color: " + COLORS.yellow,
+            com: "background-color: " + COLORS.lightyellow,
           };
         }
       }
@@ -229,7 +236,7 @@ export default {
         this.lastnameValidation = true;
         this.firstnameValidation = true;
         this.emailValidation = true;
-        console.log(this.student)
+        console.log(this.student);
         addStudent(this.student).then((res) => {
           console.log(res);
           this.student.lastname = "";
@@ -238,13 +245,14 @@ export default {
           this.lastnameValidation = null;
           this.firstnameValidation = null;
           this.emailValidation = null;
-          this.getAllStudents()
+          this.getAllStudents();
         });
       } else {
         this.lastnameValidation = this.student.lastname.length !== 0;
         this.firstnameValidation = this.student.firstname.length !== 0;
-        this.emailValidation = !(this.student.email.length === 0 ||
-            !this.student.email.includes("@"));
+        this.emailValidation = !(
+          this.student.email.length === 0 || !this.student.email.includes("@")
+        );
       }
     },
     //show or not the card to update the student
@@ -257,11 +265,11 @@ export default {
       this.isUpdateUserCardDisplayed = true;
     },
     deleteSelectedStudent: function (selectedStudent) {
-      console.log(selectedStudent.id)
-      deleteStudent(selectedStudent.id).then(res => {
-        console.log(res)
-        this.getAllStudents()
-      })
+      console.log(selectedStudent.id);
+      deleteStudent(selectedStudent.id).then((res) => {
+        console.log(res);
+        this.getAllStudents();
+      });
     },
     updateSelectedStudent() {
       this.lastnameValidation = null;
@@ -285,8 +293,9 @@ export default {
       } else {
         this.lastnameValidation = this.student.lastname.length !== 0;
         this.firstnameValidation = this.student.firstname.length !== 0;
-        this.emailValidation = !(this.student.email.length === 0 &&
-            !this.student.email.includes("@"));
+        this.emailValidation = !(
+          this.student.email.length === 0 && !this.student.email.includes("@")
+        );
       }
     },
   },
@@ -319,6 +328,9 @@ export default {
 }
 .btn {
   border: none;
+}
+.icon-btn {
+  cursor:pointer;
 }
 .item-list {
   grid-area: list;
