@@ -24,7 +24,7 @@
           <b-card-text>Liste des étudiants</b-card-text>
           <div
             class="itemStudent pt-1 pb-1"
-            v-for="student in students"
+            v-for="student in suggestions"
             :key="student.id"
           >
             {{ student.lastname }} {{ student.firstname }}
@@ -34,7 +34,7 @@
               </b-button>
               <b-button
                 id="delete"
-                @click="handleDeleteStudent(student)"
+                @click="deleteSelectedStudent(student)"
                 class="pe-0"
               >
                 supprimer
@@ -53,9 +53,11 @@
       ></autocomplete-users>
     </b-card>
     <!--    Ajouter un étudiant-->
-    <b-card class="card item-add" v-if="showAddUserInput">
-      <b-card-text
+    <b-card class="card item-add" v-if="isUpdateUserCardDisplayed || isAddUserCardDisplayed">
+      <b-card-text  v-if="isAddUserCardDisplayed"
         >Ajouter un étudiant en licence {{ type.toUpperCase() }}</b-card-text
+      ><b-card-text  v-else-if="isUpdateUserCardDisplayed"
+        >Modifier les informations de l'étudiant <b>{{student.lastname}} {{student.firstname}}</b></b-card-text
       >
       <div>
         <b-form-group label="Nom" label-for="input-lastname" class="m-2">
@@ -67,7 +69,6 @@
             lazy-formatter
             :required="true"
           ></b-form-input>
-          <p>{{this.student.lastname}}</p>
           <b-form-invalid-feedback :state="lastnameValidation">
             Le nom doit être renseigné
           </b-form-invalid-feedback>
@@ -99,66 +100,23 @@
           </b-form-invalid-feedback>
         </b-form-group>
         <b-button
+            v-if="isAddUserCardDisplayed"
           type="submit"
           id="submit-btn"
           :style="bgColors.yellow"
           @click="addNewStudent"
           >Ajouter</b-button
-        >
-      </div>
-    </b-card>
-    <!--    Modifier un étudiant-->
-    <b-card class="card item-add" v-else-if="showUpdateUserInput">
-      <b-card-text>Modifier les informations concernant </b-card-text>
-      <div>
-        <b-form-group label="Nom" label-for="input-lastname" class="m-2">
-          <b-form-input
-            id="input-lastname"
-            v-model="student.lastname"
-            :state="lastnameValidation"
-            placeholder="Nom de l'étudiant"
-            lazy-formatter
-            :required="true"
-          ></b-form-input>
-          <b-form-invalid-feedback :state="lastnameValidation">
-            Le nom doit être renseigné
-          </b-form-invalid-feedback>
-        </b-form-group>
-        <b-form-group label="Prénom" label-for="input-firstname" class="m-2"
-          ><b-form-input
-            id="input-firstname"
-            v-model="student.firstname"
-            :state="firstnameValidation"
-            placeholder="Prénom de l'étudiant"
-            lazy-formatter
-            :required="true"
-          ></b-form-input>
-          <b-form-invalid-feedback :state="firstnameValidation">
-            Le prenom doit être renseigné
-          </b-form-invalid-feedback>
-        </b-form-group>
-        <b-form-group label="Email" label-for="input-email" class="m-2"
-          ><b-form-input
-            id="input-email"
-            v-model="student.email"
-            :state="emailValidation"
-            placeholder="Email de l'étudiant"
-            lazy-formatter
-            :required="true"
-          ></b-form-input>
-          <b-form-invalid-feedback :state="emailValidation">
-            L'email doit être renseigné et être au bon format (@)
-          </b-form-invalid-feedback>
-        </b-form-group>
-        <b-button
+        ><b-button
+            v-else-if="isUpdateUserCardDisplayed"
           type="submit"
           id="submit-btn"
           :style="bgColors.yellow"
-          @click="handleUpdateStudent"
-          >Modifier</b-button
+          @click="updateSelectedStudent"
+          >Ajouter</b-button
         >
       </div>
     </b-card>
+
   </div>
 </template>
 
@@ -176,8 +134,8 @@ export default {
   components: { AutocompleteUsers },
   data() {
     return {
-      showAddUserInput: false,
-      showUpdateUserInput: false,
+      isAddUserCardDisplayed: false,
+      isUpdateUserCardDisplayed: false,
       students: [],
       student: {
         email: "",
@@ -205,7 +163,8 @@ export default {
   },
   methods: {
     showAddUserCard() {
-      this.showAddUserInput = true;
+      this.isUpdateUserCardDisplayed = false;
+      this.isAddUserCardDisplayed = true;
     },
     getAllStudents() {
       getUsers(JSON.parse(localStorage.getItem("tpzId")))
@@ -223,12 +182,18 @@ export default {
         });
     },
     toggleLicence(e) {
+      this.suggestions=[]
       console.log(e.target.id);
       /*si on clique sur DEV et que COM était sélectionné on switch sinon rien*/
       if (e.target.id === "dev") {
         if (this.type === "com") {
           this.type = "dev";
           this.student.isDev = true;
+          this.students.map(el=>{
+            if(el.is_dev){
+              this.suggestions.push(el)
+            }
+          })
           this.style = {
             dev: "background-color: " + COLORS.yellow,
             com: "",
@@ -239,6 +204,11 @@ export default {
         if (this.type === "dev") {
           this.type = "com";
           this.student.isDev = false;
+          this.students.map(el=>{
+            if(!el.is_dev){
+              this.suggestions.push(el)
+            }
+          })
           this.style = {
             dev: "",
             com: "background-color: " + COLORS.yellow,
@@ -279,22 +249,21 @@ export default {
     },
     //show or not the card to update the student
     showUpdateUserCard(selectedStudent) {
-      console.log(selectedStudent);
       this.student.id = selectedStudent.id;
       this.student.email = selectedStudent.email;
       this.student.lastname = selectedStudent.lastname;
       this.student.firstname = selectedStudent.firstname;
-      this.showAddUserInput = false;
-      this.showUpdateUserInput = true;
+      this.isAddUserCardDisplayed = false;
+      this.isUpdateUserCardDisplayed = true;
     },
-    handleDeleteStudent: function (selectedStudent) {
+    deleteSelectedStudent: function (selectedStudent) {
       console.log(selectedStudent.id)
       deleteStudent(selectedStudent.id).then(res => {
         console.log(res)
         this.getAllStudents()
       })
     },
-    handleUpdateStudent() {
+    updateSelectedStudent() {
       this.lastnameValidation = null;
       this.firstnameValidation = null;
       this.emailValidation = null;
