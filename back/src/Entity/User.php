@@ -271,7 +271,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getTpzId(): ?int
     {
-        return $this->tpz->getId();
+        if ($this->getTpz()) {
+            return $this->getTpz()->getId();
+        } else {
+            return null;
+        }
+        
     }
 
     public function setTpz(?Tpz $tpz): self

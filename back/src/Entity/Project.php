@@ -44,7 +44,7 @@ class Project
     private $agency;
 
     /**
-     * @ORM\OneToMany(targetEntity=Task::class, mappedBy="project")
+     * @ORM\OneToMany(targetEntity=Task::class, mappedBy="project", cascade={"persist", "remove"})
      * @Groups({"tpzs:read","agencies:read"})
      */
     private $tasks;
