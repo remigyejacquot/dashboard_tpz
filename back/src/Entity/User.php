@@ -55,13 +55,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"users:read","tpzs:read","agencies:read"})
+     * @Groups({"users:read","tpzs:read","agencies:read", "commentary"})
      */
     private $firstname;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"users:read","tpzs:read","agencies:read"})
+     * @Groups({"users:read","tpzs:read","agencies:read", "commentary"})
      */
     private $lastname;
 
@@ -82,9 +82,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $tpz;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Commentary::class, mappedBy="user")
+     */
+    private $commentaries;
+
     public function __construct()
     {
         $this->tpz_role = new ArrayCollection();
+        $this->commentaries = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -277,6 +283,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setTpz(?Tpz $tpz): self
     {
         $this->tpz = $tpz;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Commentary>
+     */
+    public function getCommentaries(): Collection
+    {
+        return $this->commentaries;
+    }
+
+    public function addCommentary(Commentary $commentary): self
+    {
+        if (!$this->commentaries->contains($commentary)) {
+            $this->commentaries[] = $commentary;
+            $commentary->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCommentary(Commentary $commentary): self
+    {
+        if ($this->commentaries->removeElement($commentary)) {
+            // set the owning side to null (unless already changed)
+            if ($commentary->getUser() === $this) {
+                $commentary->setUser(null);
+            }
+        }
 
         return $this;
     }

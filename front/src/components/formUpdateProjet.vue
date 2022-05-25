@@ -69,7 +69,8 @@ export default {
     },
     async updateProjet() {
       const data = {
-        'name' : this.projectName
+        'name' : this.projectName,
+        "updatedAt": new Date()
       }
       if (this.projectName !== "") {
         this.$bvModal.hide('update-project')
@@ -80,7 +81,6 @@ export default {
       }
     },
     async deleteProject() {
-      console.log(this.id)
       if(this.id) {
         this.$bvModal.hide('modal-suppression')
         await deleteProject(this.id)
