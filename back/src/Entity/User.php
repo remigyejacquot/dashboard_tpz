@@ -54,7 +54,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $agency;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      * @Groups({"users:read","tpzs:read","agencies:read"})
      */
     private $firstname;
@@ -66,7 +66,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $lastname;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="boolean", nullable=true)
      * @Groups({"users:read"})
      */
     private $is_dev;
@@ -276,12 +276,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         } else {
             return null;
         }
-        
+
     }
 
     public function setTpz(?Tpz $tpz): self
     {
-        $this->tpz = $tpz;
+        $this->tpz = $tpz || null;
 
         return $this;
     }

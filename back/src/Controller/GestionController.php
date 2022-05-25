@@ -105,6 +105,17 @@ class GestionController extends AbstractController
     }
 
     /**
+     * @Route("/gestion/getTeachers", name="get_all_teachers")
+     */
+    public function getAllTeachers(EntityManagerInterface $entityManager, SerializerInterface $serializer) {
+        $users = $entityManager->getRepository(User::class)->findBy(['tpz'=>null]);
+        if($users) {
+            return new Response($serializer->serialize($users, 'json'));
+        }
+        return null;
+    }
+
+    /**
      * @Route("/gestion/updateRoleBureau/{tpzId}", name="update_role_bureau")
      */
     public function updateRoleBureau(EntityManagerInterface $entityManager, UserRepository $userRepository, Request $request, int $tpzId) {

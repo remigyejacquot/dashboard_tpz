@@ -14,7 +14,7 @@
             <font-awesome-icon icon="user-pen" class="gestion-icones-menu" size="2x"/>
             etudiants
         </b-nav-item>
-        <b-nav-item to="/">
+        <b-nav-item :to="{ name: 'GestionProfesseurs'}" :active='$route.name === "GestionProfesseurs"'>
             <font-awesome-icon icon="user-tie" class="gestion-icones-menu" size="2x"/>
             profs
         </b-nav-item>

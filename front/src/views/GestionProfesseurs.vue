@@ -1,43 +1,33 @@
 <template>
   <div class="container">
-    <!--    Liste des étudiants-->
+    <!--    Liste des professeurs-->
     <b-card class="card item-list">
       <div class="mt-3">
-        <div class="toggleBar mt-3">
-          <b-button-group>
-            <b-button id="dev" @click="toggleLicence($event)" :style="style.dev"
-              >DEV</b-button
-            >
-            <b-button id="com" @click="toggleLicence($event)" :style="style.com"
-              >COM</b-button
-            >
-          </b-button-group>
-            <b-icon
-              icon="plus-circle-fill"
-              style="color: #f96197"
-              font-scale="1.5"
-              @click="showAddUserCard"
-              class="icon-btn"
-              >+</b-icon
-            >
+        <div class="add-btn mt-3">
+          <b-icon
+            icon="plus-circle-fill"
+            style="color: #f96197"
+            font-scale="1.5"
+            @click="showAddUserCard"
+            class="icon-btn"
+            >+</b-icon
+          >
         </div>
         <div class="mt-3">
-          <b-card-text
-            >Liste des étudiants de la licence {{ type }}</b-card-text
-          >
+          <b-card-text>Liste des professeurs</b-card-text>
           <div
             class="itemStudent pt-1 pb-1"
-            v-for="student in suggestions"
-            :key="student.id"
+            v-for="teacher in teachers"
+            :key="teacher.id"
           >
-            {{ student.lastname }} {{ student.firstname }}
+            {{ teacher.lastname }} {{ teacher.firstname }}
             <div>
-              <b-button id="update" @click="showUpdateUserCard(student)">
+              <b-button id="update" @click="showUpdateUserCard(teacher)">
                 modifier
               </b-button>
               <b-button
                 id="delete"
-                @click="deleteSelectedStudent(student)"
+                @click="deleteSelectedStudent(teacher)"
                 class="pe-0"
               >
                 supprimer
@@ -50,28 +40,27 @@
     <!--    Recherche-->
     <b-card class="card item-search">
       <autocomplete-users
-        v-bind:options="suggestions"
-        input="etudiant"
-        placeholder="Rechercher un étudiant"
-
+        v-bind:options="teachers"
+        input="professeur"
+        placeholder="Rechercher un professeur"
       ></autocomplete-users>
     </b-card>
-    <!--    Ajouter un étudiant-->
+    <!--    Ajouter un professeur-->
     <b-card
       class="card item-add"
       v-if="isUpdateUserCardDisplayed || isAddUserCardDisplayed"
     >
       <b-card-text v-if="isAddUserCardDisplayed"
-        >Ajouter un étudiant en licence {{ type.toUpperCase() }}</b-card-text
+        >Ajouter un professeur</b-card-text
       ><b-card-text v-else-if="isUpdateUserCardDisplayed"
-        >Modifier les informations de l'étudiant
-        <b>{{ student.lastname }} {{ student.firstname }}</b></b-card-text
+        >Modifier les informations du professeur
+        <b>{{ teacher.lastname }} {{ teacher.firstname }}</b></b-card-text
       >
       <div>
         <b-form-group label="Nom" label-for="input-lastname" class="m-2">
           <b-form-input
             id="input-lastname"
-            v-model="student.lastname"
+            v-model="teacher.lastname"
             :state="lastnameValidation"
             placeholder="Nom de l'étudiant"
             lazy-formatter
@@ -84,7 +73,7 @@
         <b-form-group label="Prénom" label-for="input-firstname" class="m-2"
           ><b-form-input
             id="input-firstname"
-            v-model="student.firstname"
+            v-model="teacher.firstname"
             :state="firstnameValidation"
             placeholder="Prénom de l'étudiant"
             lazy-formatter
@@ -97,7 +86,7 @@
         <b-form-group label="Email" label-for="input-email" class="m-2"
           ><b-form-input
             id="input-email"
-            v-model="student.email"
+            v-model="teacher.email"
             :state="emailValidation"
             placeholder="Email de l'étudiant"
             lazy-formatter
@@ -131,14 +120,14 @@
 import {
   addStudent,
   deleteStudent,
-  getUsers,
+  getTeachers,
   updateStudent,
 } from "../../api/users";
 import AutocompleteUsers from "../components/autocompleteUsers";
 import { COLORS } from "../utils/colors";
 
 export default {
-  name: "GestionEtudiants",
+  name: "GestionProfesseurs",
   components: { AutocompleteUsers },
   data() {
     return {
@@ -146,23 +135,14 @@ export default {
       isAddUserCardDisplayed: false,
       isUpdateUserCardDisplayed: false,
       //Liste de tous les étudiants
-      students: [],
-      //Model d'étudiant
-      student: {
+      teachers: [],
+      //Model de professeur
+      teacher: {
         email: "",
         firstname: "",
         lastname: "",
-        tpz: JSON.parse(localStorage.getItem("tpzId")),
-        isDev: true,
-      },
-      //Liste des étudiants d'une licence afin d'effectuer la recherche
-      suggestions: [],
-      //Le type de la licence (maj avec le toggle)
-      type: "dev",
-      //Style conditionnel
-      style: {
-        dev: "background-color: " + COLORS.lightyellow,
-        com: "",
+        tpz: null,
+        isDev: null,
       },
       //Permet de styliser les boutons d'après une variable globale
       bgColors: {
@@ -175,7 +155,7 @@ export default {
     };
   },
   mounted() {
-    this.getAllStudents();
+    this.getAllTeachers();
   },
   methods: {
     //Affiche la carte pour ajouter un noouvel étudiant
@@ -184,58 +164,11 @@ export default {
       this.isAddUserCardDisplayed = true;
     },
     //Fetch tous les étudiants
-    getAllStudents() {
-      this.suggestions= []
-      this.students = []
-      getUsers(JSON.parse(localStorage.getItem("tpzId")))
-        .then((res) => {
-          res.data["hydra:member"].map((el) => {
-            if (el.is_dev) {
-              console.log(el);
-              this.suggestions.push(el);
-            }
-          });
-          this.students = res.data["hydra:member"];
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    },
-    //Permet de sélectionner l'une ou l'autre des licence
-    toggleLicence(e) {
-      this.suggestions = [];
-      console.log(e.target.id);
-      //si on clique sur DEV et que COM était sélectionné on switch sinon rien
-      if (e.target.id === "dev") {
-        if (this.type === "com") {
-          this.type = "dev";
-          this.student.isDev = true;
-          this.students.map((el) => {
-            if (el.is_dev) {
-              this.suggestions.push(el);
-            }
-          });
-          this.style = {
-            dev: "background-color: " + COLORS.lightyellow,
-            com: "",
-          };
-        }
-        //si on clique sur COM et que DEV était sélectionné on switch sinon rien
-      } else if (e.target.id === "com") {
-        if (this.type === "dev") {
-          this.type = "com";
-          this.student.isDev = false;
-          this.students.map((el) => {
-            if (!el.is_dev) {
-              this.suggestions.push(el);
-            }
-          });
-          this.style = {
-            dev: "",
-            com: "background-color: " + COLORS.lightyellow,
-          };
-        }
-      }
+    getAllTeachers() {
+      this.teachers = [];
+      getTeachers().then((res) => {
+        this.teachers = res.data
+      });
     },
     //Ajoute un nouvel étudiant qui ne serait pas d'office dans la liste + contrôle des champs
     addNewStudent() {
@@ -243,39 +176,39 @@ export default {
       this.firstnameValidation = null;
       this.emailValidation = null;
       if (
-        this.student.lastname.length !== 0 &&
-        this.student.firstname !== 0 &&
-        this.student.email !== 0 &&
-        this.student.email.includes("@")
+        this.teacher.lastname.length !== 0 &&
+        this.teacher.firstname !== 0 &&
+        this.teacher.email !== 0 &&
+        this.teacher.email.includes("@")
       ) {
         this.lastnameValidation = true;
         this.firstnameValidation = true;
         this.emailValidation = true;
-        console.log(this.student);
-        addStudent(this.student).then((res) => {
+        console.log(this.teacher);
+        addStudent(this.teacher).then((res) => {
           console.log(res);
-          this.student.lastname = "";
-          this.student.firstname = "";
-          this.student.email = "";
+          this.teacher.lastname = "";
+          this.teacher.firstname = "";
+          this.teacher.email = "";
           this.lastnameValidation = null;
           this.firstnameValidation = null;
           this.emailValidation = null;
-          this.getAllStudents();
+          this.getAllTeachers();
         });
       } else {
-        this.lastnameValidation = this.student.lastname.length !== 0;
-        this.firstnameValidation = this.student.firstname.length !== 0;
+        this.lastnameValidation = this.teacher.lastname.length !== 0;
+        this.firstnameValidation = this.teacher.firstname.length !== 0;
         this.emailValidation = !(
-          this.student.email.length === 0 || !this.student.email.includes("@")
+          this.teacher.email.length === 0 || !this.teacher.email.includes("@")
         );
       }
     },
     //Affiche la carte pour modifier les infos d'un étudiant
     showUpdateUserCard(selectedStudent) {
-      this.student.id = selectedStudent.id;
-      this.student.email = selectedStudent.email;
-      this.student.lastname = selectedStudent.lastname;
-      this.student.firstname = selectedStudent.firstname;
+      this.teacher.id = selectedStudent.id;
+      this.teacher.email = selectedStudent.email;
+      this.teacher.lastname = selectedStudent.lastname;
+      this.teacher.firstname = selectedStudent.firstname;
       this.isAddUserCardDisplayed = false;
       this.isUpdateUserCardDisplayed = true;
     },
@@ -284,7 +217,7 @@ export default {
       console.log(selectedStudent.id);
       deleteStudent(selectedStudent.id).then((res) => {
         console.log(res);
-        this.getAllStudents();
+        this.getAllTeachers();
       });
     },
     //Modifier un étudiant
@@ -293,29 +226,29 @@ export default {
       this.firstnameValidation = null;
       this.emailValidation = null;
       if (
-        this.student.lastname.length !== 0 &&
-        this.student.firstname !== 0 &&
-        this.student.email !== 0 &&
-        this.student.email.includes("@")
+        this.teacher.lastname.length !== 0 &&
+        this.teacher.firstname !== 0 &&
+        this.teacher.email !== 0 &&
+        this.teacher.email.includes("@")
       ) {
         this.lastnameValidation = true;
         this.firstnameValidation = true;
         this.emailValidation = true;
-        updateStudent(this.student.id, this.student).then((res) => {
+        updateStudent(this.teacher.id, this.teacher).then((res) => {
           console.log(res);
-          this.student.lastname = "";
-          this.student.firstname = "";
-          this.student.email = "";
+          this.teacher.lastname = "";
+          this.teacher.firstname = "";
+          this.teacher.email = "";
           this.lastnameValidation = null;
           this.firstnameValidation = null;
           this.emailValidation = null;
-          this.getAllStudents()
+          this.getAllTeachers();
         });
       } else {
-        this.lastnameValidation = this.student.lastname.length !== 0;
-        this.firstnameValidation = this.student.firstname.length !== 0;
+        this.lastnameValidation = this.teacher.lastname.length !== 0;
+        this.firstnameValidation = this.teacher.firstname.length !== 0;
         this.emailValidation = !(
-          this.student.email.length === 0 && !this.student.email.includes("@")
+          this.teacher.email.length === 0 && !this.teacher.email.includes("@")
         );
       }
     },
@@ -333,11 +266,10 @@ export default {
     "list add";
   justify-items: stretch;
 }
-.toggleBar {
+.add-btn {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
+  justify-content: flex-end;
 }
 .btn-group > .btn:first-child {
   border-top-left-radius: 100px;
@@ -351,7 +283,7 @@ export default {
   border: none;
 }
 .icon-btn {
-  cursor:pointer;
+  cursor: pointer;
 }
 .item-list {
   grid-area: list;
