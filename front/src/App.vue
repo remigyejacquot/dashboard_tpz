@@ -1,12 +1,11 @@
 <template>
   <div id="app">
     <!-- <b-img-lazy v-bind="mainProps" center :src="require('./assets/tpz_logo.png')" fluid alt="Logo Troyes Point Zero"></b-img-lazy> -->
-    <!-- <b-button @click="logout">Déconnexion</b-button> -->
         <b-navbar id="navbar" toggleable="lg" type="light" class="d-flex flex-column justify-content-start align-items-center">
           <b-navbar-brand href="#" class="w-100 m-0 px-5">
-            <b-img :src="require('./assets/gontrand.jpg')" rounded="circle" fluid class="pb-2"/>
+            <!-- <b-img :src="require('./assets/gontrand.jpg')" rounded="circle" fluid class="pb-2"/> -->
             <div>Jean Jacques</div>
-            <div class="text-small">Licence</div>
+            <div class="text-small">Licence  {{user.is_dev ? 'DEV' : 'COM'}}</div>
           </b-navbar-brand>
 
           <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
@@ -31,6 +30,7 @@
                   <span>Gérer les utilisateurs</span>
                 </div>
               </b-nav-item>
+                  <b-button @click="logout">Déconnexion</b-button>
             </b-navbar-nav>
           </b-collapse>
         </b-navbar>
@@ -41,19 +41,34 @@
 </template>
 
 <script>
+import {getUser} from "../api/users";
 
 export default {
   data() {
     return {
-      mainProps: { width: 200, height: 200}
+      mainProps: { width: 200, height: 200},
+      user:{}
     }
   },
   methods: {
     logout() {
       localStorage.clear();
       this.$router.push("/");
-    }
-  }
+    },
+    fetchUserInfo(id) {
+      getUser(id).then((res)=>{
+        console.log(res.data)
+        this.user = res.data
+        localStorage.setItem("user", JSON.stringify(res.data)) // store the user in localstorage
+      })
+    },
+  },
+  created() {
+    const userId = JSON.parse(localStorage.getItem("user")).id ||
+    JSON.parse(localStorage.getItem("user"))["@id"].substr(-1)
+    // console.log(userId)
+    this.fetchUserInfo(userId)
+  },
 }
 </script>
 
