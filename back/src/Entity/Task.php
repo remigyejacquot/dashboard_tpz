@@ -59,7 +59,7 @@ class Task
     private $finished_at;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Project::class, inversedBy="tasks")
+     * @ORM\ManyToOne(targetEntity=Project::class, inversedBy="tasks", cascade={"persist", "remove"})
      */
     private $project;
 

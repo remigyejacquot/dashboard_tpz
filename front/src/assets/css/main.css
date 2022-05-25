@@ -35,3 +35,36 @@ body * {
 .red-button:hover {
     background-color: #c24949;
 }
+
+.grey-button {
+    background-color: #cbcbcb;
+    color :white;
+    font-family: roboto, sans-serif;
+    font-weight: bold;
+    padding: 5px 40px;
+    border: none;
+    border-radius: 20px;
+}
+
+.grey-button:hover {
+    background-color: #adadad;
+}
+
+.modifier {
+    background-color: transparent !important;
+    border: none !important;
+    color : #FAD26E !important;
+    box-shadow: none !important;
+}
+
+.modifier:hover {
+    color: #6D5A8F !important;
+}
+
+.btn:focus, .btn-secondary:focus {
+    box-shadow: none !important;
+}
+
+.error {
+    color : darkred;
+}
