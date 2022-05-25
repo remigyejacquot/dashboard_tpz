@@ -141,9 +141,12 @@ export default {
   components: { AutocompleteUsers },
   data() {
     return {
+      //Pour l'affichage des cartes
       isAddUserCardDisplayed: false,
       isUpdateUserCardDisplayed: false,
+      //Liste de tous les étudiants
       students: [],
+      //Model d'étudiant
       student: {
         email: "",
         firstname: "",
@@ -151,15 +154,20 @@ export default {
         tpz: JSON.parse(localStorage.getItem("tpzId")),
         isDev: true,
       },
+      //Liste des étudiants d'une licence afin d'effectuer la recherche
       suggestions: [],
+      //Le type de la licence (maj avec le toggle)
       type: "dev",
+      //Style conditionnel
       style: {
         dev: "background-color: " + COLORS.lightyellow,
         com: "",
       },
+      //Permet de styliser les boutons d'après une variable globale
       bgColors: {
         yellow: "background-color: " + COLORS.lightyellow,
       },
+      //Pour la validation des champs
       lastnameValidation: null,
       firstnameValidation: null,
       emailValidation: null,
@@ -169,11 +177,15 @@ export default {
     this.getAllStudents();
   },
   methods: {
+    //Affiche la carte pour ajouter un noouvel étudiant
     showAddUserCard() {
       this.isUpdateUserCardDisplayed = false;
       this.isAddUserCardDisplayed = true;
     },
+    //Fetch tous les étudiants
     getAllStudents() {
+      this.suggestions= []
+      this.students = []
       getUsers(JSON.parse(localStorage.getItem("tpzId")))
         .then((res) => {
           res.data["hydra:member"].map((el) => {
@@ -188,10 +200,11 @@ export default {
           console.log(err);
         });
     },
+    //Permet de sélectionner l'une ou l'autre des licence
     toggleLicence(e) {
       this.suggestions = [];
       console.log(e.target.id);
-      /*si on clique sur DEV et que COM était sélectionné on switch sinon rien*/
+      //si on clique sur DEV et que COM était sélectionné on switch sinon rien
       if (e.target.id === "dev") {
         if (this.type === "com") {
           this.type = "dev";
@@ -206,7 +219,7 @@ export default {
             com: "",
           };
         }
-        /*si on clique sur COM et que DEV était sélectionné on switch sinon rien*/
+        //si on clique sur COM et que DEV était sélectionné on switch sinon rien
       } else if (e.target.id === "com") {
         if (this.type === "dev") {
           this.type = "com";
@@ -223,6 +236,7 @@ export default {
         }
       }
     },
+    //Ajoute un nouvel étudiant qui ne serait pas d'office dans la liste + contrôle des champs
     addNewStudent() {
       this.lastnameValidation = null;
       this.firstnameValidation = null;
@@ -255,7 +269,7 @@ export default {
         );
       }
     },
-    //show or not the card to update the student
+    //Affiche la carte pour modifier les infos d'un étudiant
     showUpdateUserCard(selectedStudent) {
       this.student.id = selectedStudent.id;
       this.student.email = selectedStudent.email;
@@ -264,6 +278,7 @@ export default {
       this.isAddUserCardDisplayed = false;
       this.isUpdateUserCardDisplayed = true;
     },
+    //Supprimer un étudiant
     deleteSelectedStudent: function (selectedStudent) {
       console.log(selectedStudent.id);
       deleteStudent(selectedStudent.id).then((res) => {
@@ -271,6 +286,7 @@ export default {
         this.getAllStudents();
       });
     },
+    //Modifier un étudiant
     updateSelectedStudent() {
       this.lastnameValidation = null;
       this.firstnameValidation = null;
@@ -289,6 +305,10 @@ export default {
           this.student.lastname = "";
           this.student.firstname = "";
           this.student.email = "";
+          this.lastnameValidation = null;
+          this.firstnameValidation = null;
+          this.emailValidation = null;
+          this.getAllStudents()
         });
       } else {
         this.lastnameValidation = this.student.lastname.length !== 0;

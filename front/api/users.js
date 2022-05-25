@@ -14,7 +14,7 @@ async function addStudent(data) {
 }
 
 async function updateStudent(id,data) {
-    return await axiosInstance.put("api/users/"+id, data)
+    return await axiosInstance.put("/gestion/updateStudent/"+id, data)
 }
 
 async function deleteStudent(id) {

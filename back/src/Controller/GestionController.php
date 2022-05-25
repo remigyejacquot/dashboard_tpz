@@ -181,4 +181,28 @@ class GestionController extends AbstractController
         $entityManager->flush();
         return new Response('ok');
     }
+
+    /**
+     * @Route("/gestion/updateStudent/{id}", name="update_student")
+     */
+    public function updateStudent(EntityManagerInterface $entityManager, SerializerInterface $serializer, Request $request, int $id) {
+        $data=json_decode($request->getContent());
+        $user = $entityManager->getRepository(User::class)->find($id);
+
+        switch ($data){
+            case empty($data->lastname) :
+                return new Response('Le nom n\'est pas correctement renseigné');
+            case empty($data->firstname) :
+                return new Response('Le prénom n\'est pas correctement renseigné');
+            case empty($data->email) :
+                return new Response('L\'email n\'est pas correctement renseigné');
+        }
+
+        $user->setEmail($data->email);
+        $user->setFirstname($data->firstname);
+        $user->setLastname($data->lastname);
+        $entityManager->persist($user);
+        $entityManager->flush();
+        return new Response('ok');
+    }
 }
