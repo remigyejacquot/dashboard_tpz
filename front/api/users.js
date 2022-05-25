@@ -13,4 +13,12 @@ async function addStudent(data) {
     //return await axiosInstance.post("api/users", data)
 }
 
-export { getUser, getUsers, addStudent };
+async function updateStudent(id,data) {
+    return await axiosInstance.put("api/users/"+id, data)
+}
+
+async function deleteStudent(id) {
+    return await axiosInstance.delete("api/users/"+id)
+}
+
+export { getUser, getUsers, addStudent, updateStudent, deleteStudent };

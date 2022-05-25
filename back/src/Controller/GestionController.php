@@ -166,7 +166,7 @@ class GestionController extends AbstractController
                 return new Response('Le nom n\'est pas correctement renseigné');
             case empty($data->firstname) :
                 return new Response('Le prénom n\'est pas correctement renseigné');
-            case empty($data->email) || $data->email :
+            case empty($data->email) :
                 return new Response('L\'email n\'est pas correctement renseigné');
         }
 

@@ -22,11 +22,23 @@
         </div>
         <div class="mt-3">
           <b-card-text>Liste des étudiants</b-card-text>
-          <div class="itemStudent pt-1 pb-1" v-for="user in users" :key="user.id">
-            {{ user.lastname }} {{ user.firstname }}
+          <div
+            class="itemStudent pt-1 pb-1"
+            v-for="student in students"
+            :key="student.id"
+          >
+            {{ student.lastname }} {{ student.firstname }}
             <div>
-              <b-button id="update" @click="updateUser"> modifier </b-button>
-              <b-button id="delete" @click="deleteUser" class="pe-0"> supprimer </b-button>
+              <b-button id="update" @click="showUpdateUserCard(student)">
+                modifier
+              </b-button>
+              <b-button
+                id="delete"
+                @click="handleDeleteStudent(student)"
+                class="pe-0"
+              >
+                supprimer
+              </b-button>
             </div>
           </div>
         </div>
@@ -40,8 +52,8 @@
         placeholder="Rechercher un étudiant"
       ></autocomplete-users>
     </b-card>
-<!--    Ajouter un étudiant-->
-    <b-card class="card item-add" v-if="showAddUserCardValue">
+    <!--    Ajouter un étudiant-->
+    <b-card class="card item-add" v-if="showAddUserInput">
       <b-card-text
         >Ajouter un étudiant en licence {{ type.toUpperCase() }}</b-card-text
       >
@@ -49,12 +61,13 @@
         <b-form-group label="Nom" label-for="input-lastname" class="m-2">
           <b-form-input
             id="input-lastname"
-            v-model="userToAdd.lastname"
+            v-model="student.lastname"
             :state="lastnameValidation"
             placeholder="Nom de l'étudiant"
             lazy-formatter
             :required="true"
           ></b-form-input>
+          <p>{{this.student.lastname}}</p>
           <b-form-invalid-feedback :state="lastnameValidation">
             Le nom doit être renseigné
           </b-form-invalid-feedback>
@@ -62,7 +75,7 @@
         <b-form-group label="Prénom" label-for="input-firstname" class="m-2"
           ><b-form-input
             id="input-firstname"
-            v-model="userToAdd.firstname"
+            v-model="student.firstname"
             :state="firstnameValidation"
             placeholder="Prénom de l'étudiant"
             lazy-formatter
@@ -75,7 +88,7 @@
         <b-form-group label="Email" label-for="input-email" class="m-2"
           ><b-form-input
             id="input-email"
-            v-model="userToAdd.email"
+            v-model="student.email"
             :state="emailValidation"
             placeholder="Email de l'étudiant"
             lazy-formatter
@@ -94,11 +107,67 @@
         >
       </div>
     </b-card>
+    <!--    Modifier un étudiant-->
+    <b-card class="card item-add" v-else-if="showUpdateUserInput">
+      <b-card-text>Modifier les informations concernant </b-card-text>
+      <div>
+        <b-form-group label="Nom" label-for="input-lastname" class="m-2">
+          <b-form-input
+            id="input-lastname"
+            v-model="student.lastname"
+            :state="lastnameValidation"
+            placeholder="Nom de l'étudiant"
+            lazy-formatter
+            :required="true"
+          ></b-form-input>
+          <b-form-invalid-feedback :state="lastnameValidation">
+            Le nom doit être renseigné
+          </b-form-invalid-feedback>
+        </b-form-group>
+        <b-form-group label="Prénom" label-for="input-firstname" class="m-2"
+          ><b-form-input
+            id="input-firstname"
+            v-model="student.firstname"
+            :state="firstnameValidation"
+            placeholder="Prénom de l'étudiant"
+            lazy-formatter
+            :required="true"
+          ></b-form-input>
+          <b-form-invalid-feedback :state="firstnameValidation">
+            Le prenom doit être renseigné
+          </b-form-invalid-feedback>
+        </b-form-group>
+        <b-form-group label="Email" label-for="input-email" class="m-2"
+          ><b-form-input
+            id="input-email"
+            v-model="student.email"
+            :state="emailValidation"
+            placeholder="Email de l'étudiant"
+            lazy-formatter
+            :required="true"
+          ></b-form-input>
+          <b-form-invalid-feedback :state="emailValidation">
+            L'email doit être renseigné et être au bon format (@)
+          </b-form-invalid-feedback>
+        </b-form-group>
+        <b-button
+          type="submit"
+          id="submit-btn"
+          :style="bgColors.yellow"
+          @click="handleUpdateStudent"
+          >Modifier</b-button
+        >
+      </div>
+    </b-card>
   </div>
 </template>
 
 <script>
-import { addStudent, getUsers } from "../../api/users";
+import {
+  addStudent, deleteStudent,
+  getUsers,
+  updateStudent,
+} from "../../api/users";
 import AutocompleteUsers from "../components/autocompleteUsers";
 import { COLORS } from "../utils/colors";
 
@@ -107,9 +176,10 @@ export default {
   components: { AutocompleteUsers },
   data() {
     return {
-      showAddUserCardValue : false,
-      users: [],
-      userToAdd: {
+      showAddUserInput: false,
+      showUpdateUserInput: false,
+      students: [],
+      student: {
         email: "",
         firstname: "",
         lastname: "",
@@ -135,7 +205,7 @@ export default {
   },
   methods: {
     showAddUserCard() {
-      this.showAddUserCardValue = true;
+      this.showAddUserInput = true;
     },
     getAllStudents() {
       getUsers(JSON.parse(localStorage.getItem("tpzId")))
@@ -146,17 +216,11 @@ export default {
               this.suggestions.push(el);
             }
           });
-          this.users = res.data["hydra:member"];
+          this.students = res.data["hydra:member"];
         })
         .catch((err) => {
           console.log(err);
         });
-    },
-    updateUser(){
-      console.log('udated')
-    },
-    deleteUser(){
-      console.log('udated')
     },
     toggleLicence(e) {
       console.log(e.target.id);
@@ -164,7 +228,7 @@ export default {
       if (e.target.id === "dev") {
         if (this.type === "com") {
           this.type = "dev";
-          this.userToAdd.isDev = true;
+          this.student.isDev = true;
           this.style = {
             dev: "background-color: " + COLORS.yellow,
             com: "",
@@ -174,7 +238,7 @@ export default {
       } else if (e.target.id === "com") {
         if (this.type === "dev") {
           this.type = "com";
-          this.userToAdd.isDev = false;
+          this.student.isDev = false;
           this.style = {
             dev: "",
             com: "background-color: " + COLORS.yellow,
@@ -187,39 +251,73 @@ export default {
       this.firstnameValidation = null;
       this.emailValidation = null;
       if (
-        this.userToAdd.lastname.length !== 0 &&
-        this.userToAdd.firstname !== 0 &&
-        this.userToAdd.email !== 0 &&
-        this.userToAdd.email.includes("@")
+        this.student.lastname.length !== 0 &&
+        this.student.firstname !== 0 &&
+        this.student.email !== 0 &&
+        this.student.email.includes("@")
       ) {
         this.lastnameValidation = true;
         this.firstnameValidation = true;
         this.emailValidation = true;
-        addStudent(this.userToAdd).then((res) => {
+        console.log(this.student)
+        addStudent(this.student).then((res) => {
           console.log(res);
-          this.userToAdd.lastname = "";
-          this.userToAdd.firstname = "";
-          this.userToAdd.email = "";
+          this.student.lastname = "";
+          this.student.firstname = "";
+          this.student.email = "";
+          this.lastnameValidation = null;
+          this.firstnameValidation = null;
+          this.emailValidation = null;
+          this.getAllStudents()
         });
       } else {
-        if (this.userToAdd.lastname.length === 0) {
-          this.lastnameValidation = false;
-        } else {
-          this.lastnameValidation = true;
-        }
-        if (this.userToAdd.firstname.length === 0) {
-          this.firstnameValidation = false;
-        } else {
-          this.firstnameValidation = true;
-        }
-        if (
-          this.userToAdd.email.length === 0 &&
-          !this.userToAdd.email.includes("@")
-        ) {
-          this.emailValidation = false;
-        } else {
-          this.emailValidation = true;
-        }
+        this.lastnameValidation = this.student.lastname.length !== 0;
+        this.firstnameValidation = this.student.firstname.length !== 0;
+        this.emailValidation = !(this.student.email.length === 0 ||
+            !this.student.email.includes("@"));
+      }
+    },
+    //show or not the card to update the student
+    showUpdateUserCard(selectedStudent) {
+      console.log(selectedStudent);
+      this.student.id = selectedStudent.id;
+      this.student.email = selectedStudent.email;
+      this.student.lastname = selectedStudent.lastname;
+      this.student.firstname = selectedStudent.firstname;
+      this.showAddUserInput = false;
+      this.showUpdateUserInput = true;
+    },
+    handleDeleteStudent: function (selectedStudent) {
+      console.log(selectedStudent.id)
+      deleteStudent(selectedStudent.id).then(res => {
+        console.log(res)
+        this.getAllStudents()
+      })
+    },
+    handleUpdateStudent() {
+      this.lastnameValidation = null;
+      this.firstnameValidation = null;
+      this.emailValidation = null;
+      if (
+        this.student.lastname.length !== 0 &&
+        this.student.firstname !== 0 &&
+        this.student.email !== 0 &&
+        this.student.email.includes("@")
+      ) {
+        this.lastnameValidation = true;
+        this.firstnameValidation = true;
+        this.emailValidation = true;
+        updateStudent(this.student.id, this.student).then((res) => {
+          console.log(res);
+          this.student.lastname = "";
+          this.student.firstname = "";
+          this.student.email = "";
+        });
+      } else {
+        this.lastnameValidation = this.student.lastname.length !== 0;
+        this.firstnameValidation = this.student.firstname.length !== 0;
+        this.emailValidation = !(this.student.email.length === 0 &&
+            !this.student.email.includes("@"));
       }
     },
   },
@@ -276,15 +374,15 @@ export default {
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #FAD26E;
+  border-bottom: 1px solid #fad26e;
 }
 #update {
-  color: #FAD26E;
+  color: #fad26e;
   background-color: transparent;
   border: none;
 }
 #delete {
-  color: #FF6969;
+  color: #ff6969;
   background-color: transparent;
   border: none;
 }
