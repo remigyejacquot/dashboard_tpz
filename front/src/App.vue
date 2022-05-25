@@ -2,35 +2,43 @@
   <div id="app">
     <!-- <b-img-lazy v-bind="mainProps" center :src="require('./assets/tpz_logo.png')" fluid alt="Logo Troyes Point Zero"></b-img-lazy> -->
         <b-navbar id="navbar" toggleable="lg" type="light" class="d-flex flex-column justify-content-start align-items-center">
-          <b-navbar-brand href="#" class="w-100 m-0 px-5">
-            <!-- <b-img :src="require('./assets/gontrand.jpg')" rounded="circle" fluid class="pb-2"/> -->
-            <div>Jean Jacques</div>
-            <div class="text-small">Licence  {{user.is_dev ? 'DEV' : 'COM'}}</div>
+          <b-navbar-brand href="#" class="w-100 m-0 mt-5 px-5 d-flex flex-column align-items-center justify-content-center">
+            <b-img :src="require('./assets/gontrand.jpg')" rounded="circle" fluid class="pb-2"/>
+            <div class="d-flex flex-row align-items-center">
+              <p class="mb-0 d-flex">{{user.firstname}} {{user.lastname}} &nbsp;</p> 
+              <div class="d-flex" v-if="user.tpzRolesArray[0] == 'chef de projet'"><font-awesome-icon class="crown-icon" icon="fa-solid fa-crown" /></div>
+            </div>
+            <div class="text-small">Licence  {{user.is_dev ? 'dev' : 'com'}}</div>
           </b-navbar-brand>
 
           <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
           <b-collapse id="nav-collapse" is-nav class="align-items-start w-100">
             <b-navbar-nav class="d-flex flex-column w-100">
-              <b-nav-item href="#" class="d-flex flex-column justify-content-center align-items-center py-2">
+              <b-nav-item :to="{ name: 'Dashboard' }" class="d-flex flex-column justify-content-center align-items-center">
                 <div class="nav-item-color d-flex flex-column justify-content-center align-items-center w-100">
                   <font-awesome-icon icon="fa-solid fa-chalkboard-user" />
                   <span>Dashboard</span>
                 </div>
               </b-nav-item>
-              <b-nav-item href="#" class="d-flex flex-column justify-content-center align-items-center py-2">
+              <b-nav-item :to="{ name: 'Projects' }" class="d-flex flex-column justify-content-center align-items-center">
                 <div class="nav-item-color d-flex flex-column justify-content-center align-items-center w-100">
                   <font-awesome-icon icon="fa-solid fa-user-group" />
                   <span>Mes projets</span>
                 </div>
               </b-nav-item>
-              <b-nav-item href="#" class="d-flex flex-column justify-content-center align-items-center py-2">
+              <b-nav-item :to="{ name: 'GestionEtudiants' }" class="d-flex flex-column justify-content-center align-items-center">
                 <div class="nav-item-color d-flex flex-column justify-content-center align-items-center w-100">
                   <font-awesome-icon icon="fa-solid fa-gear" />
                   <span>Gérer les utilisateurs</span>
                 </div>
               </b-nav-item>
-                  <b-button @click="logout">Déconnexion</b-button>
+              <b-nav-item class="d-flex flex-column justify-content-center align-items-center">
+                  <div class="nav-item-color d-flex flex-column justify-content-center align-items-center w-100" @click="logout">
+                    <font-awesome-icon icon="fa-solid fa-arrow-right-from-bracket" />
+                    <span>Déconnexion</span>
+                  </div>
+              </b-nav-item>
             </b-navbar-nav>
           </b-collapse>
         </b-navbar>
@@ -111,4 +119,7 @@ export default {
   font-size: 0.9rem;
 }
 
+.crown-icon {
+  color: #F7B000;
+}
 </style>

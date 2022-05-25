@@ -5,7 +5,7 @@ import { BootstrapVue, IconsPlugin } from "bootstrap-vue";
 /* import the fontawesome core */
 import { library } from '@fortawesome/fontawesome-svg-core'
 /* import specific icons */
-import {faUsers, faUserTie, faUsersGear, faUserPen, faPen, faChalkboardUser, faUserGroup, faGear, faCrown } from '@fortawesome/free-solid-svg-icons'
+import {faUsers, faUserTie, faUsersGear, faUserPen, faPen, faChalkboardUser, faUserGroup, faGear, faCrown, faArrowRightFromBracket } from '@fortawesome/free-solid-svg-icons'
 /* import font awesome icon component */
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 
@@ -18,7 +18,7 @@ import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
 
 /* add icons to the library */
-library.add(faChalkboardUser, faUserGroup, faGear, faCrown, faUserTie)
+library.add(faChalkboardUser, faUserGroup, faGear, faCrown, faUserTie,faArrowRightFromBracket)
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 Vue.config.productionTip = false;
 Vue.use(BootstrapVue);

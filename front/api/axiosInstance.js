@@ -1,8 +1,5 @@
 import axios from 'axios';
 
-const urlRemi = "http://localhost/dashboard_tpz/back/public/index.php/"
-//const urlRemi = "http://localhost:8888/tpz/dashboard_tpz/back/public/index.php/"
-
 const axiosInstance = axios.create({
     baseURL: 'http://localhost/dashboard_tpz/back/public/index.php',
 });
