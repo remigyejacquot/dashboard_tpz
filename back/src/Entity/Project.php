@@ -24,8 +24,7 @@ class Project
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"agencies:read"})
-     * @Groups({"users:read"})
+     * @Groups({"tpzs:read","agencies:read"})
      */
     private $name;
 
@@ -45,8 +44,8 @@ class Project
     private $agency;
 
     /**
-     * @ORM\OneToMany(targetEntity=Task::class, mappedBy="project")
-     * @Groups({"agencies:read"},{"users:read"})
+     * @ORM\OneToMany(targetEntity=Task::class, mappedBy="project", cascade={"persist", "remove"})
+     * @Groups({"tpzs:read","agencies:read"})
      */
     private $tasks;
 

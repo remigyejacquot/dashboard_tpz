@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\TaskRepository;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -23,41 +24,48 @@ class Task
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"tpzs:read","agencies:read"})
      */
     private $title;
 
     /**
      * @ORM\Column(type="boolean")
+     * @Groups({"tpzs:read","agencies:read"})
      */
     private $is_finished;
 
     /**
      * @ORM\Column(type="text")
+     * @Groups({"agencies:read"})
      */
     private $description;
 
     /**
      * @ORM\Column(type="datetime_immutable")
+     * @Groups({"agencies:read"})
      */
     private $created_at;
 
     /**
      * @ORM\Column(type="datetime_immutable")
+     * @Groups({"agencies:read"})
      */
     private $updated_at;
 
     /**
      * @ORM\Column(type="datetime_immutable")
+     * @Groups({"agencies:read"})
      */
     private $finished_at;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Project::class, inversedBy="tasks")
+     * @ORM\ManyToOne(targetEntity=Project::class, inversedBy="tasks", cascade={"persist", "remove"})
      */
     private $project;
 
     /**
      * @ORM\OneToMany(targetEntity=Subtask::class, mappedBy="task")
+     * @Groups({"agencies:read"})
      */
     private $subtasks;
 

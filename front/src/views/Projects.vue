@@ -1,54 +1,101 @@
 <template>
   <div>
+    <main class="d-flex">
+      <section
+          class="title-section d-flex justify-content-between align-items-center flex-basis-50"
+      >
+        <div class="d-flex header-section-div">
+          <h2>Project Flyer</h2>
+          <p>Barre de progression</p>
+        </div>
+        <div class="d-flex header-section-div">
+          <p>5</p>
+          <button class="modify-btn">Modifier</button>
+        </div>
+      </section>
+      <section
+          class="switch-section d-flex justify-content-between align-items-center flex-basis-50"
+      >
+        <div class="d-flex header-section-div">
+          <h2>Entreprise machin</h2>
+          <ul id="example-1">
+            <li v-for="member in agency.users" :key="member.id">
+              {{ member.firstname }}
+              {{ member.lastname }}
+            </li>
+          </ul>
+        </div>
+        <div class="d-flex header-section-div">
+          <p>5</p>
+          <button class="modify-btn">Modifier</button>
+        </div>
+      </section>
+    </main>
     <h1>PROJECTS</h1>
     <p>USER</p>
     <b-card-text>{{ user }}</b-card-text>
-    <p>LES MEMBRES DE L'AGENCE</p>
-    <b-card-text v-for="agency in agencyMembers" :key="agency.id">{{ agency }}</b-card-text>
-    <p>TPZMEMBERS</p>
-    <b-card-text v-for="member in tpzMembers" :key="member.id">{{ member }}</b-card-text>
-    <b-button :to="{name: 'Projects'}">LES PROJETS</b-button>
   </div>
 </template>
 
 <script>
-import {getAllMembers} from "../../api/tpzMembers";
-import {getAgencyMembers} from "../../api/agencies";
+import { getAgencyMembers } from "../../api/agencies";
 
 export default {
   name: "Projects",
   data() {
     return {
       user: {},
-      tpzMembers:[],
-      agencyMembers:[],
+      projects: [],
+      agency: {},
     };
   },
   created() {
-    const user = JSON.parse(localStorage.getItem("user"))
+    const user = JSON.parse(localStorage.getItem("user"));
     this.user = user
-    this.fetchTpzMembers()
-    this.fetchUserLicenceAgencies(user.agency['@id'].substr(-1))//retrieve user agency index from @id
+    this.getAllAgencyMembers(user["agency"].substr(-1)); //retrieve user index from @id
   },
   methods: {
-    fetchTpzMembers() {
-      getAllMembers().then((res)=>{
-        res.data['hydra:member'].forEach(member => {
-          this.tpzMembers.push(member)
-        })
-      })
-    },
-    fetchUserLicenceAgencies(id) {
-      getAgencyMembers(id).then((res)=>{
-        res.data.users.forEach(user=>{
-          this.agencyMembers.push(user)
-        })
-      })
+    getAllAgencyMembers(id) {
+      getAgencyMembers(id).then((res) => {
+        console.log(res.data)
+        this.agency = res.data;
+        res.data.projects.forEach((project) => {
+          this.projects.push(project);
+        });
+      });
     },
   },
-}
+};
 </script>
 
 <style scoped>
+.flex-basis-50 {
+  flex-basis: 50%;
+}
 
+main {
+  background-color: #e5e5e5;
+  padding: 2em;
+}
+
+main > section {
+  background-color: white;
+  margin: 1em;
+  padding: 0 1em;
+  border-radius: 10px;
+}
+
+.header-section-div {
+  align-content: center;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  padding: 1em;
+}
+
+.modify-btn {
+  color: #f7b000;
+  background: none;
+  border: none;
+}
 </style>

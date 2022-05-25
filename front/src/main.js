@@ -8,6 +8,13 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { faChalkboardUser, faUserGroup, faGear, faCrown, faUserTie } from '@fortawesome/free-solid-svg-icons'
 /* import font awesome icon component */
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { library} from "@fortawesome/fontawesome-svg-core";
+import {faUsers, faUserTie, faUsersGear, faUserPen, faPen} from "@fortawesome/free-solid-svg-icons";
+import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
+
+library.add(faUsers, faUserTie, faUsersGear, faUserPen, faPen)
+
+Vue.component('font-awesome-icon', FontAwesomeIcon)
 
 // Import Bootstrap an BootstrapVue CSS files (order is important)
 import "bootstrap/dist/css/bootstrap.css";

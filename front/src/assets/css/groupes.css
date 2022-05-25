@@ -1,0 +1,65 @@
+.container-liste-agence {
+    background-color: white;
+    border-radius: 20px;
+    padding: 20px !important;
+    height: 100%;
+}
+
+.container-forms {
+    padding-left: 50px;
+}
+
+.container-forms .form {
+    background-color: white;
+    border-radius: 20px;
+    padding: 20px;
+}
+
+.action-title {
+    text-align: left;
+    font-weight: bold;
+    font-size: 25px;
+}
+
+.valid-button {
+    width: 170px;
+    float: right;
+}
+
+.form label {
+    text-align: left;
+    font-size: 18px;
+}
+
+.form input {
+    background-color: #F6F6F6;
+    border: none;
+}
+
+.form .form-group {
+    padding-bottom: 15px;
+}
+
+.form select {
+    width: 100%;
+    background-color: #F6F6F6;
+    border: none;
+    height: 36px;
+    padding: 10px;
+}
+
+.form.add {
+    height: 310px;
+}
+
+.form.delete {
+    height: 230px;
+}
+
+@media screen and (max-width: 970px)
+{
+    .container-forms .form {
+        padding: 0;
+        margin-top: 30px;
+    }
+}
