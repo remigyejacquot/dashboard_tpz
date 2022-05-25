@@ -15,24 +15,30 @@
 
           <b-collapse id="nav-collapse" is-nav class="align-items-start w-100">
             <b-navbar-nav class="d-flex flex-column w-100">
-              <b-nav-item :to="{ name: 'Dashboard' }" class="d-flex flex-column justify-content-center align-items-center">
-                <div class="nav-item-color d-flex flex-column justify-content-center align-items-center w-100">
-                  <font-awesome-icon icon="fa-solid fa-chalkboard-user" />
-                  <span>Dashboard</span>
-                </div>
-              </b-nav-item>
-              <b-nav-item :to="{ name: 'Projects' }" class="d-flex flex-column justify-content-center align-items-center">
-                <div class="nav-item-color d-flex flex-column justify-content-center align-items-center w-100">
-                  <font-awesome-icon icon="fa-solid fa-user-group" />
-                  <span>Mes projets</span>
-                </div>
-              </b-nav-item>
-              <b-nav-item :to="{ name: 'GestionEtudiants' }" class="d-flex flex-column justify-content-center align-items-center">
-                <div class="nav-item-color d-flex flex-column justify-content-center align-items-center w-100">
-                  <font-awesome-icon icon="fa-solid fa-gear" />
-                  <span>Gérer les utilisateurs</span>
-                </div>
-              </b-nav-item>
+              <li class="nav-item">
+                <router-link :to="{ name: 'Dashboard' }" class="d-flex flex-column justify-content-center align-items-center">
+                  <div class="nav-item-color d-flex flex-column justify-content-center align-items-center w-100">
+                    <font-awesome-icon icon="fa-solid fa-chalkboard-user" />
+                    <span>Dashboard</span>
+                  </div>
+                </router-link>
+              </li>
+              <li class="nav-item">
+                <router-link :to="{ name: 'Projects' }" class="d-flex flex-column justify-content-center align-items-center">
+                  <div class="nav-item-color d-flex flex-column justify-content-center align-items-center w-100">
+                    <font-awesome-icon icon="fa-solid fa-user-group" />
+                    <span>Mes projets</span>
+                  </div>
+                </router-link>
+              </li>
+              <li class="nav-item">
+                <router-link :to="{ name: 'GestionEtudiants' }" class="d-flex flex-column justify-content-center align-items-center">
+                  <div class="nav-item-color d-flex flex-column justify-content-center align-items-center w-100">
+                    <font-awesome-icon icon="fa-solid fa-gear" />
+                    <span>Gérer les utilisateurs</span>
+                  </div>
+                </router-link>
+              </li>
               <b-nav-item class="d-flex flex-column justify-content-center align-items-center">
                   <div class="nav-item-color d-flex flex-column justify-content-center align-items-center w-100" @click="logout">
                     <font-awesome-icon icon="fa-solid fa-arrow-right-from-bracket" />
@@ -107,6 +113,10 @@ export default {
   border-bottom: #FAD26E solid 1px;
 }
 
+a {
+  text-decoration: none !important;
+}
+
 .nav-item:nth-child(1) {
   border-top: #FAD26E solid 2px;
 }
@@ -121,5 +131,13 @@ export default {
 
 .crown-icon {
   color: #F7B000;
+}
+
+.router-link-active {
+  background-color: #FAD26E;
+}
+
+.router-link-active .nav-item-color {
+  color:  #ffffff;
 }
 </style>
