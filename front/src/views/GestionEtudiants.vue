@@ -132,7 +132,7 @@ import {
   addStudent,
   deleteUser,
   getUsers,
-  updateStudent,
+  updateUser,
 } from "../../api/users";
 import AutocompleteUsers from "../components/autocompleteUsers";
 import { COLORS } from "../utils/colors";
@@ -301,7 +301,7 @@ export default {
         this.lastnameValidation = true;
         this.firstnameValidation = true;
         this.emailValidation = true;
-        updateStudent(this.student.id, this.student).then((res) => {
+        updateUser(this.student.id, this.student).then((res) => {
           console.log(res);
           this.student.lastname = "";
           this.student.firstname = "";

@@ -27,7 +27,7 @@
               </b-button>
               <b-button
                 id="delete"
-                @click="deleteSelectedStudent(teacher)"
+                @click="deleteSelectedTeacher(teacher)"
                 class="pe-0"
               >
                 supprimer
@@ -108,7 +108,7 @@
           type="submit"
           id="submit-btn"
           :style="bgColors.yellow"
-          @click="updateSelectedStudent"
+          @click="updateSelectedTeacher"
           >Ajouter</b-button
         >
       </div>
@@ -121,7 +121,7 @@ import {
   addTeacher,
   deleteUser,
   getTeachers,
-  updateStudent,
+  updateUser,
 } from "../../api/users";
 import AutocompleteUsers from "../components/autocompleteUsers";
 import { COLORS } from "../utils/colors";
@@ -214,16 +214,16 @@ export default {
       this.isAddUserCardDisplayed = false;
       this.isUpdateUserCardDisplayed = true;
     },
-    //Supprimer un étudiant
-    deleteSelectedStudent: function (selectedStudent) {
+    //Supprimer un professeur
+    deleteSelectedTeacher: function (selectedStudent) {
       console.log(selectedStudent.id);
       deleteUser(selectedStudent.id).then((res) => {
         console.log(res);
         this.getAllTeachers();
       });
     },
-    //Modifier un étudiant
-    updateSelectedStudent() {
+    //Modifier un professeur
+    updateSelectedTeacher() {
       this.lastnameValidation = null;
       this.firstnameValidation = null;
       this.emailValidation = null;
@@ -236,7 +236,7 @@ export default {
         this.lastnameValidation = true;
         this.firstnameValidation = true;
         this.emailValidation = true;
-        updateStudent(this.teacher.id, this.teacher).then((res) => {
+        updateUser(this.teacher.id, this.teacher).then((res) => {
           console.log(res);
           this.teacher.lastname = "";
           this.teacher.firstname = "";

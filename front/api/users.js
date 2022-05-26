@@ -18,8 +18,8 @@ async function addStudent(data) {
     //return await axiosInstance.post("api/users", data)
 }
 
-async function updateStudent(id,data) {
-    return await axiosInstance.put("/gestion/updateStudent/"+id, data)
+async function updateUser(id,data) {
+    return await axiosInstance.put("/gestion/updateUser/"+id, data)
 }
 
 //Teachers
@@ -31,8 +31,4 @@ async function addTeacher(data) {
     return await axiosInstance.post("/gestion/addTeacher", data)
 }
 
-async function updateTeacher(id,data) {
-    return await axiosInstance.put("/gestion/updateTeacher/"+id, data)
-}
-
-export { getUser, getUsers, deleteUser, addStudent, updateStudent, getTeachers, addTeacher, updateTeacher };
+export { getUser, getUsers, deleteUser, addStudent, updateUser, getTeachers, addTeacher };

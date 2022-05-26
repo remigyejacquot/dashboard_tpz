@@ -194,9 +194,9 @@ class GestionController extends AbstractController
     }
 
     /**
-     * @Route("/gestion/updateStudent/{id}", name="update_student")
+     * @Route("/gestion/updateUser/{id}", name="update_user")
      */
-    public function updateStudent(EntityManagerInterface $entityManager, SerializerInterface $serializer, Request $request, int $id) {
+    public function updateUser(EntityManagerInterface $entityManager, SerializerInterface $serializer, Request $request, int $id) {
         $data=json_decode($request->getContent());
         $user = $entityManager->getRepository(User::class)->find($id);
 
