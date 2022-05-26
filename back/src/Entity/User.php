@@ -56,13 +56,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"users:read","tpzs:read","agencies:read"})
+     * @Groups({"users:read","tpzs:read","agencies:read", "commentary"})
      */
     private $firstname;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"users:read","tpzs:read","agencies:read"})
+     * @Groups({"users:read","tpzs:read","agencies:read", "commentary"})
      */
     private $lastname;
 
@@ -83,9 +83,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $tpz;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Commentary::class, mappedBy="user")
+     */
+    private $commentaries;
+
     public function __construct()
     {
-        $this->tpz_role = new ArrayCollection();
+        $this->tpz_role     = new ArrayCollection();
+        $this->commentaries = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -112,7 +118,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUserIdentifier(): string
     {
-        return (string) $this->email;
+        return (string)$this->email;
     }
 
     /**
@@ -120,7 +126,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUsername(): string
     {
-        return (string) $this->email;
+        return (string)$this->email;
     }
 
     /**
@@ -221,9 +227,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function setIsDev(?bool $is_dev): self
     {
-        if($is_dev){
+        if ($is_dev) {
             $this->is_dev = $is_dev;
-        }else{
+        } else {
             $this->is_dev = null;
         }
 
@@ -257,7 +263,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @Groups({"users:read"})
      */
-    public function getTpzRolesArray() {
+    public function getTpzRolesArray()
+    {
         $tpz_roles = [];
         /** @var TpzRoles $roles */
         foreach ($this->getTpzRole() as $roles) {
@@ -286,7 +293,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function setTpz(?Tpz $tpz): self
     {
-        if($tpz){
+        if ($tpz) {
             $this->tpz = $tpz;
         } else {
             $this->tpz = null;
@@ -294,4 +301,35 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, Commentary>
+     */
+    public function getCommentaries(): Collection
+    {
+        return $this->commentaries;
+    }
+
+    public function addCommentary(Commentary $commentary): self
+    {
+        if (!$this->commentaries->contains($commentary)) {
+            $this->commentaries[] = $commentary;
+            $commentary->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCommentary(Commentary $commentary): self
+    {
+        if ($this->commentaries->removeElement($commentary)) {
+            // set the owning side to null (unless already changed)
+            if ($commentary->getUser() === $this) {
+                $commentary->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
 }
