@@ -63,12 +63,10 @@ import { addAgency } from "../../api/agencies";
 import {getGroupesData, updateRole, deleteGroupe} from "../../api/gestion";
 import AutocompleteUsers from "../components/autocompleteUsers";
 import AutocompleteAgency from "../components/autocompleteAgency";
-import Commentary from "../components/commentary";
-import FormUpdateProjet from "../components/formUpdateProjet";
 
 export default {
   name: "Groupes",
-  components: {FormUpdateProjet, Commentary, AutocompleteAgency, AutocompleteUsers },
+  components: {AutocompleteAgency, AutocompleteUsers },
   data () {
     return {
       chefProjet: "",
