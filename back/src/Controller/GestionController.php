@@ -12,6 +12,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -164,7 +165,6 @@ class GestionController extends AbstractController
     public function addStudent(UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $entityManager, SerializerInterface $serializer, Request $request) {
         $data=json_decode($request->getContent());
         $plaintextPassword = 'azerty';
-        $tpz = $entityManager->getRepository(Tpz::class)->find($data->tpz);
         /** @var User $user */
         $user = new User();
         $hashedPassword = $passwordHasher->hashPassword(
@@ -187,7 +187,7 @@ class GestionController extends AbstractController
         $user->setPassword($hashedPassword);
         $user->setRoles(['ROLE_USER']);
         $user->setIsDev($data->isDev);
-        $user->setTpz($tpz);
+        $user->setTpz($entityManager->getRepository(Tpz::class)->find($data->tpz));
         $entityManager->persist($user);
         $entityManager->flush();
         return new Response('ok');
@@ -215,5 +215,44 @@ class GestionController extends AbstractController
         $entityManager->persist($user);
         $entityManager->flush();
         return new Response('ok');
+    }
+
+    /**
+     * @Route("/gestion/addTeacher", name="add_teacher")
+     */
+    public function addTeacher(UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $entityManager, SerializerInterface $serializer, Request $request) {
+        $data=json_decode($request->getContent());
+        if(in_array('ROLE_ADMIN', $data->senderRoles)){
+            $plaintextPassword = 'azerty';
+            /** @var User $user */
+            $user = new User();
+            $hashedPassword = $passwordHasher->hashPassword(
+                $user,
+                $plaintextPassword
+            );
+
+            switch ($data) {
+                case empty($data->lastname) :
+                    return new Response('Le nom n\'est pas correctement renseigné');
+                case empty($data->firstname) :
+                    return new Response('Le prénom n\'est pas correctement renseigné');
+                case empty($data->email) :
+                    return new Response('L\'email n\'est pas correctement renseigné');
+            }
+
+            $user->setEmail($data->email);
+            $user->setFirstname($data->firstname);
+            $user->setLastname($data->lastname);
+            $user->setPassword($hashedPassword);
+            $user->setRoles(['ROLE_USER', 'ROLE_ADMIN']);
+            $user->setIsDev(null);
+            $user->setTpz(null);
+            $entityManager->persist($user);
+            $entityManager->flush();
+            return new Response('ok');
+        } else
+        {
+            return new Response('Vous n\'avez pas les autorisations nécessaires pour réaliser cette opération', 403);
+        }
     }
 }
