@@ -1,8 +1,8 @@
 <template>
   <div class="container-fluid">
-    <form-update-projet id="3" name="toto23" agenceId="28"></form-update-projet>
+    <!-- <form-update-projet id="3" name="toto23" agenceId="28"></form-update-projet>
     <form-update-projet id="" name="" agenceId="28"></form-update-projet>
-    <commentary groupe="Groupe3" agenceId="28"></commentary>
+    <commentary groupe="Groupe3" agenceId="28"></commentary>-->
     <div class="row h-100">
       <div class="container-liste-agence col-lg-6">
         <p class="action-title">Liste des groupes</p>
