@@ -222,7 +222,9 @@ class GestionController extends AbstractController
      */
     public function addTeacher(UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $entityManager, SerializerInterface $serializer, Request $request) {
         $data=json_decode($request->getContent());
-        if(in_array('ROLE_ADMIN', $data->senderRoles)){
+        $roles=$data->senderRoles;
+        $teacher=$data->teacherToAdd;
+        if(in_array('ROLE_ADMIN', $roles)){
             $plaintextPassword = 'azerty';
             /** @var User $user */
             $user = new User();
@@ -231,18 +233,18 @@ class GestionController extends AbstractController
                 $plaintextPassword
             );
 
-            switch ($data) {
-                case empty($data->lastname) :
+            switch ($teacher) {
+                case empty($teacher->lastname) :
                     return new Response('Le nom n\'est pas correctement renseigné');
-                case empty($data->firstname) :
+                case empty($teacher->firstname) :
                     return new Response('Le prénom n\'est pas correctement renseigné');
-                case empty($data->email) :
+                case empty($teacher->email) :
                     return new Response('L\'email n\'est pas correctement renseigné');
             }
 
-            $user->setEmail($data->email);
-            $user->setFirstname($data->firstname);
-            $user->setLastname($data->lastname);
+            $user->setEmail($teacher->email);
+            $user->setFirstname($teacher->firstname);
+            $user->setLastname($teacher->lastname);
             $user->setPassword($hashedPassword);
             $user->setRoles(['ROLE_USER', 'ROLE_ADMIN']);
             $user->setIsDev(null);
