@@ -130,7 +130,7 @@
 <script>
 import {
   addStudent,
-  deleteStudent,
+  deleteUser,
   getUsers,
   updateStudent,
 } from "../../api/users";
@@ -282,7 +282,7 @@ export default {
     //Supprimer un étudiant
     deleteSelectedStudent: function (selectedStudent) {
       console.log(selectedStudent.id);
-      deleteStudent(selectedStudent.id).then((res) => {
+      deleteUser(selectedStudent.id).then((res) => {
         console.log(res);
         this.getAllStudents();
       });
