@@ -38,6 +38,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="json")
+     * @Groups({"users:read"})
      */
     private $roles = [];
 
@@ -218,9 +219,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->is_dev;
     }
 
-    public function setIsDev(bool $is_dev): self
+    public function setIsDev(?bool $is_dev): self
     {
-        $this->is_dev = $is_dev;
+        if($is_dev){
+            $this->is_dev = $is_dev;
+        }else{
+            $this->is_dev = null;
+        }
 
         return $this;
     }
@@ -281,7 +286,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function setTpz(?Tpz $tpz): self
     {
-        $this->tpz = $tpz || null;
+        if($tpz){
+            $this->tpz = $tpz;
+        } else {
+            $this->tpz = null;
+        }
 
         return $this;
     }

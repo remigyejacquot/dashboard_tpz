@@ -62,7 +62,7 @@
             id="input-lastname"
             v-model="teacher.lastname"
             :state="lastnameValidation"
-            placeholder="Nom de l'étudiant"
+            placeholder="Nom du professeur"
             lazy-formatter
             :required="true"
           ></b-form-input>
@@ -75,7 +75,7 @@
             id="input-firstname"
             v-model="teacher.firstname"
             :state="firstnameValidation"
-            placeholder="Prénom de l'étudiant"
+            placeholder="Prénom du professeur"
             lazy-formatter
             :required="true"
           ></b-form-input>
@@ -88,7 +88,7 @@
             id="input-email"
             v-model="teacher.email"
             :state="emailValidation"
-            placeholder="Email de l'étudiant"
+            placeholder="Email du professeur"
             lazy-formatter
             :required="true"
           ></b-form-input>
@@ -101,7 +101,7 @@
           type="submit"
           id="submit-btn"
           :style="bgColors.yellow"
-          @click="addNewStudent"
+          @click="addNewTeacher"
           >Ajouter</b-button
         ><b-button
           v-else-if="isUpdateUserCardDisplayed"
@@ -118,8 +118,8 @@
 
 <script>
 import {
-  addStudent,
-  deleteStudent,
+  addTeacher,
+  deleteUser,
   getTeachers,
   updateStudent,
 } from "../../api/users";
@@ -141,8 +141,6 @@ export default {
         email: "",
         firstname: "",
         lastname: "",
-        tpz: null,
-        isDev: null,
       },
       //Permet de styliser les boutons d'après une variable globale
       bgColors: {
@@ -171,7 +169,7 @@ export default {
       });
     },
     //Ajoute un nouvel étudiant qui ne serait pas d'office dans la liste + contrôle des champs
-    addNewStudent() {
+    addNewTeacher() {
       this.lastnameValidation = null;
       this.firstnameValidation = null;
       this.emailValidation = null;
@@ -184,8 +182,12 @@ export default {
         this.lastnameValidation = true;
         this.firstnameValidation = true;
         this.emailValidation = true;
-        console.log(this.teacher);
-        addStudent(this.teacher).then((res) => {
+        console.log(JSON.parse(localStorage.getItem("user")).roles )
+        const data = {
+          senderRoles: JSON.parse(localStorage.getItem("user")).roles,
+          teacherToAdd: this.teacher
+        }
+        addTeacher(data).then((res) => {
           console.log(res);
           this.teacher.lastname = "";
           this.teacher.firstname = "";
@@ -215,7 +217,7 @@ export default {
     //Supprimer un étudiant
     deleteSelectedStudent: function (selectedStudent) {
       console.log(selectedStudent.id);
-      deleteStudent(selectedStudent.id).then((res) => {
+      deleteUser(selectedStudent.id).then((res) => {
         console.log(res);
         this.getAllTeachers();
       });
