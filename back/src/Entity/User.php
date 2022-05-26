@@ -38,6 +38,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="json")
+     * @Groups({"users:read"})
      */
     private $roles = [];
 
@@ -54,7 +55,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $agency;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      * @Groups({"users:read","tpzs:read","agencies:read", "commentary"})
      */
     private $firstname;
@@ -66,7 +67,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $lastname;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="boolean", nullable=true)
      * @Groups({"users:read"})
      */
     private $is_dev;
@@ -89,7 +90,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function __construct()
     {
-        $this->tpz_role = new ArrayCollection();
+        $this->tpz_role     = new ArrayCollection();
         $this->commentaries = new ArrayCollection();
     }
 
@@ -117,7 +118,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUserIdentifier(): string
     {
-        return (string) $this->email;
+        return (string)$this->email;
     }
 
     /**
@@ -125,7 +126,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUsername(): string
     {
-        return (string) $this->email;
+        return (string)$this->email;
     }
 
     /**
@@ -224,9 +225,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->is_dev;
     }
 
-    public function setIsDev(bool $is_dev): self
+    public function setIsDev(?bool $is_dev): self
     {
-        $this->is_dev = $is_dev;
+        if ($is_dev) {
+            $this->is_dev = $is_dev;
+        } else {
+            $this->is_dev = null;
+        }
 
         return $this;
     }
@@ -258,7 +263,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @Groups({"users:read"})
      */
-    public function getTpzRolesArray() {
+    public function getTpzRolesArray()
+    {
         $tpz_roles = [];
         /** @var TpzRoles $roles */
         foreach ($this->getTpzRole() as $roles) {
@@ -277,12 +283,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getTpzId(): ?int
     {
-        return $this->tpz->getId();
+        if ($this->getTpz()) {
+            return $this->getTpz()->getId();
+        } else {
+            return null;
+        }
+
     }
 
     public function setTpz(?Tpz $tpz): self
     {
-        $this->tpz = $tpz;
+        if ($tpz) {
+            $this->tpz = $tpz;
+        } else {
+            $this->tpz = null;
+        }
 
         return $this;
     }
@@ -316,4 +331,5 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
 }
