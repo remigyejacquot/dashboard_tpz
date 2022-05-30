@@ -55,19 +55,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"users:read","tpzs:read","agencies:read"})
+     * @Groups({"users:read","tpzs:read","agencies:read", "tpzMembers:read"})
      */
     private $firstname;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"users:read","tpzs:read","agencies:read"})
+     * @Groups({"users:read","tpzs:read","agencies:read", "tpzMembers:read"})
      */
     private $lastname;
 
     /**
      * @ORM\Column(type="boolean")
-     * @Groups({"users:read"})
+     * @Groups({"users:read", "tpzMembers:read"})
      */
     private $is_dev;
 
@@ -271,7 +271,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getTpzId(): ?int
     {
-        return $this->tpz->getId();
+        if ($this->getTpz()) {
+            return $this->getTpz()->getId();
+        } else {
+            return null;
+        }
+
     }
 
     public function setTpz(?Tpz $tpz): self

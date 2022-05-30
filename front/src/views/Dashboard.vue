@@ -1,12 +1,12 @@
 <template>
-  <div class="container vh-100 bg-light">
+  <div class="container bg-light">
     <div class="justify-content-between d-flex" style="height: 100px">
       <div
         class="rounded-lg d-flex bg-white mt-4 align-items-center justify-content-between p-3"
         style="width: 49%; border-radius: 15px"
       >
         <h1 style="font-size: 24px">Gestion des projets</h1>
-        <span>2021 - 2022</span>
+        <span v-if="user.tpzId">{{ user.tpzId }}</span>
       </div>
       <div
         class="d-flex mt-4 align-items-center justify-content-between p-3"
@@ -27,6 +27,7 @@
         </div>
         <div>
           <div
+            @click="toggleLicence"
             style="height: 30px; border-radius: 10px; border: solid white 2px"
             class="d-flex align-items-center"
           >
@@ -87,7 +88,11 @@
                     clip-rule="evenodd"
                   />
                 </svg>
-                <span>John Doe 1</span>
+                <template v-for="deskUser in deskMembers">
+                  <span v-if="deskUser.tpzRolesArray.includes('président', 'vice-président') && !deskUser.is_dev" v-bind:key="deskUser.id">
+                    {{ user.firstname }} {{ user.lastname }}
+                  </span>
+                </template>
               </div>
               <span> Président </span>
             </li>
@@ -112,9 +117,13 @@
                     clip-rule="evenodd"
                   />
                 </svg>
-                <span> John Doe 2 </span>
+                <template v-for="deskUser in deskMembers">
+                  <span v-if="deskUser.tpzRolesArray.includes('trésorier', 'vice-trésorier') && !deskUser.is_dev" v-bind:key="deskUser.id">
+                    {{ user.firstname }} {{ user.lastname }}
+                  </span>
+                </template>
               </div>
-              <span> Vice-trésorier </span>
+              <span> Trésorier </span>
             </li>
             <li
               style="
@@ -137,7 +146,11 @@
                     clip-rule="evenodd"
                   />
                 </svg>
-                <span> John Doe 3 </span>
+                <template v-for="deskUser in deskMembers">
+                  <span v-if="deskUser.tpzRolesArray.includes('secrétaire', 'vice-secrétaire') && !deskUser.is_dev" v-bind:key="deskUser.id">
+                    {{ user.firstname }} {{ user.lastname }}
+                  </span>
+                </template>
               </div>
               <span> Secrétaire </span>
             </li>
@@ -170,7 +183,11 @@
                     clip-rule="evenodd"
                   />
                 </svg>
-                <span>John Doe 1</span>
+                <template v-for="deskUser in deskMembers">
+                  <span v-if="deskUser.tpzRolesArray.includes('président', 'vice-président') && deskUser.is_dev" v-bind:key="deskUser.id">
+                    {{ user.firstname }} {{ user.lastname }}
+                  </span>
+                </template>
               </div>
               <span> Président </span>
             </li>
@@ -195,9 +212,13 @@
                     clip-rule="evenodd"
                   />
                 </svg>
-                <span> John Doe 2 </span>
+                <template v-for="deskUser in deskMembers">
+                  <span v-if="deskUser.tpzRolesArray.includes('trésorier', 'vice-trésorier') && !deskUser.is_dev" v-bind:key="deskUser.id">
+                    {{ user.firstname }} {{ user.lastname }}
+                  </span>
+                </template>
               </div>
-              <span> Vice-trésorier </span>
+              <span> Trésorier </span>
             </li>
             <li
               style="
@@ -228,7 +249,9 @@
         </div>
       </div>
     </section>
-    <section class="d-flex justify-content-between">
+    <section class="d-flex gap-4 mt-4">
+      <project-preview />
+      <project-preview />
       <project-preview />
     </section>
     <!--    <h1>DASHBOARD</h1>-->
@@ -248,41 +271,49 @@ import { getAllTpzMembers } from "../../api/tpzMembers";
 import { getUser } from "../../api/users";
 import { getTpz } from "../../api/tpzs";
 import ProjectPreview from "../components/ProjectPreview";
+import {getMembresBureau} from "../../api/gestion";
 
 export default {
   name: "Dashboard",
-  components: {ProjectPreview},
+  components: { ProjectPreview },
   data() {
     return {
       user: {},
       devAgencies: [],
       comAgencies: [],
       tpzMembers: [],
+      deskMembers: [],
       type: "",
     };
   },
   created() {
-    const userId = JSON.parse(localStorage.getItem("user")).id || JSON.parse(localStorage.getItem("user"))["@id"].substr(-1);
+    const userId =
+      JSON.parse(localStorage.getItem("user")).id ||
+      JSON.parse(localStorage.getItem("user"))["@id"].substr(-1);
     this.fetchInfo(userId);
+    console.log(userId);
     this.fetchTpzMembers();
   },
   methods: {
     fetchInfo(id) {
       getUser(id).then((res) => {
-        console.log(res.data.tpzId);
         this.user = res.data;
         this.type = res.data.is_dev ? "dev" : "com";
-        localStorage.setItem("user", JSON.stringify(res.data))
-        localStorage.setItem("tpzId", JSON.stringify(res.data.tpzId)) // store the user in localstorage
-        getTpz(res.data.tpzId).then((res) => {
-          console.log("toto", res.data.agencies);
-          this.devAgencies = res.data.agencies.filter(
-            (el) => el.is_dev === true
-          );
-          this.comAgencies = res.data.agencies.filter(
-            (el) => el.is_dev !== true
-          );
-        });
+        localStorage.setItem("user", JSON.stringify(res.data));
+        localStorage.setItem("tpzId", JSON.stringify(res.data.tpzId)); // store the user in localstorage
+        if (res.data.tpzId) {
+          getTpz(res.data.tpzId).then((res) => {
+            this.devAgencies = res.data.agencies.filter(
+              (el) => el.is_dev === true
+            );
+            this.comAgencies = res.data.agencies.filter(
+              (el) => el.is_dev !== true
+            );
+          });
+          getMembresBureau(res.data.tpzId).then((res) => {
+            this.deskMembers = res.data
+          })
+        }
       });
     },
     fetchTpzMembers() {
