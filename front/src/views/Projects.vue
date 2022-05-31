@@ -1,6 +1,7 @@
 <template>
   <div>
-    <main class="d-flex">
+    <navSidebar></navSidebar>
+    <main class="container">
       <section
           class="title-section d-flex justify-content-between align-items-center flex-basis-50"
       >
@@ -30,18 +31,20 @@
           <button class="modify-btn">Modifier</button>
         </div>
       </section>
+      <h1>PROJECTS</h1>
+      <p>USER</p>
+      <b-card-text>{{ user }}</b-card-text>
     </main>
-    <h1>PROJECTS</h1>
-    <p>USER</p>
-    <b-card-text>{{ user }}</b-card-text>
   </div>
 </template>
 
 <script>
+import NavSidebar from "../components/navSidebar";
 import { getAgencyMembers } from "../../api/agencies";
 
 export default {
   name: "Projects",
+  components: { NavSidebar },
   data() {
     return {
       user: {},

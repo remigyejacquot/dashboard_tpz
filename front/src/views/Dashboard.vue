@@ -1,35 +1,41 @@
 <template>
   <div>
-    <h1>DASHBOARD</h1>
-    <p>USER</p>
-    <b-card-text>{{ user }}</b-card-text>
-    <p>TOUTES LES AGENCES DE LA LICENCE {{ type === "dev" ? "DEV" : "COM" }}</p>
-    <b-button @click="toggleLicence">CHANGER DE LICENCE</b-button>
-    <div v-if="type === 'dev'">
-      <b-card-text v-for="agency in devAgencies" :key="agency.id">{{
-        agency
+    <navSidebar></navSidebar>
+    <div class="container">
+      <h1>DASHBOARD</h1>
+      <p>USER</p>
+      <b-card-text>{{ user }}</b-card-text>
+      <p>TOUTES LES AGENCES DE LA LICENCE {{ type === "dev" ? "DEV" : "COM" }}</p>
+      <b-button @click="toggleLicence">CHANGER DE LICENCE</b-button>
+      <div v-if="type === 'dev'">
+        <b-card-text v-for="agency in devAgencies" :key="agency.id">{{
+          agency
+        }}</b-card-text>
+      </div>
+      <div v-else>
+        <b-card-text v-for="agency in comAgencies" :key="agency.id">{{
+          agency
+        }}</b-card-text>
+      </div>
+      <p>TPZMEMBERS</p>
+      <b-card-text v-for="member in tpzMembers" :key="member.id">{{
+        member
       }}</b-card-text>
+      <b-button :to="{ name: 'Projects' }">LES PROJETS</b-button>
     </div>
-    <div v-else>
-      <b-card-text v-for="agency in comAgencies" :key="agency.id">{{
-        agency
-      }}</b-card-text>
-    </div>
-    <p>TPZMEMBERS</p>
-    <b-card-text v-for="member in tpzMembers" :key="member.id">{{
-      member
-    }}</b-card-text>
-    <b-button :to="{ name: 'Projects' }">LES PROJETS</b-button>
+    
   </div>
 </template>
 
 <script>
+import NavSidebar from "../components/navSidebar";
 import { getAllTpzMembers } from "../../api/tpzMembers";
 import { getUser } from "../../api/users";
 import { getTpz } from "../../api/tpzs";
 
 export default {
   name: "Dashboard",
+  components: { NavSidebar },
   data() {
     return {
       user: {},
