@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div class="row min-vh-100 vw-100 p-0">
     <navSidebar></navSidebar>
-    <main class="container">
+    <main class="container bg-light col-10 px-3">
       <section
           class="title-section d-flex justify-content-between align-items-center flex-basis-50"
       >
