@@ -1,0 +1,122 @@
+.modal-header {
+    background-color: #FBDD91 !important;
+    color: white;
+    padding: 5px 20px !important;
+}
+
+.modal-header h5 {
+    font-weight: bold !important;
+}
+
+.close {
+    background-color: transparent;
+    border: none;
+    color: white;
+    font-size: 30px;
+}
+
+#name {
+    background-color: #F6F6F6;
+    border: none;
+    border-radius: 0;
+}
+
+#name-input label {
+    width: 20%;
+}
+
+#name-input div {
+    width: 80%;
+}
+
+.modal-dialog {
+    width: 55% !important;
+    max-width: none !important;
+    min-width: 500px !important;
+}
+
+.modal-content {
+    border: none !important;
+    border-radius: 0 !important;
+    max-height: 95vh !important;
+}
+
+.bottom-modal {
+    border-top : 1px solid #d4d3d3;
+}
+
+.modal-body {
+    padding: 8% !important;
+}
+
+.valid-button-wrapper {
+    height: 70px;
+}
+
+.commentaires-title {
+    color: #F7B000;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.commentaire-user {
+    font-size: 18px;
+}
+
+.commentaire-user svg {
+    color: #57C7D4
+}
+
+.commentaire-date {
+    color: #4D3677;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.commentaire {
+    padding-top: 30px;
+    border-bottom: 1px solid #FDF0D0;
+}
+
+#commentaires-wrapper {
+    max-height: 450px;
+    overflow-y: scroll;
+}
+
+#commentaires-wrapper::-webkit-scrollbar {
+    display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+#commentaires-wrapper {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+.valid-button.commentaire {
+    height: 40px;
+}
+
+.commentaire-link {
+    font-size: 14px;
+    font-weight: bold;
+    text-decoration: none;
+    margin: 10px 0 10px 10px;
+    cursor: pointer;
+}
+
+.commentaire-link.modify {
+    color: #F7B000;
+ }
+
+.commentaire-link.modify:hover {
+    color: #f19101;
+}
+
+.commentaire-link.delete {
+    color: #F03E3E;
+}
+
+.commentaire-link.delete:hover {
+    color: #c24949;
+}

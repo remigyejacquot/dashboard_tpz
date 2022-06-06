@@ -1,4 +1,6 @@
 <template>
+<div>
+<navSidebar></navSidebar>
   <div class="container bg-light">
     <div class="justify-content-between d-flex" style="height: 100px">
       <div
@@ -264,9 +266,11 @@
     <!--    <b-card-text v-for="member in tpzMembers" :key="member.id">{{ member }}</b-card-text>-->
     <!--    <b-button :to="{name: 'Projects'}">LES PROJETS</b-button>-->
   </div>
+  </div>
 </template>
 
 <script>
+import NavSidebar from "../components/navSidebar";
 import { getAllTpzMembers } from "../../api/tpzMembers";
 import { getUser } from "../../api/users";
 import { getTpz } from "../../api/tpzs";
@@ -275,7 +279,7 @@ import {getMembresBureau} from "../../api/gestion";
 
 export default {
   name: "Dashboard",
-  components: { ProjectPreview },
+  components: { ProjectPreview, NavSidebar},
   data() {
     return {
       user: {},

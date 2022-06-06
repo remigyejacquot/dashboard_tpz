@@ -4,7 +4,8 @@
       <b-form-input v-bind:id="input" v-model="user" type="text" v-bind:placeholder="placeholder" required v-on:update="onChange($event)"></b-form-input>
       <div v-bind:class="(autocompeleteList.length === 0) ? 'd-none' : ''">
         <ul :id="'results-' + input"  class="results">
-          <p class="infos">Veuillez selectionner l'étudiant</p>
+          <p class="infos" v-if="input==='etudiant'">Veuillez selectionner l'étudiant</p>
+          <p class="infos" v-else>Veuillez selectionner le professeur</p>
           <li v-for="(item) in autocompeleteList" :key="item.id" @click="updateField(item)" class="autocomplete-result" :style="{'cursor': 'pointer'}">
               {{ item.lastname }} {{ item.firstname }}
           </li>
