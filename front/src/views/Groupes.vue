@@ -5,22 +5,35 @@
     <commentary groupe="Groupe3" agenceId="28"></commentary>-->
     <div class="row h-100">
       <div class="container-liste-agence col-lg-6">
-        <p class="action-title">Liste des groupes</p>
-        <div v-for="(item) in agencesDev" :key="item.id">
-          <p>{{item.name}}</p>
-          <ul>
-            <li v-for="(member) in item.users" :key="member.id">
-              {{member.firstname}} {{member.lastname}}
-            </li>
-          </ul>
+        <p class="action-title col-9">Liste des groupes</p>
+        <div class="col-3">
+          <b-form-checkbox v-model="show_agencies" name="check-button" switch>
+            Switch Checkbox <b>(Checked: {{ show_agencies }})</b>
+          </b-form-checkbox>
         </div>
-        <div v-for="(item) in agencesCom" :key="item.id">
-          <p>{{item.name}}</p>
-          <ul>
-            <li v-for="(member) in item.users" :key="member.id">
-              {{member.firstname}} {{member.lastname}}
-            </li>
-          </ul>
+        <div class="liste-agence">
+          <div v-if="this.show_agencies == false" class="row justify-content-center align-items-stretch">
+            <div v-for="(item) in agencesDev" :key="item.id" class="col-5 groups_card m-2">
+              <p class="name-agency">{{item.name}}</p>
+              <p class="name-agency">groupe</p>
+              <ul class="p-0">
+                <li v-for="(member) in item.users" :key="member.id" class="member-agency">
+                  <!-- <p v-if="member.length == 0">Aucun membre</p> -->
+                  <p>{{member.firstname}} {{member.lastname}}</p>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div v-else class="row">
+            <div v-for="(item) in agencesCom" :key="item.id" class="row justify-content-center align-items-stretch">
+              <p class="name-agency">{{item.name}}</p>
+              <ul class="p-0">
+                <li v-for="(member) in item.users" :key="member.id" class="member-agency">
+                  {{member.firstname}} {{member.lastname}}
+                </li>
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
       <div class="col-lg-6 container-forms">
@@ -77,7 +90,8 @@ export default {
       ],
       suggestions : {},
       agencesDev : [],
-      agencesCom: [],
+      agencesCom : [],
+      show_agencies : false,
     }
   },
   async mounted () {
@@ -107,6 +121,7 @@ export default {
           this.suggestions = res.data.users
           this.agencesDev = res.data.agenciesDev
           this.agencesCom = res.data.agenciesCom
+          console.log(res.data)
         })
     },
     async supprimerGroupe() {
@@ -118,5 +133,23 @@ export default {
 </script>
 
 <style scoped>
-
+.groups_card{
+  border: 2px solid #FAD26E;
+  border-radius: 10px;
+}
+.name-agency{
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: #FAD26E;
+  text-align: center;
+}
+.member-agency{
+  text-align: center;
+  list-style: none;
+}
+.liste-agence{
+  overflow-y: scroll; 
+  overflow-x: hidden; 
+  height: 80%;
+}
 </style>

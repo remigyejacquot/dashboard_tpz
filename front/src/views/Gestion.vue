@@ -1,7 +1,7 @@
 <template>
-<div>
+<div class="row">
   <navSidebar></navSidebar>
-  <div class="container">
+  <div class="container col-10">
     <div class="d-flex flex-row menu-container">
       <div class="gestion-menu">
         <b-nav class="d-flex flex-column gestion-nav">

@@ -1,5 +1,5 @@
 <template>
-  <div id="nav">
+  <div id="nav" class="col-2">
     <!-- <b-img-lazy v-bind="mainProps" center :src="require('./assets/tpz_logo.png')" fluid alt="Logo Troyes Point Zero"></b-img-lazy> -->
         <b-navbar id="navbar" toggleable="lg" type="light" class="d-flex flex-column justify-content-start align-items-center">
           <b-navbar-brand href="#" class="w-100 m-0 mt-5 px-5 d-flex flex-column align-items-center justify-content-center">
