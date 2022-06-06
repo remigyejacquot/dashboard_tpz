@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const axiosInstance = axios.create({
-    baseURL: 'http://localhost:8888/tpz/dashboard_tpz/back/public/index.php',
+    baseURL: 'http://localhost/dashboard_tpz/back/public/index.php',
 });
 
 axiosInstance.interceptors.request.use(
