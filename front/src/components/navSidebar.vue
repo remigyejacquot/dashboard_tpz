@@ -3,10 +3,10 @@
     <!-- <b-img-lazy v-bind="mainProps" center :src="require('./assets/tpz_logo.png')" fluid alt="Logo Troyes Point Zero"></b-img-lazy> -->
         <b-navbar id="navbar" toggleable="lg" type="light" class="d-flex flex-column justify-content-start align-items-center">
           <b-navbar-brand href="#" class="w-100 m-0 mt-5 px-5 d-flex flex-column align-items-center justify-content-center">
-            <b-img :src="require('../assets/gontrand.jpg')" rounded="circle" fluid class="pb-2"/>
+            <b-img :src="require('../assets/default-user-image.png')" rounded="circle" class="avatar"/>
             <div class="d-flex flex-row align-items-center">
               <p class="mb-0 d-flex">{{user.firstname}} {{user.lastname}} &nbsp;</p> 
-              <div class="d-flex" v-if="user.tpzRolesArray[0] == 'chef de projet'"><font-awesome-icon class="crown-icon" icon="fa-solid fa-crown" /></div>
+              <div class="d-flex" v-if="user.tpzRolesArray[0] === 'chef de projet'"><font-awesome-icon class="crown-icon" icon="fa-solid fa-crown" /></div>
             </div>
             <div class="text-small">Licence  {{user.is_dev ? 'dev' : 'com'}}</div>
           </b-navbar-brand>
@@ -35,7 +35,7 @@
                 <router-link :to="{ name: 'GestionEtudiants' }" class="d-flex flex-column justify-content-center align-items-center">
                   <div class="nav-item-color d-flex flex-column justify-content-center align-items-center w-100">
                     <font-awesome-icon icon="fa-solid fa-gear" />
-                    <span>Gérer les utilisateurs</span>
+                    <span class="text-center w-100">Gérer les utilisateurs</span>
                   </div>
                 </router-link>
               </li>
@@ -155,4 +155,9 @@ a {
 .router-link-active .nav-item-color {
   color:  #ffffff;
 }
+
+.avatar {
+  width: 100px;
+}
+
 </style>

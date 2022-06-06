@@ -7,7 +7,7 @@
         class="rounded-lg d-flex bg-white mt-4 align-items-center justify-content-between p-3"
         style="width: 49%; border-radius: 15px"
       >
-        <h1 style="font-size: 24px">Gestion des projets</h1>
+        <h1 style="font-size: 20px" class="m-0">Gestion des projets</h1>
         <span v-if="user.tpzId">{{ user.tpzId }}</span>
       </div>
       <div
@@ -56,8 +56,8 @@
       <h2 style="font-size: 28px; font-weight: bold" class="mb-4">
         Membres du bureau
       </h2>
-      <div class="d-flex flex-row justify-content-around w-75">
-        <div style="width: 40%">
+      <div class="d-flex flex-row justify-content-around w-100">
+        <div class="col-5">
           <h4
             style="
               color: rgba(77, 54, 119, 1);
@@ -158,7 +158,7 @@
             </li>
           </ul>
         </div>
-        <div style="width: 40%">
+        <div class="col-5">
           <h4 style="color: rgba(247, 176, 0, 0.57); font-size: 18px; font-weight: bolder">
             Licence communication
           </h4>
