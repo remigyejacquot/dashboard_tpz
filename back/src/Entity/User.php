@@ -56,19 +56,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"users:read","tpzs:read","agencies:read", "commentary"})
+     * @Groups({"users:read","tpzs:read","agencies:read", "commentary", "tpzMembers:read"})
      */
     private $firstname;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"users:read","tpzs:read","agencies:read", "commentary"})
+     * @Groups({"users:read","tpzs:read","agencies:read", "commentary", "tpzMembers:read"}})
      */
     private $lastname;
 
     /**
      * @ORM\Column(type="boolean", nullable=true)
-     * @Groups({"users:read"})
+     * @Groups({"users:read", "tpzMembers:read"})
      */
     private $is_dev;
 
