@@ -115,9 +115,8 @@ export default {
 
 #navbar {
   background-color: white;
-  height: 100vh;
-  width: 15rem;
-  position: fixed;
+  height: 100%;
+  width: 100%;
 }
 
 .nav-item-color {

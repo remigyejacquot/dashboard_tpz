@@ -62,7 +62,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"users:read","tpzs:read","agencies:read", "commentary", "tpzMembers:read"}})
+     * @Groups({"users:read","tpzs:read","agencies:read", "commentary", "tpzMembers:read"})
      */
     private $lastname;
 
@@ -263,7 +263,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @Groups({"users:read"})
      */
-    public function getTpzRolesArray()
+    public function getTpzRolesArray(): array
     {
         $tpz_roles = [];
         /** @var TpzRoles $roles */

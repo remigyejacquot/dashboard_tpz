@@ -1,7 +1,7 @@
 <template>
-<div>
+<div class="row min-vh-100 vw-100 p-0">
 <navSidebar></navSidebar>
-  <div class="container bg-light">
+  <div class="container bg-light col-10 px-3">
     <div class="justify-content-between d-flex" style="height: 100px">
       <div
         class="rounded-lg d-flex bg-white mt-4 align-items-center justify-content-between p-3"
@@ -12,7 +12,7 @@
       </div>
       <div
         class="d-flex mt-4 align-items-center justify-content-between p-3"
-        style="width: 49%; border-radius: 15px; background-color: #f7b000"
+        style="width: 49%; border-radius: 15px; background-color: rgba(247, 176, 0, 0.57)"
       >
         <div class="d-flex flex-column">
           <div>
@@ -65,14 +65,14 @@
               font-weight: bolder;
             "
           >
-            Licence Communication
+            Licence développement
           </h4>
           <ul style="list-style: none" class="p-0 m-0">
             <li
               style="
                 border-radius: 10px;
                 color: white;
-                background-color: rgba(77, 54, 119, 1);
+                background-color: rgba(77, 54, 119, 0.82);
                 height: 35px;
               "
               class="d-flex justify-content-between align-items-center p-2 mb-2"
@@ -101,7 +101,7 @@
             <li
               style="
                 border-radius: 10px;
-                background-color: rgba(77, 54, 120, 0.2);
+                background-color: rgba(249, 245, 255, 1);
                 height: 35px;
               "
               class="d-flex justify-content-between align-items-center p-2 mb-2"
@@ -130,7 +130,7 @@
             <li
               style="
                 border-radius: 10px;
-                background-color: rgba(77, 54, 120, 0.2);
+                background-color: rgba(249, 245, 255, 1);
                 height: 35px;
               "
               class="d-flex justify-content-between align-items-center p-2 mb-2"
@@ -159,15 +159,15 @@
           </ul>
         </div>
         <div style="width: 40%">
-          <h4 style="color: #f7b000; font-size: 18px; font-weight: bolder">
-            Licence développement
+          <h4 style="color: rgba(247, 176, 0, 0.57); font-size: 18px; font-weight: bolder">
+            Licence communication
           </h4>
           <ul style="list-style: none" class="p-0 m-0">
             <li
               style="
                 border-radius: 10px;
                 color: white;
-                background-color: #f7b000;
+                background-color: rgba(247, 176, 0, 0.57);
                 height: 35px;
               "
               class="d-flex justify-content-between align-items-center p-2 mb-2"
@@ -196,7 +196,7 @@
             <li
               style="
                 border-radius: 10px;
-                background-color: rgba(245, 175, 0, 0.42);
+                background-color: rgba(255, 242, 208, 0.57);
                 height: 35px;
               "
               class="d-flex justify-content-between align-items-center p-2 mb-2"
@@ -225,7 +225,7 @@
             <li
               style="
                 border-radius: 10px;
-                background-color: rgba(245, 175, 0, 0.42);
+                background-color: rgba(255, 242, 208, 0.57);
                 height: 35px;
               "
               class="d-flex justify-content-between align-items-center p-2 mb-2"
