@@ -6,7 +6,7 @@
             <b-img :src="require('../assets/default-user-image.png')" rounded="circle" class="avatar"/>
             <div class="d-flex flex-row align-items-center">
               <p class="mb-0 d-flex">{{user.firstname}} {{user.lastname}} &nbsp;</p> 
-              <div class="d-flex" v-if="user.tpzRolesArray[0] === 'chef de projet'"><font-awesome-icon class="crown-icon" icon="fa-solid fa-crown" /></div>
+              <div class="d-flex" v-if="user.tpzRolesArray && user.tpzRolesArray.includes('chef de projet')"><font-awesome-icon class="crown-icon" icon="fa-solid fa-crown" /></div>
             </div>
             <div class="text-small">Licence  {{user.is_dev ? 'dev' : 'com'}}</div>
           </b-navbar-brand>

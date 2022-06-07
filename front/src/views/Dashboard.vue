@@ -8,11 +8,11 @@
         style="width: 49%; border-radius: 15px"
       >
         <h1 style="font-size: 20px" class="m-0">Gestion des projets</h1>
-        <span v-if="user.tpzId">{{ user.tpzId }}</span>
+        <span></span>
       </div>
       <div
-        class="d-flex mt-4 align-items-center justify-content-between p-3"
-        style="width: 49%; border-radius: 15px; background-color: rgba(247, 176, 0, 0.57)"
+        :class="'d-flex mt-4 align-items-center justify-content-between p-3 ' + (this.isDisplay === 'communication' ? 'orange-bg' : 'purple-bg')"
+        style="width: 49%; border-radius: 15px;"
       >
         <div class="d-flex flex-column">
           <div>
@@ -20,10 +20,10 @@
               style="font-size: 24px; font-weight: bold"
               class="text-white p-0 m-0"
             >
-              Licence communication
+              Licence {{isDisplay}}
             </h2>
-            <div>
-              <span>5 groupes</span><span> | </span><span>24 élèves</span>
+            <div :style="this.isDisplay === 'developpement' ? 'color: white' : ''">
+              <span>{{ isDisplay === 'communication' ? comAgencies.length : devAgencies.length }} groupes</span>
             </div>
           </div>
         </div>
@@ -34,18 +34,17 @@
             class="d-flex align-items-center"
           >
             <span
-              class="bg-white h-100 text-center"
-              style="
-                border-radius: 5px 0 0 5px;
-                width: 50px;
-                cursor: pointer;
-                color: #f7b000;
-              "
+              :class="'h-100 text-center ' + (this.isDisplay === 'communication' ? 'active' : 'desactive')"
+              id="communication-switch"
+              style="border-radius: 5px 0 0 5px; color: #f7b000;"
+              @click="changeDisplay"
               >com</span
             >
             <span
-              class="text-white h-100 text-center"
-              style="border-radius: 0 5px 5px 0; width: 50px; cursor: pointer"
+              :class="'h-100 text-center ' + (this.isDisplay === 'developpement' ? 'active' : 'desactive')"
+              id="developpement-switch"
+              style="border-radius: 0 5px 5px 0; color: #4D3677;"
+              @click="changeDisplay"
               >dev</span
             >
           </div>
@@ -77,7 +76,7 @@
               "
               class="d-flex justify-content-between align-items-center p-2 mb-2"
             >
-              <div class="d-flex flex-row align-items-center">
+              <div class="d-flex flex-row align-items-center w-100">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   style="width: 30px; height: 30px; margin-right: 5px"
@@ -91,12 +90,12 @@
                   />
                 </svg>
                 <template v-for="deskUser in deskMembers">
-                  <span v-if="deskUser.tpzRolesArray.includes('président', 'vice-président') && !deskUser.is_dev" v-bind:key="deskUser.id">
-                    {{ user.firstname }} {{ user.lastname }}
+                  <span class="d-flex justify-content-between w-100" v-if="(deskUser.tpzRolesArray.includes('president') || deskUser.tpzRolesArray.includes('vice-president') ) && deskUser.is_dev" v-bind:key="deskUser.id">
+                    {{ deskUser.firstname }} {{ deskUser.lastname }}
+                    <span> {{deskUser.tpzRolesArray.includes('president') ? 'Président' : 'Vice-président'}} </span>
                   </span>
                 </template>
               </div>
-              <span> Président </span>
             </li>
             <li
               style="
@@ -106,7 +105,7 @@
               "
               class="d-flex justify-content-between align-items-center p-2 mb-2"
             >
-              <div class="d-flex flex-row align-items-center">
+              <div class="d-flex flex-row align-items-center w-100">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   style="width: 30px; height: 30px; margin-right: 5px"
@@ -120,12 +119,12 @@
                   />
                 </svg>
                 <template v-for="deskUser in deskMembers">
-                  <span v-if="deskUser.tpzRolesArray.includes('trésorier', 'vice-trésorier') && !deskUser.is_dev" v-bind:key="deskUser.id">
-                    {{ user.firstname }} {{ user.lastname }}
+                  <span class="d-flex justify-content-between w-100" v-if="(deskUser.tpzRolesArray.includes('tresorier') || deskUser.tpzRolesArray.includes('vice-tresorier')) && deskUser.is_dev" v-bind:key="deskUser.id">
+                    {{ deskUser.firstname }} {{ deskUser.lastname }}
+                    <span> {{deskUser.tpzRolesArray.includes('tresorier') ? 'Trésorier' : 'Vice-trésorier'}} </span>
                   </span>
                 </template>
               </div>
-              <span> Trésorier </span>
             </li>
             <li
               style="
@@ -135,7 +134,7 @@
               "
               class="d-flex justify-content-between align-items-center p-2 mb-2"
             >
-              <div class="d-flex flex-row align-items-center">
+              <div class="d-flex flex-row align-items-center w-100">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   style="width: 30px; height: 30px; margin-right: 5px"
@@ -149,12 +148,12 @@
                   />
                 </svg>
                 <template v-for="deskUser in deskMembers">
-                  <span v-if="deskUser.tpzRolesArray.includes('secrétaire', 'vice-secrétaire') && !deskUser.is_dev" v-bind:key="deskUser.id">
-                    {{ user.firstname }} {{ user.lastname }}
+                  <span class="d-flex justify-content-between w-100" v-if="(deskUser.tpzRolesArray.includes('secretaire') || deskUser.tpzRolesArray.includes('vice-secretaire')) && deskUser.is_dev" v-bind:key="deskUser.id">
+                    {{ deskUser.firstname }} {{ deskUser.lastname }}
+                    <span> {{deskUser.tpzRolesArray.includes('secretaire') ? 'Secrétaire' : 'Vice-secrétaire'}} </span>
                   </span>
                 </template>
               </div>
-              <span> Secrétaire </span>
             </li>
           </ul>
         </div>
@@ -172,7 +171,7 @@
               "
               class="d-flex justify-content-between align-items-center p-2 mb-2"
             >
-              <div class="d-flex flex-row align-items-center">
+              <div class="d-flex flex-row align-items-center w-100">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   style="width: 30px; height: 30px; margin-right: 5px"
@@ -186,12 +185,12 @@
                   />
                 </svg>
                 <template v-for="deskUser in deskMembers">
-                  <span v-if="deskUser.tpzRolesArray.includes('président', 'vice-président') && deskUser.is_dev" v-bind:key="deskUser.id">
-                    {{ user.firstname }} {{ user.lastname }}
+                  <span class="d-flex justify-content-between w-100" v-if="(deskUser.tpzRolesArray.includes('president') || deskUser.tpzRolesArray.includes('vice-president') ) && !deskUser.is_dev" v-bind:key="deskUser.id">
+                    {{ deskUser.firstname }} {{ deskUser.lastname }}
+                    <span> {{deskUser.tpzRolesArray.includes('president') ? 'Président' : 'Vice-président'}} </span>
                   </span>
                 </template>
               </div>
-              <span> Président </span>
             </li>
             <li
               style="
@@ -215,12 +214,12 @@
                   />
                 </svg>
                 <template v-for="deskUser in deskMembers">
-                  <span v-if="deskUser.tpzRolesArray.includes('trésorier', 'vice-trésorier') && !deskUser.is_dev" v-bind:key="deskUser.id">
-                    {{ user.firstname }} {{ user.lastname }}
+                  <span class="d-flex justify-content-between w-100" v-if="(deskUser.tpzRolesArray.includes('tresorier') || deskUser.tpzRolesArray.includes('vice-tresorier')) && !deskUser.is_dev" v-bind:key="deskUser.id">
+                    {{ deskUser.firstname }} {{ deskUser.lastname }}
+                    <span> {{deskUser.tpzRolesArray.includes('tresorier') ? 'Trésorier' : 'Vice-trésorier'}} </span>
                   </span>
                 </template>
               </div>
-              <span> Trésorier </span>
             </li>
             <li
               style="
@@ -230,7 +229,7 @@
               "
               class="d-flex justify-content-between align-items-center p-2 mb-2"
             >
-              <div class="d-flex flex-row align-items-center">
+              <div class="d-flex flex-row align-items-center w-100">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   style="width: 30px; height: 30px; margin-right: 5px"
@@ -243,9 +242,13 @@
                     clip-rule="evenodd"
                   />
                 </svg>
-                <span> John Doe 3 </span>
+                <template v-for="deskUser in deskMembers">
+                  <span class="d-flex justify-content-between w-100" v-if="(deskUser.tpzRolesArray.includes('secretaire') || deskUser.tpzRolesArray.includes('vice-secretaire')) && !deskUser.is_dev" v-bind:key="deskUser.id">
+                    {{ deskUser.firstname }} {{ deskUser.lastname }}
+                    <span> {{deskUser.tpzRolesArray.includes('secretaire') ? 'Secrétaire' : 'Vice-secrétaire'}} </span>
+                  </span>
+                </template>
               </div>
-              <span> Secrétaire </span>
             </li>
           </ul>
         </div>
@@ -288,6 +291,7 @@ export default {
       tpzMembers: [],
       deskMembers: [],
       type: "",
+      isDisplay : "communication"
     };
   },
   created() {
@@ -295,7 +299,6 @@ export default {
       JSON.parse(localStorage.getItem("user")).id ||
       JSON.parse(localStorage.getItem("user"))["@id"].substr(-1);
     this.fetchInfo(userId);
-    console.log(userId);
     this.fetchTpzMembers();
   },
   methods: {
@@ -330,8 +333,42 @@ export default {
     toggleLicence() {
       this.type === "dev" ? (this.type = "com") : (this.type = "dev");
     },
+    changeDisplay() {
+      this.isDisplay = this.isDisplay === 'communication' ? 'developpement' : 'communication'
+    }
   },
 };
 </script>
 
-<style></style>
+<style>
+.active {
+  background-color: white;
+  width: 50px;
+  cursor: pointer;
+}
+
+.desactive {
+  color : white !important;
+  background-color: transparent;
+  width: 50px;
+  cursor: pointer;
+}
+
+.purple-bg {
+  background-color: rgba(77, 54, 119, 0.82);
+}
+
+.orange-bg {
+  background-color: rgba(247, 176, 0, 0.57);
+}
+
+
+.orange-light {
+  background-color: rgba(255, 242, 208, 0.57);
+}
+
+.purple-light {
+  background-color: rgba(249, 245, 255, 1);
+}
+
+</style>
