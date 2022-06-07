@@ -74,7 +74,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\ManyToMany(targetEntity=TpzRoles::class, inversedBy="users")
-     * @Groups({"users:read","tpzs:read"})
+     * @Groups({"users:read","tpzs:read", "agencies:read"})
      */
     private $tpz_role;
 

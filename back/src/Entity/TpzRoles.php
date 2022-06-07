@@ -26,7 +26,7 @@ class TpzRoles
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"tpzMembers:read"})
+     * @Groups({"tpzMembers:read", "agencies:read"})
      */
     private $role;
 
