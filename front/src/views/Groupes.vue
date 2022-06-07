@@ -40,7 +40,7 @@
         <div class="form add">
           <p class="action-title">Créer une agence</p>
           <b-form>
-            <autocomplete-users v-bind:options="suggestions"  input="chef" placeholder="Chef de projet"></autocomplete-users>
+            <autocomplete-users v-bind:options="suggestions"  input="chef" placeholder="Chef d'agence"></autocomplete-users>
               <b-form-group id="spe" label="Spécialité" label-for="spe">
                 <b-form-select v-model="is_dev" :options="options"></b-form-select>
               </b-form-group>
@@ -114,7 +114,7 @@ export default {
       )
     },
     async updateRoleChef(idAgence) {
-      await updateRole('chef de projet', this.chefProjet, idAgence)
+      await updateRole('chef d\'agence', this.chefProjet, idAgence)
     },
     async getDataGroupes() {
         await getGroupesData(1).then((res) => {
@@ -148,8 +148,8 @@ export default {
   list-style: none;
 }
 .liste-agence{
-  overflow-y: scroll; 
-  overflow-x: hidden; 
+  overflow-y: scroll;
+  overflow-x: hidden;
   height: 80%;
 }
 </style>
