@@ -1,6 +1,6 @@
 <template>
 <div class="row">
-  <navSidebar></navSidebar>
+  <navSidebar/>
   <div class="container col-10">
     <div class="d-flex flex-row menu-container">
       <div class="gestion-menu">
@@ -26,9 +26,9 @@
       <router-view></router-view>
     </div>
   </div>
-  
+
 </div>
-  
+
 </template>
 
 <style>
