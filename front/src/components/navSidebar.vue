@@ -60,7 +60,9 @@ export default {
   data() {
     return {
       mainProps: { width: 200, height: 200},
-      user: {},
+      user: {
+        tpzRolesArray:[]
+      },
       devAgencies: [],
       comAgencies: [],
       type: "",
