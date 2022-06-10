@@ -6,12 +6,12 @@
           class="title-section d-flex justify-content-between align-items-center"
       >
         <div class="d-flex header-section-div flex-column">
-          <b-form-select v-model="selected" :options="projects" text-field="text" value-field="value" class="mb-2"></b-form-select>
+          <b-form-select v-model="selectedProject" :options="projects" text-field="text" value-field="value" class="mb-2"></b-form-select>
           <div class="d-flex w-100 justify-content-between align-items-center">
-          <b-progress :max="progress.max" variant="warning" striped animated class="w-100 me-2">
-            <b-progress-bar :value="progress.value"/>
+          <b-progress :max="progressProject.max" variant="warning" striped animated class="w-100 me-2">
+            <b-progress-bar :value="progressProject.value"/>
           </b-progress>
-            <p class="m-0">{{progress.value}}%</p>
+            <p class="m-0">{{progressProject.value}}%</p>
           </div>
         </div>
         <div class="d-flex header-section-div flex-column justify-content-between align-items-end">
@@ -118,9 +118,20 @@
         </div>
       </section>
       <section>
-        {{currentTask.title}}
+        <h2>{{currentTask.title}}</h2>
         {{currentTask.description}}
-        {{currentTask.subtasks}}
+        <div class="d-flex align-items-center">
+        <b-progress :max="progressTask.max" variant="warning" striped animated class="w-100 me-2">
+          <b-progress-bar :value="progressTask.value"/>
+        </b-progress>
+        <p class="m-0">{{progressTask.value}}%</p>
+        </div>
+        <b-form-checkbox
+            v-for="subtask in subtasks" :key="subtask.value['@id']" :value="subtask.value" @change="toggleSubtasks(subtask)" v-model="finishedSubTasks"
+        >
+          {{subtask.text}}
+        </b-form-checkbox>
+        {{ finishedSubTasks }}
       </section>
       <b-card-text>{{ projects }}</b-card-text>
     </main>
@@ -130,6 +141,7 @@
 <script>
 import NavSidebar from "../components/navSidebar";
 import { getAgencyMembers } from "../../api/agencies";
+import {updateSubtasks} from "../../api/subtasks";
 
 export default {
   name: "Projects",
@@ -140,14 +152,20 @@ export default {
       agency: {
         users:[]
       },
-      selected: {},
+      selectedProject: {},
+      finishedSubTasks: [],
       projects: [],
       tasks:[],
+      subtasks:[],
       currentTask:{},
-      progress: {
+      progressProject: {
         value:0,
         max:100
       },
+      progressTask: {
+        value:0,
+        max:100
+      }
     };
   },
   created() {
@@ -156,15 +174,28 @@ export default {
     this.getAllAgencyMembers(user["agency"].substr(-1)); //retrieve user index from @id
   },
   watch: {
-    selected(currentProject) {
-      const totalProgress = (currentProject.tasks.filter(el=>el.is_finished === true).length/currentProject.tasks.length)*100
-      this.progress.value = totalProgress
+    selectedProject(currentProject) {
+      const totalProgressProject = (currentProject.tasks.filter(el=>el.is_finished === true).length/currentProject.tasks.length)*100
+      this.progressProject.value = totalProgressProject
       this.tasks=[]
       currentProject.tasks.forEach((task)=>{
         this.tasks.push(task)
       })
-      this.currentTask = currentProject.tasks.shift()
-    }
+      //make shallow copy of currentProject array
+      this.currentTask = [...currentProject.tasks].shift()
+      this.subtasks=[]
+      this.finishedSubTasks=[]
+      this.currentTask.subtasks.forEach((subtask)=>{
+        this.subtasks.push({
+          value: subtask,
+          text:subtask.title
+        })
+        if(subtask.is_finished){
+          this.finishedSubTasks.push(subtask)
+        }
+      })
+      this.progressTask.value = Math.floor((this.finishedSubTasks.length/this.subtasks.length)*100) || 0
+    },
   },
   methods: {
     getAllAgencyMembers(id) {
@@ -177,11 +208,24 @@ export default {
             text:project.name
           });
         });
-        this.selected = res.data.projects.shift()
+        this.selectedProject = res.data.projects.shift()
       });
     },
     setCurrentTask(task) {
       this.currentTask = task
+    },
+    toggleSubtasks(subtask){
+      if(this.finishedSubTasks.find(el=>el['@id'] === subtask.value['@id'])){
+        console.log('selected')
+        updateSubtasks(subtask.value['@id'].substr(-1), {
+          isFinished : true
+        })
+      } else {
+        updateSubtasks(subtask.value['@id'].substr(-1), {
+          isFinished : false
+        })
+      }
+      this.progressTask.value = Math.floor((this.finishedSubTasks.length/this.subtasks.length)*100)
     }
   },
 };
