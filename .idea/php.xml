@@ -100,6 +100,7 @@
       <path value="$PROJECT_DIR$/back/vendor/doctrine/doctrine-migrations-bundle" />
       <path value="$PROJECT_DIR$/back/vendor/symfony/security-http" />
       <path value="$PROJECT_DIR$/back/vendor/symfony/polyfill-intl-icu" />
+      <path value="$PROJECT_DIR$/back/vendor/symfony/google-mailer" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.2">

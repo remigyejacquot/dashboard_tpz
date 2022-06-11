@@ -283,8 +283,8 @@
   <b-modal id="modal-new-tpz" title="Nouveau dashboard" hide-footer>
     <p class="my-4">Créer un nouveau dashboard ?</p>
     <div class="d-flex justify-content-end">
-      <b-button class="mt-3 mx-2" block @click="$bvModal.hide('modal-new-tpz')">Annuler</b-button>
-      <b-button class="mt-3" block @click="newTpz" variant="success">créer</b-button>
+      <button class="mt-3 mx-2 grey-button" @click="$bvModal.hide('modal-new-tpz')">Annuler</button>
+      <button class="mt-3 valid-button px-2" @click="newTpz">créer</button>
     </div>
   </b-modal>
   </div>

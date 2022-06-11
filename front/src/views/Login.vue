@@ -36,7 +36,7 @@
               >Se connecter</b-button
             >
             <div class="d-flex justify-content-center mt-2">
-              <b-link to="/resetpassword" class="link-yellow"> Mot de passe oublié? </b-link>
+              <router-link :to="{ name: 'ResetPassword' }" class="link-yellow"> Mot de passe oublié? </router-link>
             </div>
           </div>
         </b-form>

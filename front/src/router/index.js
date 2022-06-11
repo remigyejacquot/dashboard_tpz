@@ -35,8 +35,7 @@ const routes = [
   {
     path: "/resetpassword",
     name: "ResetPassword",
-    component: ResetPassword,
-    meta: { requiresAuth: true },
+    component: ResetPassword
   },
   {
     path: "/gestion",

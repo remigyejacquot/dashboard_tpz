@@ -61,7 +61,7 @@ export default {
     listenerCloseResults() {
       document.addEventListener('click', (event) => {
         const box = document.getElementById('results');
-        if (box && !box.contains(event.target) && event.target.id != this.input) {
+        if (box && !box.contains(event.target) && event.target.id !== this.input) {
           this.autocompeleteList = []
         }
       });
