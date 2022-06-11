@@ -155,6 +155,7 @@ export default {
         users:[]
       },
       selectedProject: {},
+      finishedTasks: [],
       finishedSubTasks: [],
       projects: [],
       tasks:[],
@@ -177,12 +178,15 @@ export default {
   },
   watch: {
     selectedProject(currentProject) {
-      const totalProgressProject = Math.floor((currentProject.tasks.filter(el=>el.is_finished === true).length/currentProject.tasks.length)*100)
-      this.progressProject.value = totalProgressProject
       this.tasks=[]
+      this.finishedTasks = []
       currentProject.tasks.forEach((task)=>{
         this.tasks.push(task)
+        if(task.is_finished){
+          this.finishedTasks.push(task)
+        }
       })
+      this.progressProject.value = Math.floor((this.finishedTasks.length/currentProject.tasks.length)*100)
       //make shallow copy of currentProject array
       this.currentTask = [...currentProject.tasks].shift()
     },
@@ -201,10 +205,12 @@ export default {
       })
       if (this.finishedSubTasks.length === task.subtasks.length && task.subtasks.length !== 0) {
         task.is_finished = true
+
       } else {
         task.is_finished = false
       }
       this.progressTask.value = Math.floor((this.finishedSubTasks.length / task.subtasks.length) * 100) || 0
+      this.progressProject.value = Math.floor((this.finishedTasks.length / this.tasks.length) * 100) || 0
     },
   },
   methods: {
@@ -262,6 +268,10 @@ export default {
           isFinished: true
         }).then(res=>{
           this.currentTask.is_finished = true
+          if(!this.finishedTasks.some(el=>el['@id'] === this.currentTask['@id'])){
+            this.finishedTasks.push(this.currentTask)
+          }
+          this.progressProject.value = Math.floor((this.finishedTasks.length/this.tasks.length)*100)
           console.log(res)
         }).catch(err=>{
           console.log(err)
@@ -271,11 +281,16 @@ export default {
             isFinished: false
           }).then(res=>{
             this.currentTask.is_finished = false
+            console.log('debug',this.finishedTasks.filter(el=>el['@id'] !== this.currentTask['@id']))
+            this.finishedTasks = this.finishedTasks.filter(el=>el['@id'] !== this.currentTask['@id'])
+            this.progressProject.value = Math.floor((this.finishedTasks.length/this.tasks.length)*100)
+
             console.log(res)
           }).catch(err=>{
             console.log(err)
           })
       }
+      console.log(this.finishedTasks.length)
     },
     addNewSubtask(){
     }
