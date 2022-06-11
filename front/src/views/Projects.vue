@@ -3,7 +3,7 @@
     <navSidebar></navSidebar>
     <main class="container bg-light col-10 px-3">
       <section
-          class="title-section d-flex justify-content-between align-items-center"
+          class="title-section d-flex justify-content-between align-items-center item-project"
       >
         <div class="d-flex header-section-div flex-column">
           <b-form-select v-model="selectedProject" :options="projects" text-field="text" value-field="value" class="mb-2"></b-form-select>
@@ -33,7 +33,7 @@
         </div>
       </section>
       <section
-          class="switch-section d-flex justify-content-between align-items-center"
+          class="switch-section d-flex justify-content-between align-items-center item-agency"
       >
         <div class="d-flex header-section-div flex-column">
           <h2>{{agency.name}}</h2>
@@ -42,7 +42,7 @@
               <div>
               {{ member.firstname }}
               {{ member.lastname }}
-                <font-awesome-icon class="crown-icon" icon="fa-solid fa-crown" v-if="member.tpz_role.find(el=>el.role === 'chef d\'agence')"/>
+                <font-awesome-icon class="icon" icon="fa-solid fa-crown" v-if="member.tpz_role.find(el=>el.role === 'chef d\'agence')"/>
               </div>
             </li>
           </ul>
@@ -68,7 +68,7 @@
           </div>
         </div>
       </section>
-      <section class="d-flex flex-column">
+      <section class="d-flex flex-column item-tasks">
         <div class="d-flex header-section-div h-auto justify-content-between w-100">
           <h2>Tâches</h2>
           <b-button @click="addNewTask" style="background-color: transparent; border: none">
@@ -85,31 +85,15 @@
               <td class="w-100">
                 <div class="d-flex align-items-center justify-content-between">
                   <div class="d-flex align-items-center">
-                  <b-icon
-                      v-model="tasks"
-                      v-if="task.is_finished"
-                      icon="check"
-                      style="color: green"
-                      font-scale="2"
-                      class="icon-btn"
-                  />
-                  <b-icon
-                      v-else
-                      icon="dash"
-                      style="color: black"
-                      font-scale="2"
-                      @click="()=>{}"
-                      class="icon-btn"
-                  />
-                  {{task.title}}
-                  </div>
-                  <div>
-                    <b-icon
-                        icon="plus-circle-fill"
-                        style="color:#FAD26E"
-                        font-scale="1.5"
-                        @click="()=>{}"
-                        class="icon-btn"/>
+                    <font-awesome-icon
+                        v-model="tasks"
+                        v-if="task.is_finished"
+                        class="icon icon-valid"
+                        icon="fa-solid fa-check"
+                    />
+                    <font-awesome-icon v-else class="icon" icon="fa-solid fa-spinner" />
+
+                    {{task.title}}
                   </div>
                 </div>
               </td>
@@ -118,22 +102,23 @@
           </table>
         </div>
       </section>
-      <section>
-        <h2>{{currentTask.title}}</h2>
-        {{currentTask.description}}
-        <div class="d-flex align-items-center">
-        <b-progress :max="progressTask.max" variant="warning" striped animated class="w-100 me-2">
-          <b-progress-bar :value="progressTask.value"/>
-        </b-progress>
-        <p class="m-0">{{progressTask.value}}%</p>
+      <section class="d-flex flex-column item-subtasks">
+        <div class="header-section-div h-auto">
+          <h2>{{currentTask.title}}</h2>
+          {{currentTask.description}}
+          <div class="d-flex align-items-center">
+            <b-progress :max="progressTask.max" variant="warning" striped animated class="w-100 me-2">
+              <b-progress-bar :value="progressTask.value"/>
+            </b-progress>
+            <p class="m-0">{{progressTask.value}}%</p>
+          </div>
+          <b-form-checkbox
+              v-for="subtask in subtasks" :key="subtask.value['@id']" :value="subtask.value" @change="toggleSubtasks(subtask)" v-model="finishedSubTasks"
+          >
+            {{subtask.text}}
+          </b-form-checkbox>
         </div>
-        <b-form-checkbox
-            v-for="subtask in subtasks" :key="subtask.value['@id']" :value="subtask.value" @change="toggleSubtasks(subtask)" v-model="finishedSubTasks"
-        >
-          {{subtask.text}}
-        </b-form-checkbox>
-      <b-button style="background-color: #57C7D4; border: none" @click="addNewSubtask">Ajouter</b-button>
-        {{finishedSubTasks}}
+          <b-button style="background-color: #57C7D4; border: none; width: 30%" @click="addNewSubtask">Ajouter</b-button>
       </section>
     </main>
   </div>
@@ -304,9 +289,23 @@ export default {
   grid-template-columns: 1fr 1fr;
   grid-template-rows: auto;
   grid-template-areas:
-    "list search"
-    "list add";
+    "project agency"
+    "tasks subtasks"
+    "tasks subtasks";
   justify-items: stretch;
+}
+
+item-project {
+  grid-area: project;
+}
+item-agency {
+  grid-area: agency;
+}
+item-tasks {
+  grid-area: tasks;
+}
+item-subtasks {
+  grid-area: subtasks;
 }
 
 main {
@@ -346,6 +345,14 @@ td {
 }
 
 tr:hover {
-  background-color: #FAD26E;
+  background-color: #FAD26E20;
+}
+
+.icon {
+  color:#f7b000;
+  margin: .5em;
+}
+.icon-valid {
+  color: green;
 }
 </style>
