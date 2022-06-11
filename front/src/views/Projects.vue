@@ -71,7 +71,7 @@
       <section class="d-flex flex-column item-tasks">
         <div class="d-flex header-section-div h-auto justify-content-between w-100">
           <h2>Tâches</h2>
-          <b-button @click="addNewTask" style="background-color: transparent; border: none">
+          <b-button v-b-modal.addNewTaskModal style="background-color: transparent; border: none">
             <b-icon
                 icon="plus-circle-fill"
                 style="color: #f96197"
@@ -120,6 +120,37 @@
         </div>
           <b-button style="background-color: #57C7D4; border: none; width: 30%" @click="addNewSubtask">Ajouter</b-button>
       </section>
+      {{newTask}}
+    <div>
+      <b-modal id="addNewTaskModal" ref="modal" centered title="Ajouter une nouvelle tâche" hide-footer @show="resetModal" @hidden="resetModal" class="custom-modal">
+        <form ref="form">
+          <b-form-group
+              label="Titre"
+              label-for="task-title-input"
+              invalid-feedback="Le titre est requis"
+          >
+            <b-form-input
+                id="task-title-input"
+                v-model="newTask.title"
+                required
+            ></b-form-input>
+
+          </b-form-group><b-form-group
+              label="Description"
+              label-for="task-title-input"
+              invalid-feedback="La description est requise"
+          >
+          <b-form-input
+              id="task-desc-input"
+              v-model="newTask.description"
+              required
+          ></b-form-input>
+          <button class="mt-3 mr-2 grey-button" @click="$bvModal.hide('addNewTaskModal')">Annuler</button>
+          <button class="mt-3 valid-button" @click="addNewTask">Ajouter</button>
+          </b-form-group>
+        </form>
+      </b-modal>
+    </div>
     </main>
   </div>
 </template>
@@ -129,6 +160,28 @@ import NavSidebar from "../components/navSidebar";
 import { getAgencyMembers } from "../../api/agencies";
 import {updateSubtasks} from "../../api/subtasks";
 import {addTask, updateTask} from "../../api/tasks";
+
+class Task {
+  title
+  description
+  isFinished
+  project
+  subtasks
+  createdAt
+  updatedAt
+  finishedAt
+
+  constructor(title='', description='', isFinished=false, project='', subtasks = [], createdAt= new Date(), updateAt = new Date(), finishedAt= new Date()) {
+    this.title = title
+    this.description = description
+    this.isFinished = isFinished
+    this.project = project
+    this.subtasks = subtasks
+    this.createdAt = createdAt
+    this.updatedAt = updateAt
+    this.finishedAt = finishedAt
+  }
+}
 
 export default {
   name: "Projects",
@@ -153,7 +206,8 @@ export default {
       progressTask: {
         value:0,
         max:100
-      }
+      },
+      newTask: new Task()
     };
   },
   created() {
@@ -212,19 +266,13 @@ export default {
         this.selectedProject = res.data.projects.shift()
       });
     },
-    addNewTask(){
-      const newTask = {
-        title:"vueTitle",
-        description:"vueDesc",
-        isFinished:false,
-        project:this.selectedProject['@id'],
-        subtasks:[],
-        createdAt:new Date(),
-        updatedAt:new Date(),
-        finishedAt:new Date(),
-      }
-      addTask(newTask).then(res=>{
+    addNewTask(e){
+      e.preventDefault()
+      this.newTask.project = this.selectedProject['@id']
+      addTask(this.newTask).then(res=>{
         this.tasks.push(res.data)
+        this.$bvModal.hide('addNewTaskModal')
+        this.progressProject.value = Math.floor((this.finishedTasks.length/this.tasks.length)*100)
       }).catch(err=>{
         console.log(err)
       })
@@ -278,12 +326,16 @@ export default {
       console.log(this.finishedTasks.length)
     },
     addNewSubtask(){
-    }
+    },
+    resetModal() {
+      this.newTask = new Task()
+    },
   },
 };
 </script>
 
 <style scoped>
+@import '../assets/css/modal.css';
 .container {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -340,7 +392,7 @@ li {
 }
 
 td {
-  border: 1px solid black;
+  border: 1px solid #FAD26E;
   padding: .5em
 }
 
