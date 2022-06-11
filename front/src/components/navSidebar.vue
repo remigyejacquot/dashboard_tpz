@@ -2,10 +2,10 @@
   <div id="nav" class="col-2">
     <!-- <b-img-lazy v-bind="mainProps" center :src="require('./assets/tpz_logo.png')" fluid alt="Logo Troyes Point Zero"></b-img-lazy> -->
         <b-navbar id="navbar" toggleable="lg" type="light" class="d-flex flex-column justify-content-start align-items-center">
-          <b-navbar-brand href="#" class="w-100 m-0 mt-5 px-5 d-flex flex-column align-items-center justify-content-center">
+          <b-navbar-brand href="#" class="w-100 m-0 mt-5 px-1 d-flex flex-column align-items-center justify-content-center">
             <b-img :src="require('../assets/default-user-image.png')" rounded="circle" class="avatar"/>
-            <div class="d-flex flex-row align-items-center">
-              <p class="mb-0 d-flex">{{user.firstname}} {{user.lastname}} &nbsp;</p> 
+            <div class="d-flex flex-row justify-content-center align-items-center w-100">
+              <p class="mb-0 text-center">{{user.firstname}} {{user.lastname}} &nbsp;</p>
               <div class="d-flex" v-if="user.tpzRolesArray && user.tpzRolesArray.includes('chef de projet')"><font-awesome-icon class="crown-icon" icon="fa-solid fa-crown" /></div>
             </div>
             <div class="text-small">Licence  {{user.is_dev ? 'dev' : 'com'}}</div>
@@ -53,7 +53,6 @@
 
 <script>
 import {getUser} from "../../api/users";
-import { getTpz } from "../../api/tpzs";
 
 export default {
   name: "NavSidebar",
@@ -73,20 +72,9 @@ export default {
     },
     fetchUserInfo(id) {
         getUser(id).then((res) => {
-        console.log(res.data.tpzId);
         this.user = res.data;
         this.type = res.data.is_dev ? "dev" : "com";
         localStorage.setItem("user", JSON.stringify(res.data))
-        localStorage.setItem("tpzId", JSON.stringify(res.data.tpzId)) // store the user in localstorage
-        getTpz(res.data.tpzId).then((res) => {
-          console.log("toto", res.data.agencies);
-          this.devAgencies = res.data.agencies.filter(
-            (el) => el.is_dev === true
-          );
-          this.comAgencies = res.data.agencies.filter(
-            (el) => el.is_dev !== true
-          );
-        });
       });
     },
   },

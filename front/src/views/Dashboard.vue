@@ -7,8 +7,21 @@
         class="rounded-lg d-flex bg-white mt-4 align-items-center justify-content-between p-3"
         style="width: 49%; border-radius: 15px"
       >
-        <h1 style="font-size: 20px" class="m-0">Gestion des projets</h1>
-        <span></span>
+        <div class="d-flex justify-content-center align-items-center">
+          <h1 style="font-size: 20px" class="m-0">Gestion des projets</h1>
+          <div class="add-btn m-1" v-if="this.user.roles && this.user.roles.includes('ROLE_ADMIN')" v-b-modal.modal-new-tpz >
+            <b-icon
+                icon="plus-circle-fill"
+                style="color: #f96197"
+                font-scale="1.5"
+                class="icon-btn"
+            >+</b-icon
+            >
+          </div>
+        </div>
+        <div v-if="this.user.roles && this.user.roles.includes('ROLE_ADMIN')">
+          <b-form-select v-model="selected" :options="optionsTpzs" size="sm" class="select-date"></b-form-select>
+        </div>
       </div>
       <div
         :class="'d-flex mt-4 align-items-center justify-content-between p-3 ' + (this.isDisplay === 'communication' ? 'orange-bg' : 'purple-bg')"
@@ -267,14 +280,21 @@
     <!--    <b-card-text v-for="member in tpzMembers" :key="member.id">{{ member }}</b-card-text>-->
     <!--    <b-button :to="{name: 'Projects'}">LES PROJETS</b-button>-->
   </div>
+  <b-modal id="modal-new-tpz" title="Nouveau dashboard" hide-footer>
+    <p class="my-4">Créer un nouveau dashboard ?</p>
+    <div class="d-flex justify-content-end">
+      <b-button class="mt-3 mx-2" block @click="$bvModal.hide('modal-new-tpz')">Annuler</b-button>
+      <b-button class="mt-3" block @click="newTpz" variant="success">créer</b-button>
+    </div>
+  </b-modal>
   </div>
 </template>
 
 <script>
 import NavSidebar from "../components/navSidebar";
-import { getAllTpzMembers } from "../../api/tpzMembers";
-import { getUser } from "../../api/users";
-import { getTpz } from "../../api/tpzs";
+import {getAllTpzMembers} from "../../api/tpzMembers";
+import {getUser} from "../../api/users";
+import {getAllTpzs, getTpz, postTpz} from "../../api/tpzs";
 import ProjectPreview from "../components/ProjectPreview";
 import {getMembresBureau} from "../../api/gestion";
 
@@ -290,8 +310,26 @@ export default {
       deskMembers: [],
       agenciesToDisplay : [],
       type: "",
-      isDisplay : "communication"
+      isDisplay : "communication",
+      optionsTpzs: [],
+      selected: ''
     };
+  },
+  watch: {
+    selected : function() {
+      getTpz(this.selected).then((res) => {
+        this.devAgencies = res.data.agencies.filter(
+            (el) => el.is_dev === true
+        );
+        this.comAgencies = res.data.agencies.filter(
+            (el) => el.is_dev !== true
+        );
+        this.agenciesToDisplay = this.comAgencies
+      });
+      getMembresBureau(this.selected).then((res) => {
+        this.deskMembers = res.data
+      })
+    }
   },
   created() {
     const userId =
@@ -301,14 +339,30 @@ export default {
     this.fetchTpzMembers();
   },
   methods: {
+    async getTpzOptions() {
+      return await getAllTpzs().then((res) => {
+        let id
+        this.optionsTpzs = res.data["hydra:member"].map((tpz, index) => {
+          if (index === 0) {
+            this.selected = tpz['@id'].replace(/\D/g, '')
+            id = tpz['@id'].replace(/\D/g, '')
+          }
+          return {value: tpz['@id'].replace(/\D/g, ''), text: new Date(tpz.year).getFullYear()}
+        })
+        return id
+      })
+    },
     fetchInfo(id) {
-      getUser(id).then((res) => {
+      getUser(id).then(async (res) => {
         this.user = res.data;
         this.type = res.data.is_dev ? "dev" : "com";
         localStorage.setItem("user", JSON.stringify(res.data));
-        localStorage.setItem("tpzId", JSON.stringify(res.data.tpzId)); // store the user in localstorage
-        if (res.data.tpzId) {
-          getTpz(res.data.tpzId).then((res) => {
+        localStorage.setItem("tpzId", JSON.stringify(res.data.tpzId));
+        let id = res.data.tpzId
+        if (this.user.roles.includes('ROLE_ADMIN')) {
+          id = await this.getTpzOptions()
+        }
+          getTpz(id).then((res) => {
             this.devAgencies = res.data.agencies.filter(
               (el) => el.is_dev === true
             );
@@ -317,10 +371,9 @@ export default {
             );
             this.agenciesToDisplay = this.comAgencies
           });
-          getMembresBureau(res.data.tpzId).then((res) => {
+          getMembresBureau(id).then((res) => {
             this.deskMembers = res.data
           })
-        }
       });
     },
     fetchTpzMembers() {
@@ -336,6 +389,12 @@ export default {
     changeDisplay() {
       this.isDisplay = this.isDisplay === 'communication' ? 'developpement' : 'communication'
       this.agenciesToDisplay = this.isDisplay === 'communication' ? this.comAgencies : this.devAgencies
+    },
+    newTpz() {
+      postTpz({year : new Date()}).then(() => {
+        this.$bvModal.hide('modal-new-tpz')
+        window.location.reload()
+      })
     }
   },
 };
@@ -370,6 +429,17 @@ export default {
 
 .purple-light {
   background-color: rgba(249, 245, 255, 1);
+}
+
+.select-date {
+  color: #57C7D4;
+  background-color: #F6F6F6;
+  border: none;
+  padding: 5px 10px;
+}
+
+.icon-btn {
+  cursor: pointer;
 }
 
 </style>

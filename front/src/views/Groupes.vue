@@ -58,10 +58,10 @@
         </div>
       </div>
       <b-modal id="modal-1" title="Suppression"  hide-footer>
-        <p class="my-4">Êtes-vous sûr de vouloir supprimer l'agence' ?</p>
+        <p class="my-4">Êtes-vous sûr de vouloir supprimer l'agence ?</p>
         <div class="d-flex justify-content-end">
-          <b-button class="mt-3 mr-2" block @click="$bvModal.hide('bv-modal-example')">Annuler</b-button>
-          <b-button class="mt-3" block @click="$bvModal.hide('bv-modal-example'); supprimerGroupe()" variant="danger">Supprimer</b-button>
+          <b-button class="mt-3 mr-2" block @click="$bvModal.hide('modal-1')">Annuler</b-button>
+          <b-button class="mt-3" block @click="$bvModal.hide('modal-1'); supprimerGroupe()" variant="danger">Supprimer</b-button>
         </div>
       </b-modal>
       <router-view></router-view>

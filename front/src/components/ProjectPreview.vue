@@ -3,7 +3,7 @@
     style="width: 290px; border-radius: 15px"
     class="bg-white p-3 align-items-center d-flex flex-column wrapper-agence"
   >
-    <div class="w-100 d-flex justify-content-end">
+    <div class="w-100 d-flex justify-content-end" v-if="this.user.roles && this.user.roles.includes('ROLE_ADMIN')">
       <commentary :groupe="agence.name" :agenceId="agence['@id'].replace(/\D/g,'')"></commentary>
     </div>
     <h3 class="mt-2">{{agence.name}}</h3>
@@ -87,16 +87,27 @@
         <font-awesome-icon icon="fa-solid fa-chevron-right"/>
       </div>
     </div>
-    <router-link :to="{ name: 'Projects', params: { agenceId: agence['@id'].replace(/\D/g,'') } }" class="mt-3 red-button" style="background-color: #6D5A8F !important; padding: 5px 30px !important; font-size: 14px !important;">Voir le détail</router-link>
+    <router-link v-if="(this.user.roles && this.user.roles.includes('ROLE_ADMIN')) || agence['@id'] === this.user.agency"
+                 :to="{ name: 'Projects', params: { agenceId: agence['@id'].replace(/\D/g,'') } }"
+                 class="mt-3 red-button" style="background-color: #6D5A8F !important; padding: 5px 30px !important; font-size: 14px !important;">Voir le détail</router-link>
   </div>
 </template>
 
 <script>
 import Commentary from "./commentary";
+
 export default {
   name: "ProjectPreview",
   components: {Commentary},
   props : ['agence'],
+  data() {
+    return {
+      user: ''
+    }
+  },
+  created() {
+    this.user = JSON.parse(localStorage.getItem("user"))
+  },
   methods : {
     slide(to) {
       const projet = document.querySelector('#projets-' + this.agence.name + ' .isActive')
