@@ -1,7 +1,16 @@
 import axiosInstance from "./axiosInstance";
 
-async function updateSubtasks(id, data) {
+
+async function addSubtask(data) {
+    return await axiosInstance.post("/api/subtasks", data)
+}
+
+async function updateSubtask(id, data) {
     return await axiosInstance.put("/api/subtasks/" + id, data)
 }
 
-export {updateSubtasks}
+async function deleteSubtask(id) {
+    return await axiosInstance.delete("/api/tasks/"+id)
+}
+
+export {addSubtask, updateSubtask, deleteSubtask}

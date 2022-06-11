@@ -8,4 +8,8 @@ async function updateTask(id,data) {
     return await axiosInstance.put("/api/tasks/"+id,data)
 }
 
-export {addTask, updateTask}
+async function deleteTask(id) {
+    return await axiosInstance.delete("/api/tasks/"+id)
+}
+
+export {addTask, updateTask, deleteTask}

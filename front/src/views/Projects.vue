@@ -103,8 +103,11 @@
         </div>
       </section>
       <section class="d-flex flex-column item-subtasks">
-        <div class="header-section-div h-auto">
+        <div class="d-flex header-section-div h-auto justify-content-between w-100">
           <h2>{{currentTask.title}}</h2>
+          <font-awesome-icon class="icon-delete" icon="fa-solid fa-delete-left" @click="deleteCurrentTask(currentTask)"/>
+        </div>
+        <div>
           {{currentTask.description}}
           <div class="d-flex align-items-center">
             <b-progress :max="progressTask.max" variant="warning" striped animated class="w-100 me-2">
@@ -113,17 +116,20 @@
             <p class="m-0">{{progressTask.value}}%</p>
           </div>
           <b-form-checkbox
-              v-for="subtask in subtasks" :key="subtask.value['@id']" :value="subtask.value" @change="toggleSubtasks(subtask)" v-model="finishedSubTasks"
+              class="d-flex" v-for="subtask in subtasks" :key="subtask.value['@id']" :value="subtask.value" @change="toggleSubtasks(subtask)" v-model="finishedSubtasks"
           >
+            <div class="ms-3 d-flex align-items-center justify-content-between w-100">
             {{subtask.text}}
+            <font-awesome-icon class="icon-delete" icon="fa-solid fa-delete-left" @click="deleteSubtask(subtask)"/>
+            </div>
           </b-form-checkbox>
         </div>
-          <b-button style="background-color: #57C7D4; border: none; width: 30%" @click="addNewSubtask">Ajouter</b-button>
+          <b-button v-b-modal.addNewSubtaskModal style="background-color: #57C7D4; border: none; width: 30%">Ajouter</b-button>
       </section>
       {{newTask}}
     <div>
       <b-modal id="addNewTaskModal" ref="modal" centered title="Ajouter une nouvelle tâche" hide-footer @show="resetModal" @hidden="resetModal" class="custom-modal">
-        <form ref="form">
+        <form ref="formTask">
           <b-form-group
               label="Titre"
               label-for="task-title-input"
@@ -150,6 +156,23 @@
           </b-form-group>
         </form>
       </b-modal>
+      <b-modal id="addNewSubtaskModal" ref="modal" centered title="Ajouter une nouvelle sous tâche" hide-footer @show="resetModal" @hidden="resetModal" class="custom-modal">
+        <form ref="formSubtask">
+          <b-form-group
+              label="Titre"
+              label-for="task-title-input"
+              invalid-feedback="Le titre est requis"
+          >
+            <b-form-input
+                id="task-title-input"
+                v-model="newSubtask.title"
+                required
+            ></b-form-input>
+          <button class="mt-3 mr-2 grey-button" @click="$bvModal.hide('addNewSubtaskModal')">Annuler</button>
+          <button class="mt-3 valid-button" @click="addNewSubtask">Ajouter</button>
+        </b-form-group>
+        </form>
+      </b-modal>
     </div>
     </main>
   </div>
@@ -158,8 +181,8 @@
 <script>
 import NavSidebar from "../components/navSidebar";
 import { getAgencyMembers } from "../../api/agencies";
-import {updateSubtasks} from "../../api/subtasks";
-import {addTask, updateTask} from "../../api/tasks";
+import {addSubtask, deleteSubtask, updateSubtask} from "../../api/subtasks";
+import {addTask, deleteTask, updateTask} from "../../api/tasks";
 
 class Task {
   title
@@ -183,6 +206,21 @@ class Task {
   }
 }
 
+class Subtask {
+  title
+  isFinished
+  task
+  createdAt
+
+  constructor(title='', isFinished=false, task='', createdAt= new Date()) {
+    this.title=title
+    this.isFinished=isFinished
+    this.task=task
+    this.createdAt=createdAt
+  }
+
+}
+
 export default {
   name: "Projects",
   components: { NavSidebar },
@@ -194,7 +232,7 @@ export default {
       },
       selectedProject: {},
       finishedTasks: [],
-      finishedSubTasks: [],
+      finishedSubtasks: [],
       projects: [],
       tasks:[],
       subtasks:[],
@@ -207,13 +245,15 @@ export default {
         value:0,
         max:100
       },
-      newTask: new Task()
+      newTask: new Task(),
+      newSubtask: new Subtask()
     };
   },
   created() {
     const user = JSON.parse(localStorage.getItem("user"));
     this.user = user
-    this.getAllAgencyMembers(user["agency"].substr(-1)); //retrieve user index from @id
+    console.log(user)
+    this.getAllAgencyMembers(user["agency"].replace(new RegExp('.*agencies/'), ``)); //retrieve user index from @id
   },
   watch: {
     selectedProject(currentProject) {
@@ -232,23 +272,23 @@ export default {
     currentTask(task) {
       this.subtasks = []
       this.progressTask.value = 0
-      this.finishedSubTasks = []
+      this.finishedSubtasks = []
       task.subtasks.forEach((subtask) => {
         this.subtasks.push({
           value: subtask,
           text: subtask.title
         })
         if (subtask.is_finished) {
-          this.finishedSubTasks.push(subtask)
+          this.finishedSubtasks.push(subtask)
         }
       })
-      if (this.finishedSubTasks.length === task.subtasks.length && task.subtasks.length !== 0) {
+      if (this.finishedSubtasks.length === task.subtasks.length && task.subtasks.length !== 0) {
         task.is_finished = true
 
       } else {
         task.is_finished = false
       }
-      this.progressTask.value = Math.floor((this.finishedSubTasks.length / task.subtasks.length) * 100) || 0
+      this.progressTask.value = Math.floor((this.finishedSubtasks.length / task.subtasks.length) * 100) || 0
       this.progressProject.value = Math.floor((this.finishedTasks.length / this.tasks.length) * 100) || 0
     },
   },
@@ -277,27 +317,36 @@ export default {
         console.log(err)
       })
     },
+    deleteCurrentTask(task){
+      const regex = new RegExp('.*tasks/')
+      deleteTask(task['@id'].replace(regex,``)).then(res=>{
+        this.tasks = this.tasks.filter(el=>el['@id'] !== res.data['@id'])
+        this.progressProject.value = Math.floor((this.finishedTasks.length/this.tasks.length)*100)
+      }).catch(err=>{
+        console.log(err)
+      })
+    },
     setCurrentTask(task) {
       this.currentTask = task
     },
     toggleSubtasks(subtask){
-      if(this.finishedSubTasks.find(el=>el['@id'] === subtask.value['@id'])){
-        updateSubtasks(subtask.value['@id'].substr(-1), {
+      if(this.finishedSubtasks.find(el=>el['@id'] === subtask.value['@id'])){
+        updateSubtask(subtask.value['@id'].replace(new RegExp('.*subtasks/'), ``), {
           isFinished : true
         }).then(res=>{
          subtask.value.is_finished = res.data.isFinished
         })
       } else {
-        updateSubtasks(subtask.value['@id'].substr(-1), {
+        updateSubtask(subtask.value['@id'].replace(new RegExp('.*subtasks/'), ``), {
           isFinished : false
         }).then(res=>{
           subtask.value.is_finished = res.data.isFinished
 
         })
       }
-      this.progressTask.value = Math.floor((this.finishedSubTasks.length/this.subtasks.length)*100)
-      if(this.finishedSubTasks.length === this.currentTask.subtasks.length && this.currentTask.subtasks.length !== 0) {
-        updateTask(this.currentTask['@id'].substr(-1),{
+      this.progressTask.value = Math.floor((this.finishedSubtasks.length/this.subtasks.length)*100)
+      if(this.finishedSubtasks.length === this.currentTask.subtasks.length && this.currentTask.subtasks.length !== 0) {
+        updateTask(this.currentTask['@id'].replace(new RegExp('.*tasks/'), ``),{
           isFinished: true
         }).then(res=>{
           this.currentTask.is_finished = true
@@ -310,7 +359,7 @@ export default {
           console.log(err)
         })
       } else {
-          updateTask(this.currentTask['@id'].substr(-1), {
+          updateTask(this.currentTask['@id'].replace(new RegExp('.*tasks/'), ``), {
             isFinished: false
           }).then(res=>{
             this.currentTask.is_finished = false
@@ -325,10 +374,30 @@ export default {
       }
       console.log(this.finishedTasks.length)
     },
-    addNewSubtask(){
+    addNewSubtask(e){
+      e.preventDefault()
+      this.newSubtask.task = this.currentTask['@id']
+      addSubtask(this.newSubtask).then(res=>{
+        this.currentTask.subtasks.push(res.data)
+        this.$bvModal.hide('addNewSubtaskModal')
+        this.progressTask.value = Math.floor((this.finishedSubtasks.length/this.subtasks.length)*100)
+      }).catch(err=>{
+        console.log(err)
+      })
     },
-    resetModal() {
-      this.newTask = new Task()
+    deleteSubtask(subtask){
+      deleteSubtask(subtask.value['@id'].replace(new RegExp('.*subtasks/'), ``)).then(res=>{
+        this.currentTask = this.currentTask.subtasks.filter(el=>el['@id'] = res.data['@id'])
+      }).catch(err=>{
+        console.log(err)
+      })
+    },
+    resetModal: function (e) {
+      if (e.componentId === 'addNewTaskModal') {
+        this.newTask = new Task()
+      } else {
+        this.newSubtask = new Subtask()
+      }
     },
   },
 };
@@ -406,5 +475,10 @@ tr:hover {
 }
 .icon-valid {
   color: green;
+}
+.icon-delete {
+  color: #F03E3E;
+  width: 1.5em;
+  height: 1.5em;
 }
 </style>
