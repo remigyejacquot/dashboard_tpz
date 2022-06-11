@@ -48,12 +48,12 @@ class Task
 
     /**
      * @ORM\Column(type="datetime_immutable")
-     * @Groups({"agencies:read"})
+     * @Groups({"agencies:read", "tpzs:read"})
      */
     private $updated_at;
 
     /**
-     * @ORM\Column(type="datetime_immutable")
+     * @ORM\Column(type="datetime_immutable", nullable="true")
      * @Groups({"agencies:read"})
      */
     private $finished_at;

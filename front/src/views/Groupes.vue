@@ -1,5 +1,7 @@
 <template>
   <div class="container-fluid">
+    <b-overlay :show="show" rounded="sm">
+    </b-overlay>
     <!-- <form-update-projet id="3" name="toto23" agenceId="28"></form-update-projet>
     <form-update-projet id="" name="" agenceId="28"></form-update-projet>
     <commentary groupe="Groupe3" agenceId="28"></commentary>-->
@@ -69,6 +71,7 @@
 
 <style>
 @import '../assets/css/groupes.css';
+@import '../assets/css/loader.css';
 </style>
 
 <script>
@@ -83,6 +86,7 @@ export default {
   data () {
     return {
       chefProjet: "",
+      show: false,
       is_dev : true,
       options : [
           { value: true, text: 'Développement' },
@@ -100,10 +104,11 @@ export default {
 
   methods: {
     async ajoutGroupe() {
+      this.show = true
       this.chefProjet = document.getElementById('id').value
       await addAgency(
           {
-            tpz : "/dashboard_tpz/back/public/index.php/api/tpzs/1",
+            tpz : "/dashboard_tpz/back/public/index.php/api/tpzs/" + localStorage.getItem('tpzId'),
             name : "Groupe" + Math.floor(1000 + Math.random() * 9000),
             isDev : this.is_dev
           }
@@ -114,7 +119,10 @@ export default {
       )
     },
     async updateRoleChef(idAgence) {
-      await updateRole('chef de projet', this.chefProjet, idAgence)
+      await updateRole('chef de projet', this.chefProjet, idAgence).then(() => {
+        this.show = false
+        document.getElementById('chef').value = ""
+      })
     },
     async getDataGroupes() {
         await getGroupesData(1).then((res) => {

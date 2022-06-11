@@ -1,5 +1,5 @@
 <template>
-<div class="row min-vh-100 vw-100 p-0">
+<div class="row vh-100 vw-100 p-0">
 <navSidebar></navSidebar>
   <div class="container bg-light col-10 px-3">
     <div class="justify-content-between d-flex" style="height: 100px">
@@ -254,10 +254,8 @@
         </div>
       </div>
     </section>
-    <section class="d-flex gap-4 mt-4">
-      <project-preview />
-      <project-preview />
-      <project-preview />
+    <section class="d-flex gap-4 mt-4 d-flex flex-wrap">
+      <project-preview v-for="agence in agenciesToDisplay" v-bind:key="agence.id" :agence="agence"/>
     </section>
     <!--    <h1>DASHBOARD</h1>-->
     <!--    <p>USER</p>-->
@@ -290,6 +288,7 @@ export default {
       comAgencies: [],
       tpzMembers: [],
       deskMembers: [],
+      agenciesToDisplay : [],
       type: "",
       isDisplay : "communication"
     };
@@ -316,6 +315,7 @@ export default {
             this.comAgencies = res.data.agencies.filter(
               (el) => el.is_dev !== true
             );
+            this.agenciesToDisplay = this.comAgencies
           });
           getMembresBureau(res.data.tpzId).then((res) => {
             this.deskMembers = res.data
@@ -335,6 +335,7 @@ export default {
     },
     changeDisplay() {
       this.isDisplay = this.isDisplay === 'communication' ? 'developpement' : 'communication'
+      this.agenciesToDisplay = this.isDisplay === 'communication' ? this.comAgencies : this.devAgencies
     }
   },
 };

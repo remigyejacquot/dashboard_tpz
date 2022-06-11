@@ -26,7 +26,7 @@ class Tpz
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups({"agencies:read"})
+     * @Groups({"agencies:read","tpzs:read"})
      */
     private $year;
 
