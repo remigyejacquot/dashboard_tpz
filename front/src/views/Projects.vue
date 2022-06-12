@@ -379,8 +379,18 @@ export default {
       addSubtask(this.newSubtask).then(res=>{
         this.subtasks.push({text:res.data.title, value:res.data})
         this.$bvModal.hide('addNewSubtaskModal')
-        this.currentTask.is_finished = (this.finishedTasks.length/this.subtasks.length) === 1 ? true : false
-        this.progressTask.value = Math.floor((this.finishedSubtasks.length/this.subtasks.length)*100)
+        this.progressTask.value = Math.floor((this.finishedSubtasks.length/this.subtasks.length)*100) || 0
+        updateTask(this.currentTask['@id'].replace(new RegExp('.*tasks/'), ``), {
+          isFinished: false
+        }).then(res=>{
+          this.currentTask.is_finished = false
+          this.finishedTasks = this.finishedTasks.filter(el=>el['@id'] !== this.currentTask['@id'])
+          this.progressProject.value = Math.floor((this.finishedTasks.length/this.tasks.length)*100)
+
+          console.log(res)
+        }).catch(err=>{
+          console.log(err)
+        })
       }).catch(err=>{
         console.log(err)
       })
@@ -389,9 +399,33 @@ export default {
       deleteSubtask(subtask.value['@id'].replace(new RegExp('.*subtasks/'), ``)).then(()=>{
         this.subtasks = this.subtasks.filter(el=>el.value['@id'] !== subtask.value['@id'])
         this.finishedSubtasks = this.finishedSubtasks.filter(el=>el['@id'] !== subtask.value['@id'])
-        this.progressTask.value = Math.floor((this.finishedSubtasks.filter(el=>el['@id'] !== subtask.value['@id']).length/this.subtasks.filter(el=>el.value['@id'] !== subtask.value['@id']).length)*100)
-        console.log(this.subtasks.length)
-        console.log(this.finishedTasks.length)
+        this.progressTask.value = Math.floor((this.finishedSubtasks.filter(el=>el['@id'] !== subtask.value['@id']).length/this.subtasks.filter(el=>el.value['@id'] !== subtask.value['@id']).length)*100) || 0
+        if(this.finishedSubtasks.filter(el=>el['@id'] !== subtask.value['@id']).length === this.subtasks.filter(el=>el.value['@id'] !== subtask.value['@id']).length && this.currentTask.subtasks.length !== 0) {
+          updateTask(this.currentTask['@id'].replace(new RegExp('.*tasks/'), ``),{
+            isFinished: true
+          }).then(res=>{
+            this.currentTask.is_finished = true
+            if(!this.finishedTasks.some(el=>el['@id'] === this.currentTask['@id'])){
+              this.finishedTasks.push(this.currentTask)
+            }
+            this.progressProject.value = Math.floor((this.finishedTasks.length/this.tasks.length)*100)
+            console.log(res)
+          }).catch(err=>{
+            console.log(err)
+          })
+        } else {
+          updateTask(this.currentTask['@id'].replace(new RegExp('.*tasks/'), ``), {
+            isFinished: false
+          }).then(res=>{
+            this.currentTask.is_finished = false
+            this.finishedTasks = this.finishedTasks.filter(el=>el['@id'] !== this.currentTask['@id'])
+            this.progressProject.value = Math.floor((this.finishedTasks.length/this.tasks.length)*100)
+
+            console.log(res)
+          }).catch(err=>{
+            console.log(err)
+          })
+        }
       }).catch(err=>{
         console.log(err)
       })
