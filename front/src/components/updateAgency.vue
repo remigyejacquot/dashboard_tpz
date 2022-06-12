@@ -27,6 +27,7 @@
           <button class="valid-button" @click="addMembre" style="height: 35px; width: 100px; margin-left: 10px !important; padding: 0">Ajouter</button>
         </div>
       </div>
+      <button class="valid-button mt-2" @click="updateAgence">Valider</button>
     </b-modal>
   </div>
 </template>
@@ -34,6 +35,7 @@
 <script>
 import AutocompleteUsers from "./autocompleteUsers";
 import {getUsers} from "../../api/users";
+import {updateAgency} from "../../api/agencies";
 export default {
   components: {AutocompleteUsers},
   props: ['agency'],
@@ -76,7 +78,14 @@ export default {
       })
     },
     updateAgence() {
-
+      let usersIRI = this.users.map(user => user['@id'])
+      const data = {
+        name : this.name,
+        users: usersIRI
+      }
+      updateAgency(this.agency.id, data).then((res) => {
+        this.agency = res.data
+      })
     }
   },
   watch: {
