@@ -1,5 +1,7 @@
 <template>
   <div class="container-fluid">
+    <b-overlay :show="show" rounded="sm">
+    </b-overlay>
     <!-- <form-update-projet id="3" name="toto23" agenceId="28"></form-update-projet>
     <form-update-projet id="" name="" agenceId="28"></form-update-projet>
     <commentary groupe="Groupe3" agenceId="28"></commentary>-->
@@ -12,7 +14,7 @@
           </b-form-checkbox>
         </div>
         <div class="liste-agence">
-          <div v-if="this.show_agencies == false" class="row justify-content-center align-items-stretch">
+          <div v-if="this.show_agencies === false" class="row justify-content-center align-items-stretch">
             <div v-for="(item) in agencesDev" :key="item.id" class="col-5 groups_card m-2">
               <p class="name-agency">{{item.name}}</p>
               <p class="name-agency">groupe</p>
@@ -56,10 +58,10 @@
         </div>
       </div>
       <b-modal id="modal-1" title="Suppression"  hide-footer>
-        <p class="my-4">Êtes-vous sûr de vouloir supprimer l'agence' ?</p>
+        <p class="my-4">Êtes-vous sûr de vouloir supprimer l'agence ?</p>
         <div class="d-flex justify-content-end">
-          <b-button class="mt-3 mr-2" block @click="$bvModal.hide('bv-modal-example')">Annuler</b-button>
-          <b-button class="mt-3" block @click="$bvModal.hide('bv-modal-example'); supprimerGroupe()" variant="danger">Supprimer</b-button>
+          <button class="mt-3 mx-2 grey-button" @click="$bvModal.hide('modal-1')">Annuler</button>
+          <button class="mt-3 red-button" @click="$bvModal.hide('modal-1'); supprimerGroupe()" variant="danger">Supprimer</button>
         </div>
       </b-modal>
       <router-view></router-view>
@@ -69,6 +71,7 @@
 
 <style>
 @import '../assets/css/groupes.css';
+@import '../assets/css/loader.css';
 </style>
 
 <script>
@@ -83,6 +86,7 @@ export default {
   data () {
     return {
       chefProjet: "",
+      show: false,
       is_dev : true,
       options : [
           { value: true, text: 'Développement' },
@@ -100,10 +104,11 @@ export default {
 
   methods: {
     async ajoutGroupe() {
+      this.show = true
       this.chefProjet = document.getElementById('id').value
       await addAgency(
           {
-            tpz : "/dashboard_tpz/back/public/index.php/api/tpzs/1",
+            tpz : "/dashboard_tpz/back/public/index.php/api/tpzs/" + localStorage.getItem('tpzId'),
             name : "Groupe" + Math.floor(1000 + Math.random() * 9000),
             isDev : this.is_dev
           }
@@ -114,7 +119,10 @@ export default {
       )
     },
     async updateRoleChef(idAgence) {
-      await updateRole('chef d\'agence', this.chefProjet, idAgence)
+      await updateRole('chef de projet', this.chefProjet, idAgence).then(() => {
+        this.show = false
+        document.getElementById('chef').value = ""
+      })
     },
     async getDataGroupes() {
         await getGroupesData(1).then((res) => {

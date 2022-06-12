@@ -8,12 +8,15 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 
 /**
  * @ApiResource(
  *     normalizationContext={"groups"={"tpzs:read"}}
  * )
  * @ORM\Entity(repositoryClass=TpzRepository::class)
+ * @ApiFilter(OrderFilter::class, properties={"year"}, arguments={"orderParameterName"="order"})
  */
 class Tpz
 {
@@ -26,7 +29,7 @@ class Tpz
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups({"agencies:read"})
+     * @Groups({"agencies:read","tpzs:read"})
      */
     private $year;
 

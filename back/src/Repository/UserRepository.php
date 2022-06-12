@@ -40,15 +40,15 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     {
         $qb = $this->createQueryBuilder('u')
             ->join('u.tpz', 't')
-            ->andWhere('t.id = :id')
-            ->setParameter('id', $tpzId);
-        $qb->join('u.tpz_role', 'r')
+            ->join('u.tpz_role', 'r')
             ->AndWhere("r.role = 'president'")
             ->orWhere("r.role = 'vice-president'")
             ->orWhere("r.role = 'tresorier'")
             ->orWhere("r.role = 'vice-tresorier'")
             ->orWhere("r.role = 'secretaire'")
-            ->orWhere("r.role = 'vice-secretaire'");
+            ->orWhere("r.role = 'vice-secretaire'")
+            ->andWhere('t.id = :id')
+            ->setParameter('id', $tpzId);
         return $qb->getQuery()->getResult();
     }
 

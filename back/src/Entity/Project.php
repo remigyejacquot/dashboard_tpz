@@ -45,7 +45,7 @@ class Project
 
     /**
      * @ORM\OneToMany(targetEntity=Task::class, mappedBy="project", cascade={"persist", "remove"})
-     * @Groups({"tpzs:read","agencies:read"})
+     * @Groups({"agencies:read"})
      */
     private $tasks;
 
@@ -135,5 +135,17 @@ class Project
         }
 
         return $this;
+    }
+
+    /**
+     *  @Groups({"tpzs:read"})
+     */
+    public function getLastTasks() {
+        $lastTasks = null;
+        if(count($this->tasks) === 1)
+            $lastTasks = $this->tasks->last();
+        else if (count($this->tasks) >= 2)
+            $lastTasks = $this->tasks->slice(-2, 2);
+        return $lastTasks;
     }
 }

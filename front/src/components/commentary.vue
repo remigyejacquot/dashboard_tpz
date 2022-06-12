@@ -1,10 +1,10 @@
 <template>
   <div>
-    <b-button class="modifier"  v-b-modal.commentary-modal>
+    <b-button class="modifier comment"  v-b-modal.commentary-modal>
       <font-awesome-icon icon="comment" size="1x" class="mr-2"/>
       notes
     </b-button>
-    <b-modal id="commentary-modal" :title="'Agence :' + groupe" hide-footer class="custom-modal">
+    <b-modal id="commentary-modal" :title="'Agence: ' + groupe" hide-footer class="custom-modal">
       <p class="commentaires-title">Commentaires</p>
       <div id="commentaires-wrapper">
         <div v-for="commentary in commentaries" class="commentaire" v-bind:key="commentary.id">
@@ -60,11 +60,19 @@ export default {
       error : ''
     }
   },
+  watch: {
+    agenceId: function update() {
+      getCommentaries(this.agenceId) .then((res) => {
+      this.commentaries = res.data['hydra:member']
+      })
+    }
+  },
   mounted() {
     getCommentaries(this.agenceId) .then((res) => {
       this.commentaries = res.data['hydra:member']
     })
   },
+
   methods: {
     formatDate(date) {
       let dateFormat = new Date(date)
@@ -134,5 +142,7 @@ export default {
 </script>
 
 <style scoped>
-
+.modifier.comment {
+  color: #F96197 !important;
+}
 </style>

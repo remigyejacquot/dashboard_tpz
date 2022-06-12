@@ -43,4 +43,5 @@
 a.active {
     background-color: rgba(0, 0, 0, 0.03);
     border-radius: 15px;
+    width: 110px;
 }

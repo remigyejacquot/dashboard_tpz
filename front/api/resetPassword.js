@@ -1,7 +1,8 @@
-import axios from "axios";
+
+import axiosInstance from "./axiosInstance";
 
 async function resetPassword(data) {
-    return await axios.post("reset-password", data);
+    return await axiosInstance.post("/reset-password/sendMail", data);
 }
 
 export { resetPassword };
