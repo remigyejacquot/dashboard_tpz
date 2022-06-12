@@ -42,7 +42,7 @@
               <div>
               {{ member.firstname }}
               {{ member.lastname }}
-                <font-awesome-icon class="icon" icon="fa-solid fa-crown" v-if="member.tpz_role.find(el=>el.role === 'chef d\'agence')"/>
+                <font-awesome-icon class="icon" icon="fa-solid fa-crown" v-if="member.tpz_role.find(el=>el.role === 'chef de projet')"/>
               </div>
             </li>
           </ul>
@@ -115,14 +115,16 @@
             </b-progress>
             <p class="m-0">{{progressTask.value}}%</p>
           </div>
-          <b-form-checkbox
-              class="d-flex" v-for="subtask in subtasks" :key="subtask.value['@id']" :value="subtask.value" @change="toggleSubtasks(subtask)" v-model="finishedSubtasks"
-          >
-            <div class="ms-3 d-flex align-items-center justify-content-between w-100">
-            {{subtask.text}}
+          <div v-for="subtask in subtasks" :key="subtask.value['@id']" class="d-flex justify-content-between">
+            <b-form-checkbox
+                class="d-flex" :value="subtask.value" @change="toggleSubtasks(subtask)" v-model="finishedSubtasks"
+            >
+              <div class="ms-3 d-flex align-items-center justify-content-between w-100">
+              {{subtask.text}}
+              </div>
+            </b-form-checkbox>
             <font-awesome-icon class="icon-delete" icon="fa-solid fa-delete-left" @click="deleteSubtask(subtask)"/>
-            </div>
-          </b-form-checkbox>
+          </div>
         </div>
           <b-button v-b-modal.addNewSubtaskModal style="background-color: #57C7D4; border: none; width: 30%">Ajouter</b-button>
       </section>
@@ -252,7 +254,6 @@ export default {
   created() {
     const user = JSON.parse(localStorage.getItem("user"));
     this.user = user
-    console.log(user)
     this.getAllAgencyMembers(user["agency"].replace(new RegExp('.*agencies/'), ``)); //retrieve user index from @id
   },
   watch: {
@@ -363,7 +364,6 @@ export default {
             isFinished: false
           }).then(res=>{
             this.currentTask.is_finished = false
-            console.log('debug',this.finishedTasks.filter(el=>el['@id'] !== this.currentTask['@id']))
             this.finishedTasks = this.finishedTasks.filter(el=>el['@id'] !== this.currentTask['@id'])
             this.progressProject.value = Math.floor((this.finishedTasks.length/this.tasks.length)*100)
 
@@ -372,25 +372,30 @@ export default {
             console.log(err)
           })
       }
-      console.log(this.finishedTasks.length)
     },
     addNewSubtask(e){
       e.preventDefault()
       this.newSubtask.task = this.currentTask['@id']
       addSubtask(this.newSubtask).then(res=>{
-        this.currentTask.subtasks.push(res.data)
+        this.subtasks.push({text:res.data.title, value:res.data})
         this.$bvModal.hide('addNewSubtaskModal')
+        this.currentTask.is_finished = (this.finishedTasks.length/this.subtasks.length) === 1 ? true : false
         this.progressTask.value = Math.floor((this.finishedSubtasks.length/this.subtasks.length)*100)
       }).catch(err=>{
         console.log(err)
       })
     },
     deleteSubtask(subtask){
-      deleteSubtask(subtask.value['@id'].replace(new RegExp('.*subtasks/'), ``)).then(res=>{
-        this.currentTask = this.currentTask.subtasks.filter(el=>el['@id'] = res.data['@id'])
+      deleteSubtask(subtask.value['@id'].replace(new RegExp('.*subtasks/'), ``)).then(()=>{
+        this.subtasks = this.subtasks.filter(el=>el.value['@id'] !== subtask.value['@id'])
+        this.finishedSubtasks = this.finishedSubtasks.filter(el=>el['@id'] !== subtask.value['@id'])
+        this.progressTask.value = Math.floor((this.finishedSubtasks.filter(el=>el['@id'] !== subtask.value['@id']).length/this.subtasks.filter(el=>el.value['@id'] !== subtask.value['@id']).length)*100)
+        console.log(this.subtasks.length)
+        console.log(this.finishedTasks.length)
       }).catch(err=>{
         console.log(err)
       })
+
     },
     resetModal: function (e) {
       if (e.componentId === 'addNewTaskModal') {

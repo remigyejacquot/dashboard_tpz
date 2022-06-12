@@ -10,7 +10,7 @@ async function updateSubtask(id, data) {
 }
 
 async function deleteSubtask(id) {
-    return await axiosInstance.delete("/api/tasks/"+id)
+    return await axiosInstance.delete("/api/subtasks/"+id)
 }
 
 export {addSubtask, updateSubtask, deleteSubtask}
