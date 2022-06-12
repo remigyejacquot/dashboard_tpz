@@ -109,15 +109,15 @@
         </div>
         <div>
           {{currentTask.description}}
-          <div class="d-flex align-items-center">
+          <div class="d-flex align-items-center my-3">
             <b-progress :max="progressTask.max" variant="warning" striped animated class="w-100 me-2">
               <b-progress-bar :value="progressTask.value"/>
             </b-progress>
             <p class="m-0">{{progressTask.value}}%</p>
           </div>
-          <div v-for="subtask in subtasks" :key="subtask.value['@id']" class="d-flex justify-content-between">
+          <div v-for="subtask in subtasks" :key="subtask.value['@id']" class="d-flex justify-content-between my-2">
             <b-form-checkbox
-                class="d-flex" :value="subtask.value" @change="toggleSubtasks(subtask)" v-model="finishedSubtasks"
+                class="d-flex m-1" :value="subtask.value" @change="toggleSubtasks(subtask)" v-model="finishedSubtasks"
             >
               <div class="ms-3 d-flex align-items-center justify-content-between w-100">
               {{subtask.text}}
@@ -126,7 +126,7 @@
             <font-awesome-icon class="icon-delete" icon="fa-solid fa-delete-left" @click="deleteSubtask(subtask)"/>
           </div>
         </div>
-          <b-button v-b-modal.addNewSubtaskModal style="background-color: #57C7D4; border: none; width: 30%">Ajouter</b-button>
+          <b-button v-b-modal.addNewSubtaskModal style="background-color: #57C7D4; border: none; width: 40%">Ajouter une sous-tâche</b-button>
       </section>
       {{newTask}}
     <div>
