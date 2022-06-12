@@ -34,3 +34,8 @@
     background-color: #757575;
     color: white;
 }
+
+input {
+    background-color: #F6F6F6 !important;
+    border: none !important;
+}

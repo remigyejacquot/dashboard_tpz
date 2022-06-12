@@ -55,7 +55,7 @@ export default {
   },
   methods : {
     async getUsersData() {
-      await getUsers(1).then((res) => {
+      await getUsers(localStorage.getItem("tpzId")).then((res) => {
         this.suggestions = res.data['hydra:member']
       })
     },

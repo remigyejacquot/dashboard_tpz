@@ -357,11 +357,11 @@ export default {
         this.user = res.data;
         this.type = res.data.is_dev ? "dev" : "com";
         localStorage.setItem("user", JSON.stringify(res.data));
-        localStorage.setItem("tpzId", JSON.stringify(res.data.tpzId));
         let id = res.data.tpzId
         if (this.user.roles.includes('ROLE_ADMIN')) {
           id = await this.getTpzOptions()
         }
+        localStorage.setItem("tpzId", JSON.stringify(id));
           getTpz(id).then((res) => {
             this.devAgencies = res.data.agencies.filter(
               (el) => el.is_dev === true
