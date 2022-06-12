@@ -8,6 +8,12 @@
       <b-form-group id="input-name" label="Nom de l'agence" label-for="input-name" class="step-form">
         <b-form-input id="input-name" v-model="name" type="text" placeholder="Nom de l'agence"></b-form-input>
       </b-form-group>
+      <div class="update-chef step-form d-flex flex-column w-100">
+        <label>Chef d'agence</label>
+        <select id="users-chef" v-model="chef" class="w-100 select">
+          <option v-for="user in users" :value="user" v-bind:key="user.id">{{user.firstname}} {{user.lastname}}</option>
+        </select>
+      </div>
       <div class="membres d-flex w-100 step-form flex-column">
         <div class="w-100 d-flex">
           <div class="w-25">Membres</div>
@@ -36,6 +42,8 @@
 import AutocompleteUsers from "./autocompleteUsers";
 import {getUsers} from "../../api/users";
 import {updateAgency} from "../../api/agencies";
+import {updateRole} from "../../api/gestion";
+
 export default {
   components: {AutocompleteUsers},
   props: ['agency'],
@@ -78,6 +86,7 @@ export default {
       })
     },
     updateAgence() {
+      updateRole('chef de projet', this.chef['@id'].replace(/\D/g, ''), this.agency.id)
       let usersIRI = this.users.map(user => user['@id'])
       const data = {
         name : this.name,
@@ -105,9 +114,14 @@ export default {
 </script>
 
 <style scoped>
-input {
+input, .select {
   background-color: #F6F6F6;
   border: none;
+}
+
+.select {
+  height: 40px !important;
+  padding: 5px;
 }
 
 .step-form {
