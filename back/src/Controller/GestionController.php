@@ -79,7 +79,7 @@ class GestionController extends AbstractController
         $agency = $entityManager->getRepository(Agency::class)->find($id);
         $members = $agency->getUsers();
         /** @var TpzRoles $role */
-        $role = $entityManager->getRepository(TpzRoles::class)->findOneBy(array('role' => 'chef de projet'));
+        $role = $entityManager->getRepository(TpzRoles::class)->findOneBy(array('role' => 'chef d\'agence'));
         /** @var User $member */
         foreach ($members as $member) {
             if($member->getTpzRole()->contains($role)) {

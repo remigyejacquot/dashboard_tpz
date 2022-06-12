@@ -14,7 +14,7 @@
           </b-form-checkbox>
         </div>
         <div class="liste-agence">
-          <div v-if="this.show_agencies == false" class="row justify-content-center align-items-stretch">
+          <div v-if="this.show_agencies === false" class="row justify-content-center align-items-stretch">
             <div v-for="(item) in agencesDev" :key="item.id" class="col-5 groups_card m-2">
               <p class="name-agency">{{item.name}}</p>
               <p class="name-agency">groupe</p>
@@ -42,7 +42,7 @@
         <div class="form add">
           <p class="action-title">Créer une agence</p>
           <b-form>
-            <autocomplete-users v-bind:options="suggestions"  input="chef" placeholder="Chef de projet"></autocomplete-users>
+            <autocomplete-users v-bind:options="suggestions"  input="chef" placeholder="Chef d'agence"></autocomplete-users>
               <b-form-group id="spe" label="Spécialité" label-for="spe">
                 <b-form-select v-model="is_dev" :options="options"></b-form-select>
               </b-form-group>
@@ -156,8 +156,8 @@ export default {
   list-style: none;
 }
 .liste-agence{
-  overflow-y: scroll; 
-  overflow-x: hidden; 
+  overflow-y: scroll;
+  overflow-x: hidden;
   height: 80%;
 }
 </style>
