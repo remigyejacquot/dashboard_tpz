@@ -11,8 +11,8 @@
       <span style="color:rgba(77, 54, 119, 0.82);"> {{ agence.users.length }} </span>
       <font-awesome-icon icon="fa-solid fa-user-group" style="color:rgba(77, 54, 119, 0.82);"/>
     </div>
-    <div class="mt-1">
-      <p class="p-1 m-0 text-center" v-for="membre in agence.users" v-bind:key="membre.id" style="line-height: 15px" id="membres-liste-wrapper">
+    <div class="mt-1" id="membres-liste-wrapper">
+      <p class="p-1 m-0 text-center" v-for="membre in agence.users" v-bind:key="membre.id" style="line-height: 15px">
         {{ membre.firstname }} {{ membre.lastname }}
         <font-awesome-icon v-if="membre.tpzRolesArray && membre.tpzRolesArray.includes('chef de projet')" class="crown-icon" icon="fa-solid fa-crown"/>
       </p>
