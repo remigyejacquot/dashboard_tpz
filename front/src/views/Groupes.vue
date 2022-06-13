@@ -7,31 +7,40 @@
     <commentary groupe="Groupe3" agenceId="28"></commentary>-->
     <div class="row h-100">
       <div class="container-liste-agence col-lg-6">
-        <p class="action-title col-9">Liste des groupes</p>
-        <div class="col-3">
-          <b-form-checkbox v-model="show_agencies" name="check-button" switch>
-            Switch Checkbox <b>(Checked: {{ show_agencies }})</b>
-          </b-form-checkbox>
+        <div class="d-flex justify-content-between align-items-center">
+          <p class="action-title">Liste des groupes</p>
+          <div>
+            <div>
+                <div
+                    style="height: 30px; border-radius: 10px; border: solid white 2px"
+                    class="d-flex align-items-center"
+                >
+                <span
+                    :class="'text-center ' + (this.isDisplay === 'communication' ? 'active' : 'desactive')"
+                    id="communication-switch"
+                    style="border-radius: 15px 0 0 15px;"
+                    @click="changeDisplay"
+                >com</span
+                >
+                  <span
+                      :class="'text-center ' + (this.isDisplay === 'developpement' ? 'active' : 'desactive')"
+                      id="developpement-switch"
+                      style="border-radius: 0 15px 15px 0;"
+                      @click="changeDisplay"
+                  >dev</span
+                  >
+                </div>
+              </div>
+            </div>
         </div>
         <div class="liste-agence">
-          <div v-if="this.show_agencies === false" class="row justify-content-center align-items-stretch">
-            <div v-for="(item) in agencesDev" :key="item.id" class="col-5 groups_card m-2">
-              <p class="name-agency">{{item.name}}</p>
-              <p class="name-agency">groupe</p>
-              <ul class="p-0">
-                <li v-for="(member) in item.users" :key="member.id" class="member-agency">
-                  <!-- <p v-if="member.length == 0">Aucun membre</p> -->
-                  <p>{{member.firstname}} {{member.lastname}}</p>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div v-else class="row">
-            <div v-for="(item) in agencesCom" :key="item.id" class="row justify-content-center align-items-stretch">
+          <div class="row d-flex justify-content-start align-items-stretch flex-wrap px-1">
+            <div v-for="(item) in agenciesToDisplay" :key="item.id" class="groups_card m-2">
               <p class="name-agency">{{item.name}}</p>
               <ul class="p-0">
+                <p v-if="item.users.length === 0">Aucun membre</p>
                 <li v-for="(member) in item.users" :key="member.id" class="member-agency">
-                  {{member.firstname}} {{member.lastname}}
+                  <p class="m-0">{{member.firstname}} {{member.lastname}}</p>
                 </li>
               </ul>
             </div>
@@ -96,6 +105,8 @@ export default {
       agencesDev : [],
       agencesCom : [],
       show_agencies : false,
+      isDisplay : "communication",
+      agenciesToDisplay: []
     }
   },
   async mounted () {
@@ -129,12 +140,18 @@ export default {
           this.suggestions = res.data.users
           this.agencesDev = res.data.agenciesDev
           this.agencesCom = res.data.agenciesCom
+          this.agenciesToDisplay = res.data.agenciesCom
         })
     },
     async supprimerGroupe() {
       let toDelete = document.getElementById('idAgency').value
       await deleteGroupe(toDelete)
-    }
+    },
+    changeDisplay() {
+      this.isDisplay = this.isDisplay === 'communication' ? 'developpement' : 'communication'
+      this.agenciesToDisplay = this.isDisplay === 'communication' ? this.agencesCom : this.agencesDev
+      console.log(this.agenciesToDisplay)
+    },
   }
 }
 </script>
@@ -143,6 +160,9 @@ export default {
 .groups_card{
   border: 2px solid #FAD26E;
   border-radius: 10px;
+  max-width: 46%;
+  min-width: 200px;
+  flex-grow: 2;
 }
 .name-agency{
   font-size: 1.4rem;
@@ -153,10 +173,38 @@ export default {
 .member-agency{
   text-align: center;
   list-style: none;
+  line-height: 18px;
 }
 .liste-agence{
   overflow-y: scroll;
   overflow-x: hidden;
   height: 80%;
+}
+/* Hide scrollbar for Chrome, Safari and Opera */
+.liste-agence::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.liste-agence {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+.active {
+  background-color: #4D3677;
+  border: 1px solid #4D3677;
+  color: white;
+  width: 50px;
+  cursor: pointer;
+  padding:2px;
+}
+
+.desactive {
+  color : #4D3677 !important;
+  background-color: transparent;
+  border: 1px solid #4D3677;
+  width: 50px;
+  padding:2px;
+  cursor: pointer;
 }
 </style>

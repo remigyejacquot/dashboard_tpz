@@ -32,7 +32,7 @@
                 </router-link>
               </li>
               <li class="nav-item">
-                <router-link :to="{ name: 'GestionEtudiants' }" class="d-flex flex-column justify-content-center align-items-center">
+                <router-link :to="{ name: 'Groupes' }" class="d-flex flex-column justify-content-center align-items-center">
                   <div class="nav-item-color d-flex flex-column justify-content-center align-items-center w-100">
                     <font-awesome-icon icon="fa-solid fa-gear" />
                     <span class="text-center w-100">Gérer les utilisateurs</span>
