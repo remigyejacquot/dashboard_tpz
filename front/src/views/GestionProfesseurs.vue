@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <!--    Liste des professeurs-->
-    <b-card class="card item-list">
+    <b-card class="card item-list" id="item-list">
       <div class="mt-3">
         <div class="add-btn mt-3">
           <b-icon
@@ -38,7 +38,7 @@
       </div>
     </b-card>
     <!--    Recherche-->
-    <b-card class="card item-search">
+    <b-card class="card item-search" id="item-search">
       <autocomplete-users
         v-bind:options="teachers"
         input="professeur"
@@ -47,7 +47,7 @@
     </b-card>
     <!--    Ajouter un professeur-->
     <b-card
-      class="card item-add"
+      class="card item-add" id="item-add"
       v-if="isUpdateUserCardDisplayed || isAddUserCardDisplayed"
     >
       <b-card-text v-if="isAddUserCardDisplayed"
@@ -321,5 +321,9 @@ export default {
   color: #ff6969;
   background-color: transparent;
   border: none;
+}
+#item-list, #item-add, #item-search{
+  border-radius: 10px !important;
+  border: none !important;
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <!--    Liste des étudiants-->
-    <b-card class="card item-list">
+    <b-card class="card item-list" id="item-list">
       <div class="mt-3">
         <div class="toggleBar mt-3">
           <b-button-group>
@@ -48,7 +48,7 @@
       </div>
     </b-card>
     <!--    Recherche-->
-    <b-card class="card item-search">
+    <b-card class="card item-search" id="item-search">
       <autocomplete-users
         v-bind:options="suggestions"
         input="etudiant"
@@ -60,6 +60,7 @@
     <b-card
       class="card item-add"
       v-if="isUpdateUserCardDisplayed || isAddUserCardDisplayed"
+      id="item-add"
     >
       <b-card-text v-if="isAddUserCardDisplayed"
         >Ajouter un étudiant en licence {{ type.toUpperCase() }}</b-card-text
@@ -401,5 +402,9 @@ select {
   height: 36px;
   padding: 10px;
   font-size: 15px;
+}
+#item-list, #item-add, #item-search{
+  border-radius: 10px !important;
+  border: none !important;
 }
 </style>
