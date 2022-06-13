@@ -261,7 +261,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @Groups({"users:read","tpzs:read"})
+     * @Groups({"users:read","tpzs:read","agencies:read"})
      */
     public function getTpzRolesArray(): array
     {

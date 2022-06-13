@@ -16,4 +16,8 @@ async function addAgency(data) {
     return await  axiosInstance.post("api/agencies", data)
 }
 
-export { getUserLicenceAgencies, getLicenceAgencies, getAgencyMembers, addAgency };
+async function updateAgency(id, data) {
+    return await  axiosInstance.put("api/agencies/" + id, data)
+}
+
+export { getUserLicenceAgencies, getLicenceAgencies, getAgencyMembers, addAgency, updateAgency };

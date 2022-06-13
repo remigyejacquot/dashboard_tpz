@@ -16,11 +16,11 @@ import {
   faCrown,
   faArrowRightFromBracket,
   faSpinner, faCheck, faDeleteLeft,
-  faChevronLeft, faChevronRight
+  faChevronLeft, faChevronRight, faMinus
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 
-library.add(faUsers, faUserTie, faUsersGear, faUserPen, faPen, faComment, faChalkboardUser, faUserGroup, faGear, faCrown, faArrowRightFromBracket, faSpinner, faCheck, faDeleteLeft, faChevronLeft, faChevronRight)
+library.add(faUsers, faUserTie, faUsersGear, faUserPen, faPen, faComment, faChalkboardUser, faUserGroup, faGear, faCrown, faArrowRightFromBracket, faSpinner, faCheck, faDeleteLeft, faChevronLeft, faChevronRight, faMinus)
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 

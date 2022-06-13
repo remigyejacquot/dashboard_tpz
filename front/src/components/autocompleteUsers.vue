@@ -61,7 +61,3 @@ export default {
 <style>
 @import "../assets/css/autocomplete.css";
 </style>
-
-<style scoped>
-
-</style>

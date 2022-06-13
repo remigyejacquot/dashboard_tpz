@@ -125,11 +125,10 @@ export default {
       })
     },
     async getDataGroupes() {
-        await getGroupesData(1).then((res) => {
+        await getGroupesData(localStorage.getItem("tpzId")).then((res) => {
           this.suggestions = res.data.users
           this.agencesDev = res.data.agenciesDev
           this.agencesCom = res.data.agenciesCom
-          console.log(res.data)
         })
     },
     async supprimerGroupe() {

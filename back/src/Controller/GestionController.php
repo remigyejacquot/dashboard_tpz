@@ -59,6 +59,14 @@ class GestionController extends AbstractController
         /** @var Agency $agency */
         $agency = $entityManager->getRepository(Agency::class)->find($idAgence);
 
+        if(count($agency->getUsers()) > 1) {
+            /** @var User $membre */
+            foreach ($agency->getUsers() as $membre) {
+                if( $membre->getTpzRole()->contains($roleField)) {
+                    $membre->removeTpzRole($roleField);
+                }
+            }
+        }
         if($roleField) {
             $user->addTpzRole($roleField);
             $user->setAgency($agency);

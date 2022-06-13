@@ -58,13 +58,7 @@
               class="icon-btn mx-1"/>
           </b-card-text>
           <div>
-            <b-icon
-                icon="pencil-fill"
-                style="color: #f7b000"
-                font-scale="1.2"
-                @click="()=>{}"
-                class="icon-btn"/>
-            <button class="modify-btn">Modifier</button>
+            <update-agency :agency="agency"></update-agency>
           </div>
         </div>
       </section>
@@ -185,6 +179,7 @@ import NavSidebar from "../components/navSidebar";
 import { getAgencyMembers } from "../../api/agencies";
 import {addSubtask, deleteSubtask, updateSubtask} from "../../api/subtasks";
 import {addTask, deleteTask, updateTask} from "../../api/tasks";
+import UpdateAgency from "../components/updateAgency";
 
 class Task {
   title
@@ -225,7 +220,7 @@ class Subtask {
 
 export default {
   name: "Projects",
-  components: { NavSidebar },
+  components: {UpdateAgency, NavSidebar },
   data() {
     return {
       user: {},
