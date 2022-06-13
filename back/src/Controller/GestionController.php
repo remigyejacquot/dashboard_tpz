@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use ApiPlatform\Core\Annotation\ApiResource;
 use App\Entity\Agency;
 use App\Entity\Tpz;
 use App\Entity\TpzRoles;
@@ -206,6 +205,7 @@ class GestionController extends AbstractController
      */
     public function updateUser(EntityManagerInterface $entityManager, SerializerInterface $serializer, Request $request, int $id) {
         $data=json_decode($request->getContent());
+        /** @var User $user */
         $user = $entityManager->getRepository(User::class)->find($id);
 
         switch ($data){
@@ -220,6 +220,7 @@ class GestionController extends AbstractController
         $user->setEmail($data->email);
         $user->setFirstname($data->firstname);
         $user->setLastname($data->lastname);
+        $user->setIsDev($data->isDev);
         $entityManager->persist($user);
         $entityManager->flush();
         return new Response('ok');

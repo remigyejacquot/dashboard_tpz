@@ -106,6 +106,9 @@
           <b-form-invalid-feedback :state="emailValidation">
             L'email doit être renseigné et être au bon format (@)
           </b-form-invalid-feedback>
+          <b-form-group id="spe" label="Spécialité" label-for="spe">
+            <b-form-select v-model="student.isDev" :options="options"></b-form-select>
+          </b-form-group>
         </b-form-group>
         <b-button
           v-if="isAddUserCardDisplayed"
@@ -120,7 +123,7 @@
           id="submit-btn"
           :style="bgColors.yellow"
           @click="updateSelectedStudent"
-          >Ajouter</b-button
+          >Modifier</b-button
         >
       </div>
     </b-card>
@@ -172,6 +175,10 @@ export default {
       lastnameValidation: null,
       firstnameValidation: null,
       emailValidation: null,
+      options : [
+        { value: true, text: 'Développement' },
+        { value: false, text: 'Communication' }
+      ],
     };
   },
   mounted() {
@@ -204,7 +211,6 @@ export default {
     //Permet de sélectionner l'une ou l'autre des licence
     toggleLicence(e) {
       this.suggestions = [];
-      console.log(e.target.id);
       //si on clique sur DEV et que COM était sélectionné on switch sinon rien
       if (e.target.id === "dev") {
         if (this.type === "com") {
@@ -302,7 +308,6 @@ export default {
         this.firstnameValidation = true;
         this.emailValidation = true;
         updateUser(this.student.id, this.student).then((res) => {
-          console.log(res);
           this.student.lastname = "";
           this.student.firstname = "";
           this.student.email = "";
@@ -387,5 +392,13 @@ export default {
   color: #ff6969;
   background-color: transparent;
   border: none;
+}
+select {
+  width: 100%;
+  background-color: #F6F6F6;
+  border: none;
+  height: 36px;
+  padding: 10px;
+  font-size: 15px;
 }
 </style>
