@@ -10,6 +10,7 @@ import GestionEtudiants from "../views/GestionEtudiants";
 import Bureau from "../views/Bureau";
 import "../assets/css/main.css";
 import GestionProfesseurs from "../views/GestionProfesseurs";
+import Register from "../views/Register";
 
 Vue.use(VueRouter);
 
@@ -18,6 +19,11 @@ const routes = [
     path: "/",
     name: "Login",
     component: Login,
+  },
+  {
+    path: "/register",
+    name: "Register",
+    component: Register,
   },
   {
     path: "/dashboard",

@@ -69,3 +69,7 @@ body * {
     color : darkred;
     font-size: 14px;
 }
+
+.empty-field {
+    border: 1px solid red !important;
+}
