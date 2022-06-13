@@ -349,7 +349,7 @@ export default {
           }
           return {value: tpz['@id'].replace(/\D/g, ''), text: new Date(tpz.year).getFullYear()}
         })
-        return id
+        return parseInt(id)
       })
     },
     fetchInfo(id) {
@@ -395,6 +395,11 @@ export default {
         this.$bvModal.hide('modal-new-tpz')
         window.location.reload()
       })
+    },
+    checkUpdate(date) {
+      const toDay = new Date()
+      const toCheck = new Date(date)
+      console.log(toCheck + 12096e5)
     }
   },
 };

@@ -6,7 +6,8 @@
 
 .gestion-menu {
     background-color: #FAD26E;
-    width: 130px !important;
+    min-width: 120px !important;
+    max-width: 120px !important;
     border-radius: 25px;
     display: flex;
     justify-content: center;
