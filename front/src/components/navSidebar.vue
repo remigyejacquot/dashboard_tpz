@@ -31,7 +31,7 @@
                   </div>
                 </router-link>
               </li>
-              <li class="nav-item" v-if="user.roles && user.roles.includes('ROLE_ADMIN') || user.tpzRolesArray.includes('president') || user.tpzRolesArray.includes('vice-president') ">
+              <li class="nav-item" v-if="(user.roles && user.roles.includes('ROLE_ADMIN') )|| (user.tpzRolesArray && user.tpzRolesArray.includes('president')) || (user.tpzRolesArray && user.tpzRolesArray.includes('vice-president')) ">
                 <router-link :to="{ name: 'Groupes' }" class="d-flex flex-column justify-content-center align-items-center">
                   <div class="nav-item-color d-flex flex-column justify-content-center align-items-center w-100">
                     <font-awesome-icon icon="fa-solid fa-gear" />

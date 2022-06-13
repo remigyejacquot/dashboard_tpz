@@ -396,11 +396,6 @@ export default {
         window.location.reload()
       })
     },
-    checkUpdate(date) {
-      const toDay = new Date()
-      const toCheck = new Date(date)
-      console.log(toCheck + 12096e5)
-    }
   },
 };
 </script>
