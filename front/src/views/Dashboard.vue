@@ -64,7 +64,7 @@
         </div>
       </div>
     </div>
-    <section class="bg-white p-5 mt-4" style="border-radius: 15px">
+    <section class="bg-white py-3 px-5 mt-4" style="border-radius: 15px">
       <h2 style="font-size: 28px; font-weight: bold" class="mb-4">
         Membres du bureau
       </h2>

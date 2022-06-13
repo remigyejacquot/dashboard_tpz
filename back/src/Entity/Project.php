@@ -150,4 +150,22 @@ class Project
         return $lastTasks;
     }
 
+    /**
+     *  @Groups({"tpzs:read"})
+     */
+    public function getAvancementNumber() {
+        $tasks = $this->getTasks();
+        $count = 0;
+        /** @var Task $task */
+        foreach($tasks as $task) {
+            if($task->getFinishedAt()) {
+                $count++;
+            }
+        }
+        if($count > 0) {
+            return ($count/count($tasks)*100);
+        }
+        return 0;
+    }
+
 }

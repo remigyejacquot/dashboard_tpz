@@ -6,27 +6,13 @@
     <div class="w-100 d-flex justify-content-end" v-if="this.user.roles && this.user.roles.includes('ROLE_ADMIN')">
       <commentary :groupe="agence.name" :agenceId="agence['@id'].replace(/\D/g,'')"></commentary>
     </div>
-    <h3 class="mt-2">{{agence.name}}</h3>
+    <h3 class="mt-2 fw-bold" style="color: rgba(250, 210, 110, 1)">{{agence.name}}</h3>
     <div class="mb-2 d-flex align-items-center">
-      <span> {{ agence.users.length }} </span>
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-        stroke-width="2"
-        width="20px"
-        height="20px"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
-        />
-      </svg>
+      <span style="color:rgba(77, 54, 119, 0.82);"> {{ agence.users.length }} </span>
+      <font-awesome-icon icon="fa-solid fa-user-group" style="color:rgba(77, 54, 119, 0.82);"/>
     </div>
     <div class="mt-1">
-      <p class="p-1 m-0 text-center" v-for="membre in agence.users" v-bind:key="membre.id" style="line-height: 15px">
+      <p class="p-1 m-0 text-center" v-for="membre in agence.users" v-bind:key="membre.id" style="line-height: 15px" id="membres-liste-wrapper">
         {{ membre.firstname }} {{ membre.lastname }}
         <font-awesome-icon v-if="membre.tpzRolesArray && membre.tpzRolesArray.includes('chef de projet')" class="crown-icon" icon="fa-solid fa-crown"/>
       </p>
@@ -36,7 +22,7 @@
         <font-awesome-icon icon="fa-solid fa-chevron-left"/>
       </div>
       <div class="w-100 d-flex flex-column justify-center align-items-center" :id="'projets-' + agence.name">
-        <p class="mb-1 mt-3 text-start" style="width: 200px;">Projet(s): {{agence.projects.length}}</p>
+        <p class="mb-1 mt-3 text-start" style="width: 200px; color:rgba(77, 54, 119, 0.82); font-size: 18px">Projet(s): {{agence.projects.length}}</p>
         <div v-for="(projet, index) in agence.projects" v-bind:key="projet.index" :id="agence.name + '-' + index" :data-index="index" :class="'border border-4 rounded rounded-4 card-projet ' + (index !== 0 ? 'inactive' : 'isActive')" style="border-color: rgba(247, 176, 0, 0.57) !important;">
           <div class="border-bottom border-4 p-2 d-flex align-items-center gap-2 justify-content-between" style="border-color: rgba(247, 176, 0, 0.57) !important;">
             <div class="d-flex gap-2 align-items-center">
@@ -45,23 +31,17 @@
                 :class="'rounded-circle d-inline-block me-2 ' + checkUpdate(projet.updated_at)"
               />
               <b-tooltip target="tooltip-date" triggers="hover">
-                Mise à jour le : {{ new Date(projet.updated_at).toLocaleDateString() }}
+                Mis à jour le : {{ new Date(projet.updated_at).toLocaleDateString() }}
               </b-tooltip>
               <h5 class="d-inline-block m-0">{{projet.name}}</h5>
             </div>
           </div>
           <div class="p-3">
-            <div class="d-flex align-items-center justify-content-between">
-              <div class="progress" style="width: 75%">
-                <div
-                  class="progress-bar"
-                  role="progressbar"
-                  aria-valuenow="0"
-                  aria-valuemin="0"
-                  aria-valuemax="100"
-                ></div>
-              </div>
-              <span class="d-block" style="width: 20%">30%</span>
+            <div class="d-flex w-100 justify-content-between align-items-center">
+              <b-progress :max="100" class="w-100 me-2">
+                <b-progress-bar class="bg-bleu" :value="projet.avancementNumber"/>
+              </b-progress>
+              <p class="m-0 blue">{{projet.avancementNumber}}%</p>
             </div>
             <div class="tasks" v-if="projet.lastTasks !== undefined && projet.lastTasks.length === 2">
               <div class="task d-flex justify-content-between align-items-center" v-for="task in projet.lastTasks" v-bind:key="task.id">
@@ -195,10 +175,20 @@ export default {
 }
 
 .wrapper-agence {
-  min-height: 430px;
+  min-height: 550px;
 }
 
 .red-button:hover {
   color: white !important;
+}
+.blue {
+  color: #57C7D4
+}
+
+.bg-bleu {
+  background-color: #57C7D4 !important;
+}
+#membres-liste-wrapper {
+  min-height: 100px;
 }
 </style>
