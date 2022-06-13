@@ -35,6 +35,7 @@ class Project
 
     /**
      * @ORM\Column(type="datetime_immutable")
+     * @Groups({"agencies:read", "tpzs:read"})
      */
     private $updated_at;
 
@@ -148,4 +149,5 @@ class Project
             $lastTasks = $this->tasks->slice(-2, 2);
         return $lastTasks;
     }
+
 }

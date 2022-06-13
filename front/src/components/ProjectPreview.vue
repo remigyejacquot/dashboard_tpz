@@ -41,9 +41,12 @@
           <div class="border-bottom border-4 p-2 d-flex align-items-center gap-2 justify-content-between" style="border-color: rgba(247, 176, 0, 0.57) !important;">
             <div class="d-flex gap-2 align-items-center">
               <span
-                style="width: 10px; height: 10px; background-color: green"
-                class="rounded-circle d-inline-block me-2"
+                style="width: 10px; height: 10px; cursor: pointer" id="tooltip-date"
+                :class="'rounded-circle d-inline-block me-2 ' + checkUpdate(projet.updated_at)"
               />
+              <b-tooltip target="tooltip-date" triggers="hover">
+                Mise à jour le : {{ new Date(projet.updated_at).toLocaleDateString() }}
+              </b-tooltip>
               <h5 class="d-inline-block m-0">{{projet.name}}</h5>
             </div>
           </div>
@@ -74,7 +77,7 @@
               <div class="task d-flex justify-content-between align-items-center">
                 <div>
                   <p class="m-0 date">{{ new Date(projet.lastTasks.updated_at).toLocaleDateString() }}</p>
-                  <p class="title m-0">{{ projet.lastTasks.title }}</p>
+                  <p class="title m-0">{{ projet.lastTasks.title }}}</p>
                 </div>
                 <font-awesome-icon v-if="projet.lastTasks.is_finished" icon="fa-solid fa-check" class="check"/>
                 <font-awesome-icon v-else icon="fa-solid fa-spinner" class="load"/>
@@ -123,6 +126,20 @@ export default {
           }
         }
       }
+    },
+    checkUpdate(date) {
+      const today = new Date()
+      const toCheck1 = new Date(date)
+      const toCheck2 = new Date(date)
+      toCheck1.setDate(toCheck1.getDate() + 2 * 7)
+      toCheck2.setDate(toCheck2.getDate() + 3 * 7)
+      if(today < toCheck1) {
+        return 'green'
+      } else if (today > toCheck1  && today < toCheck2) {
+        return 'orange'
+      } else {
+        return'red'
+      }
     }
   }
 };
@@ -159,6 +176,18 @@ export default {
 
 .check {
   color: #15C377;
+}
+
+.rounded-circle.green {
+  background-color:  #15C377;
+}
+
+.rounded-circle.orange {
+  background-color: #fa9e1e;
+}
+
+.rounded-circle.red {
+  background-color: #F03E3E;
 }
 
 .load {
