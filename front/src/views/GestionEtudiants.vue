@@ -308,6 +308,7 @@ export default {
         this.firstnameValidation = true;
         this.emailValidation = true;
         updateUser(this.student.id, this.student).then((res) => {
+          console.log(res);
           this.student.lastname = "";
           this.student.firstname = "";
           this.student.email = "";
