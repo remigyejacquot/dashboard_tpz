@@ -358,7 +358,7 @@ export default {
         this.type = res.data.is_dev ? "dev" : "com";
         localStorage.setItem("user", JSON.stringify(res.data));
         let id = res.data.tpzId
-        if (this.user.roles.includes('ROLE_ADMIN')) {
+        if (this.user.roles && this.user.roles.includes('ROLE_ADMIN')) {
           id = await this.getTpzOptions()
         }
         localStorage.setItem("tpzId", JSON.stringify(id));

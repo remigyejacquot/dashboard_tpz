@@ -8,7 +8,7 @@
               <p class="mb-0 text-center">{{user.firstname}} {{user.lastname}} &nbsp;</p>
               <div class="d-flex" v-if="user.tpzRolesArray && user.tpzRolesArray.includes('chef de projet')"><font-awesome-icon class="crown-icon" icon="fa-solid fa-crown" /></div>
             </div>
-            <div class="text-small">Licence  {{user.is_dev ? 'dev' : 'com'}}</div>
+            <div class="text-small">Licence  {{user.is_dev && user.is_dev ? 'dev' : 'com'}}</div>
           </b-navbar-brand>
 
           <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
@@ -23,7 +23,7 @@
                   </div>
                 </router-link>
               </li>
-              <li class="nav-item" v-if="!user.roles.includes('ROLE_ADMIN')">
+              <li class="nav-item" v-if="user.roles && !user.roles.includes('ROLE_ADMIN')">
                 <router-link :to="{ name: 'Projects' }" class="d-flex flex-column justify-content-center align-items-center">
                   <div class="nav-item-color d-flex flex-column justify-content-center align-items-center w-100">
                     <font-awesome-icon icon="fa-solid fa-user-group" />
@@ -31,7 +31,7 @@
                   </div>
                 </router-link>
               </li>
-              <li class="nav-item" v-if="user.roles.includes('ROLE_ADMIN') || user.tpzRolesArray.includes('president') || user.tpzRolesArray.includes('vice-president') ">
+              <li class="nav-item" v-if="user.roles && user.roles.includes('ROLE_ADMIN') || user.tpzRolesArray.includes('president') || user.tpzRolesArray.includes('vice-president') ">
                 <router-link :to="{ name: 'Groupes' }" class="d-flex flex-column justify-content-center align-items-center">
                   <div class="nav-item-color d-flex flex-column justify-content-center align-items-center w-100">
                     <font-awesome-icon icon="fa-solid fa-gear" />
