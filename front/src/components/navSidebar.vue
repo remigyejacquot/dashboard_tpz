@@ -6,7 +6,7 @@
             <b-img :src="require('../assets/default-user-image.png')" rounded="circle" class="avatar"/>
             <div class="d-flex flex-row justify-content-center align-items-center w-100">
               <p class="mb-0 text-center">{{user.firstname}} {{user.lastname}} &nbsp;</p>
-              <div class="d-flex" v-if="user.tpzRolesArray && user.tpzRolesArray.includes('chef de projet')"><font-awesome-icon class="crown-icon" icon="fa-solid fa-crown" /></div>
+              <div class="d-flex" v-if="user.tpzRolesArray !== undefined && user.tpzRolesArray.includes('chef de projet')"><font-awesome-icon class="crown-icon" icon="fa-solid fa-crown" /></div>
             </div>
             <div class="text-small">Licence  {{user.is_dev && user.is_dev ? 'dev' : 'com'}}</div>
           </b-navbar-brand>
@@ -31,7 +31,7 @@
                   </div>
                 </router-link>
               </li>
-              <li class="nav-item" v-if="(user.roles && user.roles.includes('ROLE_ADMIN') )|| (user.tpzRolesArray && user.tpzRolesArray.includes('president')) || (user.tpzRolesArray && user.tpzRolesArray.includes('vice-president')) ">
+              <li class="nav-item" v-if="(user.roles && user.roles.includes('ROLE_ADMIN') )|| (user.tpzRolesArray !== undefined && user.tpzRolesArray.includes('president')) || (user.tpzRolesArray !== undefined && user.tpzRolesArray.includes('vice-president')) ">
                 <router-link :to="{ name: 'Groupes' }" class="d-flex flex-column justify-content-center align-items-center">
                   <div class="nav-item-color d-flex flex-column justify-content-center align-items-center w-100">
                     <font-awesome-icon icon="fa-solid fa-gear" />
