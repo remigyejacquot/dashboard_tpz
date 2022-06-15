@@ -1,16 +1,21 @@
 <template>
   <div>
-    <b-button v-if="id !== ''" class="modifier"  v-b-modal.update-project>
+    <div v-if="id !== ''" class="modifier"  v-b-modal.update-project>
       <font-awesome-icon icon="pen" size="1x" class="mr-2"/>
         modifier
-    </b-button>
-    <b-button v-else v-b-modal.add-project>
-      ajouter
-    </b-button>
+    </div>
+    <div v-else v-b-modal.add-project>
+      <b-icon
+          icon="plus-circle-fill"
+          style="color: #f96197"
+          font-scale="1.5"
+          @click="()=>{}"
+          class="icon-btn"/>
+    </div>
     <b-modal :id="idModal" title="Gestion du projet" hide-footer class="custom-modal">
       <b-form>
         <b-form-group id="name-input" label="Nom du projet" label-for="name" class="d-flex align-items-center">
-          <b-form-input id="name" v-model="projectName" type="text" placeholder="Nom du projet" required></b-form-input>
+          <b-form-input id="name" v-model="name" type="text" placeholder="Nom du projet" required></b-form-input>
         </b-form-group>
       </b-form>
       <div class="mt-3 valid-button-wrapper">
@@ -44,7 +49,6 @@ export default {
   props: ["id", "name", "agenceId"],
   data () {
     return {
-      projectName: this.name,
       error: '',
       idModal : this.id !== '' ? 'update-project' : 'add-project'
     }
@@ -52,12 +56,12 @@ export default {
   methods: {
     async newProject() {
       const data = {
-        'name' : this.projectName,
+        'name' : this.name,
         'agency' : "/dashboard_tpz/back/public/index.php/api/agencies/" + this.agenceId,
         "createdAt": new Date(),
         "updatedAt": new Date()
       }
-      if (this.projectName !== "" && this.agenceId !== "") {
+      if (this.name !== "" && this.agenceId !== "") {
         this.$bvModal.hide('add-project')
         this.error = ""
         await addProject(data)
@@ -69,10 +73,10 @@ export default {
     },
     async updateProjet() {
       const data = {
-        'name' : this.projectName,
+        'name' : this.name,
         "updatedAt": new Date()
       }
-      if (this.projectName !== "") {
+      if (this.name !== "") {
         this.$bvModal.hide('update-project')
         await updateProject(this.id, data)
         this.error = ""

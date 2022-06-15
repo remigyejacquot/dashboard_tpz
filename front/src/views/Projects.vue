@@ -15,20 +15,9 @@
           </div>
         </div>
         <div class="d-flex header-section-div flex-column justify-content-between align-items-end">
-          <b-icon
-              icon="plus-circle-fill"
-              style="color: #f96197"
-              font-scale="1.5"
-              @click="()=>{}"
-              class="icon-btn"/>
+          <form-update-projet id="" name="" :agenceId="this.agency.id"></form-update-projet>
           <div>
-            <b-icon
-                icon="pencil-fill"
-                style="color: #f7b000"
-                font-scale="1.2"
-                @click="()=>{}"
-                class="icon-btn"/>
-            <button class="modify-btn">Modifier</button>
+            <form-update-projet v-if="this.selectedProject" :id="this.selectedProject.id" :name="this.selectedProject.name" :agenceId="this.agency.id"></form-update-projet>
           </div>
         </div>
       </section>
@@ -180,6 +169,7 @@ import { getAgencyMembers } from "../../api/agencies";
 import {addSubtask, deleteSubtask, updateSubtask} from "../../api/subtasks";
 import {addTask, deleteTask, updateTask} from "../../api/tasks";
 import UpdateAgency from "../components/updateAgency";
+import FormUpdateProjet from "../components/formUpdateProjet";
 
 class Task {
   title
@@ -220,7 +210,7 @@ class Subtask {
 
 export default {
   name: "Projects",
-  components: {UpdateAgency, NavSidebar },
+  components: {FormUpdateProjet, UpdateAgency, NavSidebar },
   data() {
     return {
       user: {},
