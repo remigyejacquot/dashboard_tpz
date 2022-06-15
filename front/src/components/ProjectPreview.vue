@@ -57,7 +57,7 @@
               <div class="task d-flex justify-content-between align-items-center">
                 <div>
                   <p class="m-0 date">{{ new Date(projet.lastTasks.updated_at).toLocaleDateString() }}</p>
-                  <p class="title m-0">{{ projet.lastTasks.title }}}</p>
+                  <p class="title m-0">{{ projet.lastTasks.title }}</p>
                 </div>
                 <font-awesome-icon v-if="projet.lastTasks.is_finished" icon="fa-solid fa-check" class="check"/>
                 <font-awesome-icon v-else icon="fa-solid fa-spinner" class="load"/>
